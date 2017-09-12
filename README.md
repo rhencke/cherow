@@ -4,11 +4,6 @@
 
 Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser written in ECMAScript.
 
-**NOTE!** The first beta code will be pushed to this repo within 1 - 2 weeks.
-
-Will I ever go public? I'm not sure I will. I hate breaking what others have spent time and resources building up. And that
-will be the case if I go public with Cherow :( 
-
 ## Features 
 
 - Full support for ECMAScript 2017 [(ECMA-262 8th Edition)](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
@@ -51,17 +46,8 @@ will be the case if I go public with Cherow :(
 
 ## Benchmarks
 
-Cherow's performance beats everything that is possible to beat :) 
+To be written
 
-Here is an benchmark result after parsing tsserver. Allmost 100k code lines!
-
-```js
------------START---------
- source:  tsserver.js
-0.2065233284705882 '(cherow)'
-0.6980725535555556 '(acorn)'
-0.6897469524444444 '(esprima)'
-------------DONE---------
 ```
 
 ## Contribution
