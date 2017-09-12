@@ -34,11 +34,11 @@ will be the case if I go public with Cherow :(
 
 * `next` - Enables `ECMAScript Next` support and let you use proposals at `stage 3` or higher such as `Dynamic Import`.
 * `directives` - Enables support for [directive nodes](https://github.com/estree/estree/pull/152)
-* `raw` - Enables the raw property on literal nodes (*work in progress*)
-* `onComment` - Enables option to collect comments (*array or function*)
+* `raw` - Enables the raw property on literal nodes (*Esprima and Acorn feature*)
+* `onComment` - Enables option to collect comments. Optional; Either array or function.
 * `tokenize` - If enabled each found token will be returned as either an function or an array (*work in progres*)
 * `ranges` - Enables the start and characters offsets on the AST node.
-* `locations` - Enables location tracking. (*work in progress*)
+* `locations` - Enables location tracking. (*4 min fix, but on hold for now*)
 * `jsx` - Enables JSX
 * `ts` - Enables TypeScript (*coming very soon*)
 
@@ -72,7 +72,7 @@ Here is an benchmark result after parsing tsserver. Allmost 100k code lines!
 *Terms of contribution:*
 
 - Think twice before you try to implement anything
-- Minimum 1.5 mill ops / sec for light weight source, and 800k - 1 mill ops / sec for "heavy" source
+- Minimum 1.5 mill ops / sec for light weight cases, and 800k - 1 mill ops / sec for "heavy" cases
 - Avoid duplicating the source code
 - Create tests that cover what you have implemented
 
