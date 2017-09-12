@@ -48,7 +48,6 @@ Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser writt
 
 To be written
 
-```
 
 ## Contribution
  
