@@ -3,7 +3,9 @@
 
 **WORK IN PROGRESS**
 
-Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser written in ECMAScript.
+Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser written in ECMAScript. 
+
+It's close to 100% ECMAScript spec compatible.
 
 **Note!** The source exist in the "dev" branch
 
@@ -14,7 +16,7 @@ Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser writt
 - JSX
 - TypeScript (*in progress*)
 - Optional tracking of syntax node location (index-based and line-column)
-- 6300 unit tests with full code coverage
+- 4300 unit tests with full code coverage
 
 ## ESNext features
 
@@ -33,20 +35,12 @@ Cherow is a very fast and unbeatable, standard-compliant ECMAScript parser writt
 * `next` - Enables `ECMAScript Next` support and let you use proposals at `stage 3` or higher such as `Dynamic Import`.
 * `directives` - Enables support for [directive nodes](https://github.com/estree/estree/pull/152)
 * `raw` - Enables the raw property on literal nodes (*Esprima and Acorn feature*)
-* `onComment` - Enables option to collect comments. Optional; Either array or function.
+* `onComment` - Enables option to collect comments. Optional; Either array or function. Works like [Acorn](https://github.com/ternjs/acorn) onComment.
 * `tokenize` - If enabled each found token will be returned as either an function or an array (*work in progres*)
 * `ranges` - Enables the start and characters offsets on the AST node.
 * `locations` - Enables location tracking. (*4 min fix, but on hold for now*)
 * `jsx` - Enables JSX
 * `ts` - Enables TypeScript (*coming very soon*)
-
-
-## Current state
-
-Cherow can be used. At this stage it should be more or less equal to Esprima and Acorn, but much much faster!
-
-Nothing much will be done on active work the next period because I'm now going to finalize and cleanup
-the code base locale.
 
 
 ## Benchmarks
