@@ -35,8 +35,8 @@ It's close to 100% ECMAScript spec compatible.
 * `next` - Enables `ECMAScript Next` support and let you use proposals at `stage 3` or higher such as `Dynamic Import`.
 * `directives` - Enables support for [directive nodes](https://github.com/estree/estree/pull/152)
 * `raw` - Enables the raw property on literal nodes (*Esprima and Acorn feature*)
-* `onComment` - Enables option to collect comments. Optional; Either array or function. Works like [Acorn](https://github.com/ternjs/acorn) onComment.
-* `tokenize` - If enabled each found token will be returned as either an function or an array (*work in progres*)
+* `comments` - Enables option to collect comments. Optional; Either array or function. Works like [Acorn](https://github.com/ternjs/acorn) onComment.
+* `tokens` - If enabled each found token will be returned as either an function or an array (*work in progres*)
 * `ranges` - Enables the start and characters offsets on the AST node.
 * `locations` - Enables location tracking. (*4 min fix, but on hold for now*)
 * `jsx` - Enables JSX
