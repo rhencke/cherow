@@ -1756,6 +1756,7 @@ export class Parser {
             case Token.AsyncKeyword:
                 // export default async function f () {}
                 // export default async function () {}
+                // export default async *function () {}
                 // export default async x => x
                 declaration = this.nextTokenIsFunctionKeyword(context) ?
                     this.parseFunctionDeclaration(context) :
@@ -1784,16 +1785,20 @@ export class Parser {
         //    'export' Declaration
         //    'export' 'default' ... (handled in ParseExportDefault)
 
+        if (this.flags & Flags.InFunctionBody) this.error(Errors.ExportDeclAtTopLevel);
+
         const specifiers: ESTree.ExportSpecifier[] = [];
         let source = null;
         let isExportFromIdentifier = false;
         let declaration: ESTree.Statement | null = null;
 
-        if (this.flags & Flags.InFunctionBody) this.error(Errors.ExportDeclAtTopLevel);
-
         switch (this.token) {
+
+            // '*'
             case Token.Multiply:
                 return this.parseExportAllDeclaration(context, pos);
+
+                // '{'
             case Token.LeftBrace:
                 // export' ExportClause ';
                 // export' ExportClause FromClause ';
@@ -1821,21 +1826,33 @@ export class Parser {
                 this.nextToken(context);
 
                 break;
+
+                // 'class'   
             case Token.ClassKeyword:
                 declaration = this.parseClassDeclaration(context);
                 break;
+
+                // 'const'
             case Token.ConstKeyword:
-                declaration = this.parseVariableStatement(context |= Context.Const);
+                declaration = this.parseVariableStatement(context |= (Context.Const | Context.RequireInitializer));
                 break;
+
+                // 'let'
             case Token.LetKeyword:
-                declaration = this.parseVariableStatement(context |= Context.Let);
+                declaration = this.parseVariableStatement(context |= (Context.Let | Context.RequireInitializer));
                 break;
+
+                // 'var'
             case Token.VarKeyword:
-                declaration = this.parseVariableStatement(context);
+                declaration = this.parseVariableStatement(context | Context.RequireInitializer);
                 break;
+
+                // 'function'
             case Token.FunctionKeyword:
                 declaration = this.parseStatementListItem(context);
                 break;
+
+                // 'async'
             case Token.AsyncKeyword:
                 if (this.nextTokenIsFunctionKeyword(context)) {
                     declaration = this.parseFunctionDeclaration(context);
@@ -1875,6 +1892,10 @@ export class Parser {
     private parseExportAllDeclaration(context: Context, pos: Location): ESTree.ExportAllDeclaration {
         this.expect(context, Token.Multiply);
         this.expect(context, Token.FromKeyword);
+
+        // Invalid `export * from 123;`
+        if (this.token !== Token.StringLiteral) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
+
         const source = this.parseModuleSpecifier(context);
         this.consumeSemicolon(context);
         return this.finishNode(pos, {
@@ -2038,13 +2059,13 @@ export class Parser {
             case Token.ExportKeyword:
                 const pos = this.startNode();
                 this.expect(context, Token.ExportKeyword);
-                if (this.parseOptional(context, Token.DefaultKeyword)) return this.parseExportDefault(context, pos);
+                if (this.parseOptional(context, Token.DefaultKeyword)) return this.parseExportDefault(context | Context.AllowIn, pos);
                 return this.parseExportDeclaration(context, pos);
             case Token.ImportKeyword:
-                if (!(this.flags & Flags.OptionsNext && this.nextTokenIsLeftParen(context))) return this.parseImportDeclaration(context);
+                if (!(this.flags & Flags.OptionsNext && this.nextTokenIsLeftParen(context | Context.AllowIn))) return this.parseImportDeclaration(context | Context.AllowIn);
                 // falls through
             default:
-                return this.parseStatementListItem(context);
+                return this.parseStatementListItem(context | Context.AllowIn);
         }
     }
 
@@ -2076,7 +2097,7 @@ export class Parser {
                 // If let follows identifier on the same line, it is an declaration. Parse it as variable statement
                 if (this.isLexical(context)) return this.parseVariableStatement(context | Context.Let);
             default:
-                return this.parseStatement(context);
+                return this.parseStatement(context | Context.AllowIn);
         }
     }
 
@@ -2522,9 +2543,10 @@ export class Parser {
             if (expr.name === 'await' || expr.name === 'enum') this.error(Errors.UnexpectedToken, expr.name);
             if (context & Context.Strict &&
                 this.token === Token.FunctionKeyword) this.error(Errors.StrictFunction);
-            if (this.token === Token.ClassKeyword) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
             this.addLabel(expr.name);
+            this.flags |= Flags.TopLevel;
             const body: ESTree.Statement = this.parseStatement(context | Context.AnnexB);
+            this.flags &= ~Flags.TopLevel;
             this.removeLabel(expr.name);
 
             return this.finishNode(pos, {
@@ -2565,7 +2587,7 @@ export class Parser {
 
         this.expect(context, Token.RightParen);
         this.flags &= ~Flags.BlockStatement;
-
+        this.flags |= Flags.TopLevel;
         const consequent: ESTree.Statement = this.parseIfStatementChild(context);
 
         let alternate: ESTree.Statement | null = null;
@@ -2835,6 +2857,13 @@ export class Parser {
         const pos = this.startNode();
         const token = this.token;
         const id = this.parseBindingPatternOrIdentifier(context | Context.Binding);
+
+        // Invalid 'export let foo';
+        // Invalid 'export const foo';
+        // Invalid 'export var foo';
+        if (context & Context.RequireInitializer && id.type === 'Identifier' && this.token !== Token.Assign) {
+            this.error(Errors.MissingInitializer);
+        }
 
         // 'let', 'const'
         if (context & Context.Lexical) {
@@ -3271,7 +3300,7 @@ export class Parser {
 
         // 'eval' or 'arguments' are invalid in binding position in strict mode
         // within arrow functions, but not inside parenthesis, so we can't just
-        // throw an error  right away
+        // throw an error right away
 
         if (context & Context.Strict &&
             this.token === Token.Identifier &&
@@ -3495,7 +3524,7 @@ export class Parser {
                 return this.parseLiteral(context);
             case Token.LeftBracket:
                 this.expect(context, Token.LeftBracket);
-                let expression = this.parseExpression(context);
+                const expression = this.parseExpression(context);
                 this.expect(context, Token.RightBracket);
                 return expression;
             default:
@@ -3874,6 +3903,7 @@ export class Parser {
                             });
                     }
 
+                    // Remove the 'Arrow' flags now, else we are in deep shit
                     this.flags &= ~Flags.Arrow;
 
                     break;
@@ -4424,6 +4454,8 @@ export class Parser {
     private parseClassExpression(context: Context): ESTree.ClassExpression {
 
         const pos = this.startNode();
+
+        if (this.flags & Flags.TopLevel) this.error(Errors.Unexpected);
 
         this.expect(context, Token.ClassKeyword);
         // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code

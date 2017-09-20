@@ -118,7 +118,8 @@ export const enum Errors {
     UnNamedClassStmt,
     UnNamedFunctionStmt,
     InvalidStrictExpPostion,
-    InvalidStrictLexical
+    InvalidStrictLexical,
+    MissingInitializer
 }
 
 export const ErrorMessages: {
@@ -241,7 +242,8 @@ export const ErrorMessages: {
     [Errors.UnNamedClassStmt]: 'Class statement requires a name',
     [Errors.UnNamedFunctionStmt]: 'Function statement requires a name',
     [Errors.InvalidStrictExpPostion]: 'The identifier \'%0\' must not be in expression position in strict mode',
-    [Errors.InvalidStrictLexical]: 'Lexical declarations must not have a binding named "let"'
+    [Errors.InvalidStrictLexical]: 'Lexical declarations must not have a binding named "let"',
+    [Errors.MissingInitializer]: 'Missing initializer'
 };
 
 function constructError(msg: string, column: number): Error {

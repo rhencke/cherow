@@ -10,6 +10,12 @@ describe('Declaration - Lexical', () => {
             parseScript(`l\\u0065t a;`);
         }).to.throw();
     });
+    
+    it('should fail on let newline await in normal function', () => {
+        expect(() => {
+            parseScript(`for (let [x = let];;) {}`);
+        }).to.not.throw();
+    });
 
     it('should fail on let newline await in normal function', () => {
         expect(() => {

@@ -106,7 +106,7 @@ describe('Statements - For in', () => {
     it('should fail on "for(const a = 0 in b);"', () => {
         expect(() => {
             parseScript('for(const a = 0 in b);;');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on "for(let ? b : c in 0);"', () => {
         expect(() => {
