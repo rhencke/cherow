@@ -1,0 +1,71 @@
+{
+  "name": "cherow",
+  "version": "0.0.13",
+  "description": "",
+  "main": "dist/cherow.js",
+  "author": "KFlash",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 5.4.1 < 6",
+    "npm": ">= 3.5.3"
+  },
+  "homepage": "https://github.com/cherow/cherow",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cherow/cherow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cherow/cherow/issues"
+  },
+  "keywords": [],
+  "files": [
+    "dist",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "README.md",
+    "BENCHMARK.md"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "minify": "rollup -c rollup.config.min.js",
+    "test": "mocha test/specs/**/*.ts -R spec --bail",
+    "coverage": "npm run clean:build && npm run pretest && node --harmony ./node_modules/istanbul/lib/cli.js cover --root ./build/src --report lcov --report text ./node_modules/mocha/bin/_mocha ./build/test/**/*.js",
+    "clean": "rimraf dist build coverage",
+    "clean:build": "rimraf build",
+    "debug": "npm-run-all clean pretest",
+    "prepublish": "npm run build",
+    "prebuild": "tsc --skipLibCheck -t es2015 --m es2015",
+    "pretest": "tsc --sourceMap --skipLibCheck -t es2015 --m umd",
+    "lint": "npm-run-all --parallel lint:src lint:tests",
+    "lint:src": "tslint src/**/*.ts src/**/*.tsx",
+    "lint:tests": "tslint test/specs/**/*.ts test/specs/**/*.tsx",
+    "watch:tests": "mocha test/specs/**/*.ts -R spec --bail --watch",
+    "watch:build": "tsc --skipLibCheck -t es2015 --m es2015 -w"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.28",
+    "chai": "^4.1.2",
+    "codecov": "^2.3.0",
+    "coveralls": "^2.13.1",
+    "istanbul": "github:gotwarlost/istanbul#v1",
+    "mocha": "^3.5.3",
+    "npm-check-updates": "2.11.2",
+    "npm-run-all": "^4.1.1",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.50.0",
+    "rollup-plugin-buble": "0.15.0",
+    "rollup-plugin-uglify": "2.0.1",
+    "ts-node": "^3.3.0",
+    "tslint": "5.7.0",
+    "typescript": "^2.5.2"
+  },
+  "dependencies": {
+    "acorn": "^5.1.2",
+    "acorn-jsx": "^4.0.1",
+    "benchmark": "^2.1.4",
+    "esprima": "^4.0.0",
+    "jazzle": "^0.5.880"
+  }
+}
