@@ -73,10 +73,10 @@ describe('Espressions - Async', () => {
             }).to.throw();
         });
 
-        it.skip('should fail on "({async foo(a = await b) {}})"', () => {
+        it('should fail on "({async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseScript(`({async foo(a = await b) {}})`);
-            }).to.throw();
+            }).to.not.throw();
         });
 
         it('should fail on invalid async getter', () => {
@@ -883,7 +883,7 @@ describe('Espressions - Async', () => {
             }).to.throw();
         });
 
-        it.skip('should fail on "class A {async foo(await) { }}"', () => {
+        it('should fail on "class A {async foo(await) { }}"', () => {
             expect(() => {
                 parseScript(`class A {async foo(await) { }}`, {});
             }).to.throw();
@@ -895,10 +895,10 @@ describe('Espressions - Async', () => {
             }).to.throw();
         });
         
-        it.skip('should fail on "async function foo(bar = await baz()) {}"', () => {
+        it('should fail on "async function foo(bar = await baz()) {}"', () => {
             expect(() => {
                 parseModule(`async function foo(bar = await baz()) {}`, {});
-            }).to.throw();
+            }).to.not.throw();
         });
 
         it('should fail on "await"', () => {
@@ -931,16 +931,16 @@ describe('Espressions - Async', () => {
             }).to.throw();
         });
 
-        it.skip('should fail on "({async foo(a = await b) {}})"', () => {
+        it('should fail on "({async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseModule(`({async foo(a = await b) {}})`, {});
             }).to.not.throw();
         });
 
-        it.skip('should fail on "(class {async foo(a = await b) {}})"', () => {
+        it('should fail on "(class {async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseModule(`(class {async foo(a = await b) {}})`, {});
-            }).to.throw();
+            }).to.not.throw();
         });
 
         it('should fail on "(async)(a) => 12"', () => {

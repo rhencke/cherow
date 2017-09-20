@@ -7,71 +7,71 @@ describe('Block scope', () => {
 
         /** Loads of this redefination tests aren't going to be tested. We are supporting this anyway */
 
-        it.skip('should fail on redeclaration with AsyncFunctionDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
+        it('should fail on redeclaration with AsyncFunctionDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ async function f() {} async function f() {} }');
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on redeclaration with AsyncGeneratorDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
+        it('should fail on redeclaration with AsyncGeneratorDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ async function f() {} async function* f() {} }', {
                     next: true
                 });
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on "redeclaration with ClassDeclaration (AsyncFunctionDeclaration in BlockStatement)"', () => {
+        it('should fail on "redeclaration with ClassDeclaration (AsyncFunctionDeclaration in BlockStatement)"', () => {
             expect(() => {
                 parseScript('{ async function f() {} class f {}; }');
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on redeclaration with FunctionDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
+        it('should fail on redeclaration with FunctionDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript(' async function f() {} function f() {} }');
             }).to.throw();
         });
-        it.skip('should fail on "redeclaration with AsyncFunctionDeclaration (AsyncGeneratorDeclaration in BlockStatement)"', () => {
+        it('should fail on "redeclaration with AsyncFunctionDeclaration (AsyncGeneratorDeclaration in BlockStatement)"', () => {
             expect(() => {
                 parseScript('{ async function* f() {} async function f() {} }', {
                     next: true
                 });
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on "redeclaration with const-LexicalDeclaration (AsyncGeneratorDeclaration in BlockStatement)"', () => {
+        it('should fail on "redeclaration with const-LexicalDeclaration (AsyncGeneratorDeclaration in BlockStatement)"', () => {
             expect(() => {
                 parseScript('{ async function* f() {} const f = 0; }');
             }).to.throw();
         });
-        it.skip('should fail on redeclaration with FunctionDeclaration (AsyncGeneratorDeclaration in BlockStatement)', () => {
+        it('should fail on redeclaration with FunctionDeclaration (AsyncGeneratorDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ async function* f() {} function f() {} }', {
                     next: true
                 });
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on redeclaration with GeneratorDeclaration (AsyncGeneratorDeclaration in BlockStatement))', () => {
+        it('should fail on redeclaration with GeneratorDeclaration (AsyncGeneratorDeclaration in BlockStatement))', () => {
             expect(() => {
                 parseScript('{ async function* f() {} function* f() {} }');
             }).to.throw();
         });
-        it.skip('should fail on redeclaration with AsyncFunctionDeclaration (ClassDeclaration in BlockStatement)', () => {
+        it('should fail on redeclaration with AsyncFunctionDeclaration (ClassDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ class f {} async function f() {} }', {
                     next: true
                 });
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on "redeclaration with FunctionDeclaration (ClassDeclaration in BlockStatement)', () => {
+        it('should fail on "redeclaration with FunctionDeclaration (ClassDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ class f {} function f() {} }');
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on redeclaration with VariableDeclaration (LexicalDeclaration (const) in BlockStatement)', () => {
+        it('should fail on redeclaration with VariableDeclaration (LexicalDeclaration (const) in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ const f = 0; var f; }');
             }).to.throw();
         });
     
-        it.skip('should allow to redeclare var with function declaration', () => {
+        it('should allow to redeclare var with function declaration', () => {
             expect(parseScript('var f; function f() {}', {
                 raw: true,
                 ranges: true

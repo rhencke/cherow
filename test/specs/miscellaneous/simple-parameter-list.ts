@@ -187,11 +187,5 @@ describe('Simple parameter list', () => {
               "sourceType": "script"
           });
       });
-
-      it.skip('should parse async arrow function concise body', () => {
-        expect(parseScript('function f([x] = [1]) { "use strict" }', {
-            ranges: true,
-            raw: true
-        })).to.eql({});
-    });
+   
   });

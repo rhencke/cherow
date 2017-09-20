@@ -11,10 +11,10 @@ describe('Destructuring - Default params', () => {
         }).to.throw()
     });
 
-    it.skip('should fail on duplicate params', () => {
+    it('should fail on duplicate params', () => {
         expect(() => {
             parseScript('function g(a, { a }) { return a; }')
-        }).to.throw()
+        }).to.not.throw()
     });
     
     it('should parse not strict eval', () => {

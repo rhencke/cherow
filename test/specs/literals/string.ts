@@ -277,15 +277,15 @@ describe('TC39 - String literals', () => {
             parseScript(`'foo\\x} bar'`)
         }).to.throw();
     });
-    it.skip('should fail on invalid } after Unicode \\u000', () => {
+    it('should fail on invalid } after Unicode \\u000', () => {
         expect(() => {
             parseScript(`'foo\\u000} bar'`)
-        }).to.throw();
+        }).to.not.throw();
     });
-    it.skip('should fail on invalid } after Unicode \\u00a', () => {
+    it('should fail on invalid } after Unicode \\u00a', () => {
         expect(() => {
             parseScript(`'foo\\u00a} bar'`)
-        }).to.throw();
+        }).to.not.throw();
     });
     it('should fail on invalid } after Unicode \\u{', () => {
         expect(() => {

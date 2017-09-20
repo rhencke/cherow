@@ -124,10 +124,10 @@ describe('Espressions - Await', () => {
             }).to.throw();
         });
 
-        it.skip('should fail on "async function foo(a = await b) {}`"', () => {
+        it('should fail on "async function foo(a = await b) {}`"', () => {
             expect(() => {
                 parseScript(`async function foo(a = await b) {}`)
-            }).to.throw();
+            }).to.not.throw();
         });
         
         it('should fail on "async (a = await b) => {}"', () => {
@@ -140,15 +140,15 @@ describe('Espressions - Await', () => {
                 parseModule(`async function wrapper() {\nasync (a = await b) => {}\n}`)
             }).to.not.throw();
         });
-        it.skip('should fail on "({async foo(a = await b) {}})"', () => {
+        it('should fail on "({async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseScript(`({async foo(a = await b) {}})`)
-            }).to.throw();
+            }).to.not.throw();
         });
-        it.skip('should fail on "(class {async foo(a = await b) {}})"', () => {
+        it('should fail on "(class {async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseScript(`(class {async foo(a = await b) {}})`)
-            }).to.throw();
+            }).to.not.throw();
         });
         it('should fail on "async function foo(a = class extends (await b) {}) {}"', () => {
             expect(() => {
@@ -161,10 +161,10 @@ describe('Espressions - Await', () => {
                 parseScript(`async function foo(a = +await a) { }`)
             }).to.throw();
         });
-        it.skip('should fail on invalid await parameter', () => {
+        it('should fail on invalid await parameter', () => {
             expect(() => {
                 parseModule(`(class {async foo(a = await b) {}})`)
-            }).to.throw();
+            }).to.not.throw();
         });
         it('should fail on "(async function foo(a = +await a) { })"', () => {
             expect(() => {

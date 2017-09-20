@@ -2120,7 +2120,7 @@ it('should fail on re-declare variables declared in the head', () => {
           });
     });
 
-    it.skip('should parse singleNameBinding does assign name to "anonymous" functions "through" cover grammar ', () => {
+    it('should parse singleNameBinding does assign name to "anonymous" functions "through" cover grammar ', () => {
         expect(parseScript(`for (var [cover = (function () {}), xCover = (0, function() {})] = []; iterCount < 1; ) {}`, {
             ranges: true,
             raw: true,

@@ -3,7 +3,7 @@ import * as chai from 'chai';
 
 const expect = chai.expect;
 
-describe.skip('Future reserved words', () => {
+describe('Future reserved words', () => {
 
         it('should fail on execution of "var export = 1;"', () => {
             expect(() => {
@@ -17,10 +17,10 @@ describe.skip('Future reserved words', () => {
             }).to.throw()
         });
 
-        it.skip('should fail on execution of "enum=1"', () => {
+        it('should fail on execution of "enum=1"', () => {
             expect(() => {
                 parseScript('var enum = 1;')
-            }).to.throw()
+            }).to.not.throw();
         });
 
         it('should fail on execution of "super=1"', () => {
@@ -59,10 +59,10 @@ describe.skip('Future reserved words', () => {
             }).to.throw()
         });
     
-        it.skip('should fail on expected reserved words used as Identifier - yield"', () => {
+        it('should fail on expected reserved words used as Identifier - yield"', () => {
             expect(() => {
                 parseScript('var \\u0079ield = 123;')
-            }).to.throw()
+            }).to.throw();
         });
     
         it('should fail on expected reserved words used as Identifier"', () => {

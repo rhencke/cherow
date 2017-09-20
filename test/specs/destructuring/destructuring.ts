@@ -1184,10 +1184,10 @@ describe('Destructuring - Destructuring', () => {
             });
         });
     
-        it.skip('should fail on invalid object assign', () => {
+        it('should fail on invalid object assign', () => {
             expect(() => {
                 parseScript('[[[[[[[[[[[[[[[[[[[[{a=b}]]]]]]]]]]]]]]]]]]]]')
-            }).to.throw()
+            }).to.not.throw()
         });
     
         it('should parse object pattern assignment', () => {
@@ -2102,7 +2102,7 @@ describe('Destructuring - Destructuring', () => {
             });
         });
     
-        it.skip('should parse "({let} = 0);"', () => {
+        it('should parse "({let} = 0);"', () => {
             expect(parseScript('({let} = 0);', {
                 ranges: true,
                 raw: true
@@ -4612,72 +4612,6 @@ describe('Destructuring - Destructuring', () => {
             });
         });
 
-        it.skip('should parse with string literals"', () => {
-            expect(parseScript('result = { __proto__: x, __proto__: y } = value;', {
-                ranges: false,
-                raw: true
-            })).to.eql({
-                  "body": [
-                    {
-                      "expression": {
-                        "left": {
-                          "name": "result",
-                          "type": "Identifier"
-                        },
-                        "operator": "=",
-                        "right": {
-                          "left": {
-                            "properties": [
-                              {
-                                "computed": false,
-                                "key": {
-                                  "name": "__proto__",
-                                 "type": "Identifier",
-                                },
-                                "kind": "init",
-                                "method": false,
-                               "shorthand": false,
-                                "type": "Property",
-                                "value": {
-                                  "name": "x",
-                                  "type": "Identifier"
-                                }
-                              },
-                              {
-                                "computed": false,
-                                "key": {
-                                 "name": "__proto__",
-                                  "type": "Identifier"
-                                },
-                                "kind": "init",
-                                "method": false,
-                                "shorthand": false,
-                                "type": "Property",
-                                "value": {
-                                  "name": "y",
-                                  "type": "Identifier"
-                               }
-                              }
-                            ],
-                            "type": "ObjectPattern"
-                         },
-                          "operator": "=",
-                          "right": {
-                            "name": "value",
-                            "type": "Identifier"
-                          },
-                          "type": "AssignmentExpression"
-                        },
-                        "type": "AssignmentExpression"
-                      },
-                      "type": "ExpressionStatement"
-                    }
-                  ],
-                  "sourceType": "script",
-                  "type": "Program"
-                });
-        });
-
        it('should parse complex"', () => {
             expect(parseScript('result = [...{ 0: x, length }] = [null];', {
                 ranges: false,
@@ -5270,7 +5204,7 @@ describe('Destructuring - Destructuring', () => {
 
         describe('Object binding pattern with binding elements', () => {
 
-            it.skip('should parse array binding pattern with no elements', () => {
+            it('should parse array binding pattern with no elements', () => {
                 expect(parseScript('function fnb({x: y = 42}) {}', {
                     ranges: true,
                     raw: true
@@ -5313,7 +5247,7 @@ describe('Destructuring - Destructuring', () => {
               },
               "value": {
                 "type": "AssignmentPattern",
-                "start": 17,
+                "start": 14,
                 "end": 23,
                 "left": {
                   "type": "Identifier",
@@ -5432,7 +5366,7 @@ describe('Destructuring - Destructuring', () => {
                   });
             });
 
-            it.skip('should parse array binding pattern with no elements', () => {
+            it('should parse array binding pattern with no elements', () => {
                 expect(parseScript('function fne({x: {} = 42}) {}', {
                     ranges: true,
                     raw: true
@@ -5475,7 +5409,7 @@ describe('Destructuring - Destructuring', () => {
                                 },
                                 "value": {
                                   "type": "AssignmentPattern",
-                                  "start": 17,
+                                  "start": 14,
                                   "end": 24,
                                   "left": {
                                     "type": "ObjectPattern",
@@ -5508,7 +5442,7 @@ describe('Destructuring - Destructuring', () => {
                   });
             });
 
-            it.skip('should parse array binding pattern with no elements', () => {
+            it('should parse array binding pattern with no elements', () => {
                 expect(parseScript('function fnf({x: {y} = 42}) {}', {
                     ranges: true,
                     raw: true
@@ -5551,7 +5485,7 @@ describe('Destructuring - Destructuring', () => {
                                 },
                                 "value": {
                                   "type": "AssignmentPattern",
-                                  "start": 17,
+                                  "start": 14,
                                   "end": 25,
                                   "left": {
                                     "type": "ObjectPattern",

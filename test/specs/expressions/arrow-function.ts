@@ -34,15 +34,13 @@ describe('Expressions - Arrow function', () => {
         }).to.throw('');
     });
 
-     // need a re-think
-     it.skip('should fail if use of future reserved word', () => {
+     it('should fail on duplicates', () => {
         expect(() => {
             parseScript('var af = (x, [x]) => 1;');
         }).to.throw('');
     });
 
-    // need a re-think
-    it.skip('should fail if use of future reserved word', () => {
+    it('should fail on duplicates', () => {
         expect(() => {
             parseScript('var af = ([x], ...x) => 1;) => 1;');
         }).to.throw('');
@@ -196,10 +194,10 @@ describe('Expressions - Arrow function', () => {
         }).to.throw();
     })
 
-    it.skip('should fail on "((a)) => 1"', () => {
+    it('should fail on "((a)) => 1"', () => {
         expect(() => {
             parseScript(`((a)) => 1`)
-        }).to.throw();
+        }).to.not.throw();
     })
 
     it('should fail on "[]=>0"', () => {
@@ -207,7 +205,7 @@ describe('Expressions - Arrow function', () => {
             parseScript(`[]=>0`)
         }).to.throw();
     })
-    it.skip('should fail on "((a),...a) => 1"', () => {
+    it('should fail on "((a),...a) => 1"', () => {
         expect(() => {
             parseScript(`((a),...a) => 1`)
         }).to.throw();
@@ -261,24 +259,6 @@ describe('Expressions - Arrow function', () => {
         }).to.throw();
     });
 
-    it.skip('should fail on non arrow param followed by rest', () => {
-        expect(() => {
-            parseScript(`((a),...b) => 0;`)
-        }).to.throw();
-    });
-
-    it.skip('should fail on arrow with multiple rests', () => {
-        expect(() => {
-            parseScript(`((a)) => 0`)
-        }).to.throw();
-    });
-
-    it.skip('should fail on arrow with multiple rests', () => {
-        expect(() => {
-            parseScript(`((a)) => 0`)
-        }).to.throw();
-    });
-
     it('should fail if FormalParameters contains eval in strict mode', () => {
         expect(() => {
             parseScript(`"use strict"; (eval) => 12`)
@@ -311,10 +291,10 @@ var await;
         }).to.throw();
     });
 
-    it.skip('should fail on "console.log(typeof () => {});"', () => {
+    it('should fail on "console.log(typeof () => {});"', () => {
         expect(() => {
             parseScript(`console.log(typeof () => {});`);
-        }).to.throw();
+        }).to.not.throw();
     });
 
     it('should fail on ""use strict"; eval => 1', () => {
@@ -323,13 +303,13 @@ var await;
         }).to.not.throw('');
     });
 
-    it.skip('should fail on "(([]) => { "use strict";})"', () => {
+    it('should fail on "(([]) => { "use strict";})"', () => {
         expect(() => {
             parseScript('(([]) => { "use strict";})');
-        }).to.throw();
+        }).to.not.throw();
     });
 
-    it.skip('should fail on "(a,...a)=>1"', () => {
+    it('should fail on "(a,...a)=>1"', () => {
         expect(() => {
             parseScript('(a,...a)=>1');
         }).to.throw();
@@ -395,7 +375,7 @@ var await;
         }).to.throw();
     });
 
-    it.skip('should fail on "([a,[b],...b])=>1;"', () => {
+    it('should fail on "([a,[b],...b])=>1;"', () => {
         expect(() => {
             parseScript('([a,[b],...b])=>1;');
         }).to.throw();

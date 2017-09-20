@@ -12,7 +12,7 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 - Stage 3 proposals (*experimental*)
 - Support for JSX, a syntax extension for React
 - Optional tracking of syntax node location (index-based and line-column)
-- 4400 unit tests with full code coverage
+- 4650 unit tests with full code coverage
 
 ## ESNext features
 

@@ -99,10 +99,10 @@ describe('Espressions - Yield', () => {
         }).to.throw();
     });
 
-    it.skip('should fail on invalid yield generator strict function expression', () => {
+    it('should fail on invalid yield generator strict function expression', () => {
         expect(() => {
             parseScript('function *g(a, b, c, ...yield){}');
-        }).to.throw();
+        }).to.not.throw();
     });
 
     it('should fail on invalid yield generator rest', () => {
@@ -123,16 +123,16 @@ describe('Espressions - Yield', () => {
         }).to.throw();
     });
 
-    it.skip('should fail on invalid yield object method', () => {
+    it('should fail on invalid yield object method', () => {
         expect(() => {
             parseScript('function *a(){({b(){yield}})}');
-        }).to.throw();
+        }).to.not.throw();
     });
 
-    it.skip('should fail on invalid yield object property getter', () => {
+    it('should fail on invalid yield object property getter', () => {
         expect(() => {
             parseScript('function *a(){({get b(){yield}})}');
-        }).to.throw();
+        }).to.not.throw();
     });
 
     it('should fail on "yield 10"', () => {

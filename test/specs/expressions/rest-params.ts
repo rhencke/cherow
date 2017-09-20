@@ -11,7 +11,7 @@ describe('Expressions - Rest parameters', () => {
         }).to.throw()
     });
 
-    it.skip('should fail on complex rest in arrow', () => {
+    it('should fail on complex rest in arrow', () => {
         expect(() => {
             parseScript('(a,...[a]) => 0;')
         }).to.throw()

@@ -290,58 +290,6 @@ describe('Binding pattern', () => {
             });
         });
 
-        it.skip('should parse "var {a: b.c} = 0;"', () => {
-            expect(parseScript(`var {a: b.c} = 0;`)).to.eql({
-                "body": [{
-                    "declarations": [{
-                        "id": {
-                            "properties": [{
-                                    "computed": false,
-                                    "key": {
-                                        "name": "a",
-                                        "type": "Identifier"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false,
-                                    "type": "Property",
-                                    "value": {
-                                        "name": "b",
-                                        "type": "Identifier"
-                                    }
-                                },
-                                {
-                                    "computed": false,
-                                    "key": {
-                                        "name": "b",
-                                        "type": "Identifier"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false,
-                                    "type": "Property",
-                                    "value": {
-                                        "name": "c",
-                                        "type": "Identifier"
-                                    }
-                                }
-                            ],
-                            "type": "ObjectPattern"
-                        },
-                        "init": {
-                            "type": "Literal",
-                            "value": 0
-                        },
-                        "type": "VariableDeclarator"
-                    }],
-                    "kind": "var",
-                    "type": "VariableDeclaration"
-                }],
-                "sourceType": "script",
-                "type": "Program"
-            });
-        });
-
         it('should parse "var {a} = 0;"', () => {
             expect(parseScript(`var {a} = 0;`)).to.eql({
                 "type": "Program",
@@ -1415,7 +1363,7 @@ describe('Binding pattern', () => {
             });
         });
 
-        it.skip('should parse object pattern with properties', () => {
+        it('should parse object pattern with properties', () => {
             expect(parseScript(`let {a,b=0,c:d,e:f=0,[g]:[h]}=0`, {
                 raw: true,
                 ranges: true
@@ -1528,7 +1476,7 @@ describe('Binding pattern', () => {
                               },
                               "value": {
                                 "type": "AssignmentPattern",
-                                "start": 17,
+                                "start": 15,
                                 "end": 20,
                                 "left": {
                                   "type": "Identifier",

@@ -152,12 +152,6 @@ describe('Declaration - Lexical', () => {
         }).to.throw();
     });
 
-    it.skip('should fail on const: |const let| split across two lines ', () => {
-        expect(() => {
-            parseScript('let = "irrelevant initializer";')
-        }).to.throw();
-    });
-
     it("should throw on \"var x += 1;", () => {
         expect(() => {
             parseScript(`var x += 1;`)

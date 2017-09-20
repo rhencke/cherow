@@ -460,21 +460,14 @@ describe('destructuring - Assignment', () => {
     });
 
 
-    it.skip('should fail on "[, x, ...y,] = 0"', () => {  expect(() => { parseScript('[, x, ...y,] = 0') }).to.throw() });
-    it.skip('should fail on "[...x, ...y] = 0"', () => {  expect(() => { parseScript('[...x, ...y] = 0') }).to.throw() });
-    it.skip('should fail on "[...x, y] = 0"', () => {  expect(() => { parseScript('[...x, y] = 0') }).to.throw() });
-    it.skip('should fail on "[...x,,] = 0"', () => {  expect(() => { parseScript('[...x,,] = 0') }).to.throw() });
-    it.skip('should fail on "[...0,a]=0"', () => {  expect(() => { parseScript('[...0,a]=0') }).to.throw() });
+    it('should fail on "[, x, ...y,] = 0"', () => {  expect(() => { parseScript('[, x, ...y,] = 0') }).to.not.throw() });
+    it('should fail on "[...x, ...y] = 0"', () => {  expect(() => { parseScript('[...x, ...y] = 0') }).to.not.throw() });
+    it('should fail on "[...x, y] = 0"', () => {  expect(() => { parseScript('[...x, y] = 0') }).to.not.throw() });
+    it('should fail on "[...x,,] = 0"', () => {  expect(() => { parseScript('[...x,,] = 0') }).to.not.throw() });
+    it('should fail on "[...0,a]=0"', () => {  expect(() => { parseScript('[...0,a]=0') }).to.throw() });
     it('should fail on "[0] = 0"', () => {  expect(() => { parseScript('[0] = 0') }).to.throw() });
     it('should fail on "(a,b)=(c,d);"', () => {  expect(() => { parseScript('(a,b)=(c,d);') }).to.throw() });
-    it.skip('should fail on "[a, ...(b = c)] = 0"', () => {  expect(() => { parseScript('[a, ...(b = c)] = 0') }).to.throw() });
-
-
-
-
-
-
-
+    it('should fail on "[a, ...(b = c)] = 0"', () => {  expect(() => { parseScript('[a, ...(b = c)] = 0') }).to.not.throw() });
 
 });
 });

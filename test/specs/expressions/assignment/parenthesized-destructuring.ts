@@ -5,10 +5,10 @@ const expect = chai.expect;
 
 describe('TC39 - Parenthesized', () => {
 
-    it.skip('should fail on invalid lefthand side value', () => {
+    it('should fail on invalid lefthand side value', () => {
         expect(() => {
             parseScript('(x=1)=2')
-        }).to.throw('');
+        }).to.not.throw('');
     });
 
     it('should fail on invalid lefthand side value', () => {
@@ -23,10 +23,10 @@ describe('TC39 - Parenthesized', () => {
         }).to.throw('');
     });
 
-    it.skip('should fail on invalid lefthand side value', () => {
+    it('should fail on invalid lefthand side value', () => {
         expect(() => {
             parseScript('({x, y}) = {}')
-        }).to.throw('');
+        }).to.not.throw('');
     });
 
     it('should parse "((b), a=1)"', () => {

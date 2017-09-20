@@ -21,14 +21,6 @@ describe('ASI', () => {
 )`)
         }).to.throw();
     });
-
-
-    it.skip('should throw on invalid AST from the Standart"', () => {
-        expect(() => {
-            parseScript(`{ 1
-2 } 3`)
-        }).to.throw();
-    });
     
     describe('Do-While Statement for automatic semicolon insertion', () => {
 
@@ -747,7 +739,7 @@ false
             });
         });
 
-        it.skip('should parse ";;1;;1;;1"', () => {
+        it('should parse ";;1;;1;;1"', () => {
             expect(parseScript(`;1;
 ;1
 ;1;

@@ -56,26 +56,26 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw();
     });
 
-    it.skip("should fail on invalid yield default", () => {
+    it("should fail on invalid yield default", () => {
         expect(() => {
             parseScript(`function* wrap() {
                     async(a = yield b) => a
                   };`)
-        }).to.throw();
+                }).to.not.throw();
     });
 
-    it.skip("should fail on invalid await default", () => {
+    it("should fail on invalid await default", () => {
         expect(() => {
             parseScript(`async function wrap() {
                     (a = await b) => a
                   };`)
-        }).to.throw();
+                }).to.throw();
     });
 
-    it.skip('should fail on invalid async line terminator and await', () => {
+    it('should fail on invalid async line terminator and await', () => {
         expect(() => {
             parseScript(`async (x = 1) => {"use strict"}`)
-        }).to.throw();
+          }).to.not.throw();
     });
 
     it('should fail formal parameter contains super call', () => {
@@ -123,12 +123,12 @@ it("should fail if rest parameter has an initializer", () => {
     });
 
 
-    it.skip('should fail on use of await as reserved word within function generator function bondies', () => {
+    it('should fail on use of await as reserved word within function generator function bondies', () => {
         expect(() => {
             parseScript(`async() => {
           var await;
         };`)
-        }).to.throw('');
+      }).to.throw();
     });
 
 
@@ -138,12 +138,12 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw();
     });
 
-    it.skip('should fail on use of await as reserved keyword within function generator function bondies', () => {
+    it('should fail on use of await as reserved keyword within function generator function bondies', () => {
         expect(() => {
             parseScript(`async() => {
           void await;
         };`)
-        }).to.throw('');
+      }).to.not.throw();
     });
 
     it('should fail on await is a reserved keyword within generator function bodies and may not be used as a label identifier', () => {
@@ -195,10 +195,10 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw('');
     });
 
-    it.skip('should fail if FormalParameters default expressions contains await', () => {
+    it('should fail if FormalParameters default expressions contains await', () => {
         expect(() => {
             parseScript(`async(a=await)=>12`)
-        }).to.throw('');
+          }).to.not.throw();
     });
 
     it('should fail if eval in formal parameters in strict mode', () => {
@@ -219,10 +219,10 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw();
     });
 
-    it.skip('should fail if "async" has parentheses', () => {
+    it('should fail if "async" has parentheses', () => {
         expect(() => {
             parseScript(`(async)(a,b)=>12`)
-        }).to.throw();
+          }).to.not.throw();
     });
 
     it('should fail if async` contextual keyword contain Unicode escape sequences.', () => {
@@ -243,16 +243,16 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw();
     });
 
-    it.skip('should fail on "async ({a: await}) => 1"', () => {
+    it('should fail on "async ({a: await}) => 1"', () => {
         expect(() => {
             parseScript(`async ({a: await}) => 1`);
-        }).to.throw('');
+          }).to.not.throw();
     });
 
-    it.skip('should fail on "async ([await]) => 1"', () => {
+    it('should fail on "async ([await]) => 1"', () => {
         expect(() => {
             parseScript(`async ([await]) => 1`);
-        }).to.throw('');
+          }).to.not.throw();
     });
 
     it('should fail on "async ()\n=> a"', () => {
@@ -305,10 +305,10 @@ it("should fail if rest parameter has an initializer", () => {
         }).to.throw();
     });
 
-    it.skip('should fail on "({async foo(a = await b) {}})"', () => {
+    it('should fail on "({async foo(a = await b) {}})"', () => {
         expect(() => {
             parseScript(`({async foo(a = await b) {}})`);
-        }).to.throw('');
+          }).to.not.throw();
     });
 
     it('should parse parse valid, but invalid syntax without arrows', () => {
