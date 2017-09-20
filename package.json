@@ -1,7 +1,7 @@
 {
   "name": "cherow",
-  "version": "0.0.15",
-  "description": "",
+  "version": "0.0.17",
+  "description": "Fast, standard-compliant ECMAScript parser written in ECMAScript",
   "main": "dist/cherow.js",
   "author": "KFlash",
   "license": "MIT",
@@ -60,12 +60,5 @@
     "ts-node": "^3.3.0",
     "tslint": "5.7.0",
     "typescript": "^2.5.2"
-  },
-  "dependencies": {
-    "acorn": "^5.1.2",
-    "acorn-jsx": "^4.0.1",
-    "benchmark": "^2.1.4",
-    "esprima": "^4.0.0",
-    "jazzle": "^0.5.880"
   }
 }
