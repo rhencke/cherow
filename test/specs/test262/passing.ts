@@ -8239,52 +8239,75 @@ describe('TC262 - passing', () => {
                   var a = {
                       delete: 1
                   };`, {
-                ranges: false,
+                ranges: true,
                 raw: true,
-                directives: true
             })).to.eql({
-                "type": "Program",
-                "body": [{
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "Literal",
-                            "value": "use strict",
-                            "raw": "'use strict'"
-                        },
-                        "directive": "use strict"
-                    },
+              "type": "Program",
+              "start": 0,
+              "end": 94,
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 13,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 0,
+                    "end": 12,
+                    "value": "use strict",
+                    "raw": "'use strict'"
+                  }
+                },
+                {
+                  "type": "VariableDeclaration",
+                  "start": 32,
+                  "end": 94,
+                  "declarations": [
                     {
-                        "type": "VariableDeclaration",
-                        "declarations": [{
-                            "type": "VariableDeclarator",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "a"
+                      "type": "VariableDeclarator",
+                      "start": 36,
+                      "end": 93,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 36,
+                        "end": 37,
+                        "name": "a"
+                      },
+                      "init": {
+                        "type": "ObjectExpression",
+                        "start": 40,
+                        "end": 93,
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "start": 64,
+                            "end": 73,
+                            "method": false,
+                            "shorthand": false,
+                            "computed": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start": 64,
+                              "end": 70,
+                              "name": "delete"
                             },
-                            "init": {
-                                "type": "ObjectExpression",
-                                "properties": [{
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "delete"
-                                    },
-                                    "computed": false,
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": 1,
-                                        "raw": "1"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                }]
-                            }
-                        }],
-                        "kind": "var"
+                            "value": {
+                              "type": "Literal",
+                              "start": 72,
+                              "end": 73,
+                              "value": 1,
+                              "raw": "1"
+                            },
+                            "kind": "init"
+                          }
+                        ]
+                      }
                     }
-                ],
-                "sourceType": "script"
+                  ],
+                  "kind": "var"
+                }
+              ],
+              "sourceType": "script"
             });
         });
     
@@ -11682,151 +11705,209 @@ describe('TC262 - passing', () => {
     
         it('should parse "use strict";a={b:1,b:2}', () => {
             expect(parseScript(`"use strict";a={b:1,b:2}`, {
-                ranges: false,
-                raw: true,
-                directives: true
+                ranges: true,
+                raw: true
             })).to.eql({
-                "type": "Program",
-                "body": [{
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "Literal",
-                            "value": "use strict",
-                            "raw": "\"use strict\""
-                        },
-                        "directive": "use strict"
+              "type": "Program",
+              "start": 0,
+              "end": 24,
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 13,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 0,
+                    "end": 12,
+                    "value": "use strict",
+                    "raw": "\"use strict\""
+                  }
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start": 13,
+                  "end": 24,
+                  "expression": {
+                    "type": "AssignmentExpression",
+                    "start": 13,
+                    "end": 24,
+                    "operator": "=",
+                    "left": {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 14,
+                      "name": "a"
                     },
-                    {
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "AssignmentExpression",
-                            "operator": "=",
-                            "left": {
-                                "type": "Identifier",
-                                "name": "a"
-                            },
-                            "right": {
-                                "type": "ObjectExpression",
-                                "properties": [{
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "b"
-                                        },
-                                        "computed": false,
-                                        "value": {
-                                            "type": "Literal",
-                                            "value": 1,
-                                            "raw": "1"
-                                        },
-                                        "kind": "init",
-                                        "method": false,
-                                        "shorthand": false
-                                    },
-                                    {
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "b"
-                                        },
-                                        "computed": false,
-                                        "value": {
-                                            "type": "Literal",
-                                            "value": 2,
-                                            "raw": "2"
-                                        },
-                                        "kind": "init",
-                                        "method": false,
-                                        "shorthand": false
-                                    }
-                                ]
-                            }
+                    "right": {
+                      "type": "ObjectExpression",
+                      "start": 15,
+                      "end": 24,
+                      "properties": [
+                        {
+                          "type": "Property",
+                          "start": 16,
+                          "end": 19,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 16,
+                            "end": 17,
+                            "name": "b"
+                          },
+                          "value": {
+                            "type": "Literal",
+                            "start": 18,
+                            "end": 19,
+                            "value": 1,
+                            "raw": "1"
+                          },
+                          "kind": "init"
+                        },
+                        {
+                          "type": "Property",
+                          "start": 20,
+                          "end": 23,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 20,
+                            "end": 21,
+                            "name": "b"
+                          },
+                          "value": {
+                            "type": "Literal",
+                            "start": 22,
+                            "end": 23,
+                            "value": 2,
+                            "raw": "2"
+                          },
+                          "kind": "init"
                         }
+                      ]
                     }
-                ],
-                "sourceType": "script"
+                  }
+                }
+              ],
+              "sourceType": "script"
             });
         });
     
         it('should parse "use strict"; var a = { get b() {}, get b() {} }', () => {
             expect(parseScript(`"use strict"; var a = { get b() {}, get b() {} }`, {
-                ranges: false,
-                raw: true,
-                directives: true
+                ranges: true,
+                raw: true
             })).to.eql({
-                "type": "Program",
-                "body": [{
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "Literal",
-                            "value": "use strict",
-                            "raw": "\"use strict\""
-                        },
-                        "directive": "use strict"
-                    },
+              "type": "Program",
+              "start": 0,
+              "end": 48,
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 13,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 0,
+                    "end": 12,
+                    "value": "use strict",
+                    "raw": "\"use strict\""
+                  }
+                },
+                {
+                  "type": "VariableDeclaration",
+                  "start": 14,
+                  "end": 48,
+                  "declarations": [
                     {
-                        "type": "VariableDeclaration",
-                        "declarations": [{
-                            "type": "VariableDeclarator",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "a"
+                      "type": "VariableDeclarator",
+                      "start": 18,
+                      "end": 48,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 18,
+                        "end": 19,
+                        "name": "a"
+                      },
+                      "init": {
+                        "type": "ObjectExpression",
+                        "start": 22,
+                        "end": 48,
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "start": 24,
+                            "end": 34,
+                            "method": false,
+                            "shorthand": false,
+                            "computed": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start": 28,
+                              "end": 29,
+                              "name": "b"
                             },
-                            "init": {
-                                "type": "ObjectExpression",
-                                "properties": [{
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "b"
-                                        },
-                                        "computed": false,
-                                        "value": {
-                                            "type": "FunctionExpression",
-                                            "id": null,
-                                            "params": [],
-                                            "body": {
-                                                "type": "BlockStatement",
-                                                "body": []
-                                            },
-                                            "generator": false,
-                                            "expression": false,
-                                            "async": false
-                                        },
-                                        "kind": "get",
-                                        "method": false,
-                                        "shorthand": false
-                                    },
-                                    {
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "b"
-                                        },
-                                        "computed": false,
-                                        "value": {
-                                            "type": "FunctionExpression",
-                                            "id": null,
-                                            "params": [],
-                                            "body": {
-                                                "type": "BlockStatement",
-                                                "body": []
-                                            },
-                                            "generator": false,
-                                            "expression": false,
-                                            "async": false
-                                        },
-                                        "kind": "get",
-                                        "method": false,
-                                        "shorthand": false
-                                    }
-                                ]
+                            "kind": "get",
+                            "value": {
+                              "type": "FunctionExpression",
+                              "start": 29,
+                              "end": 34,
+                              "id": null,
+                              "generator": false,
+                              "expression": false,
+                              "async": false,
+                              "params": [],
+                              "body": {
+                                "type": "BlockStatement",
+                                "start": 32,
+                                "end": 34,
+                                "body": []
+                              }
                             }
-                        }],
-                        "kind": "var"
+                          },
+                          {
+                            "type": "Property",
+                            "start": 36,
+                            "end": 46,
+                            "method": false,
+                            "shorthand": false,
+                            "computed": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start": 40,
+                              "end": 41,
+                              "name": "b"
+                            },
+                            "kind": "get",
+                            "value": {
+                              "type": "FunctionExpression",
+                              "start": 41,
+                              "end": 46,
+                              "id": null,
+                              "generator": false,
+                              "expression": false,
+                              "async": false,
+                              "params": [],
+                              "body": {
+                                "type": "BlockStatement",
+                                "start": 44,
+                                "end": 46,
+                                "body": []
+                              }
+                            }
+                          }
+                        ]
+                      }
                     }
-                ],
-                "sourceType": "script"
+                  ],
+                  "kind": "var"
+                }
+              ],
+              "sourceType": "script"
             });
         });
     
@@ -12935,7 +13016,6 @@ describe('TC262 - passing', () => {
         it('should parse "\0"', () => {
             expect(parseScript(`'\0'`, {
                 raw: true,
-                directives: true
             })).to.eql({
                 "type": "Program",
                 "body": [{
@@ -12944,8 +13024,7 @@ describe('TC262 - passing', () => {
                         "type": "Literal",
                         "value": "\u0000",
                         "raw": "'\u0000'"
-                    },
-                    "directive": "\u0000"
+                    }
                 }],
                 "sourceType": "script"
             });

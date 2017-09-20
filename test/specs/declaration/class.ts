@@ -5,21 +5,24 @@ const expect = chai.expect;
 
 describe('Declarations - Class', () => {
 
-    it('should fail on unexpected eval in strict mode', () => {
+    it('should fail on invalid use of eval in strict mode', () => {
         expect(() => {
             parseScript(`class A {a(eval){}}`);
         }).to.throw();
     });
-    it('should fail on unexpected arguments in strict mode', () => {
+
+    it('should fail on invalid use of arguments in strict mode', () => {
         expect(() => {
             parseScript(`class A {a(arguments){}}`);
         }).to.throw();
     });
-    it('should fail if duplicate elements', () => {
+
+    it('should fail if static has async generator', () => {
         expect(() => {
             parseScript(`class C { static async *method(x = 0, x) { } }`);
         }).to.throw();
     });
+
     it('should fail if async generator contain escaped keyword', () => {
         expect(() => {
             parseScript(`class C { static async *gen() {  \\u0061wait: ; }}`, {
@@ -83,7 +86,7 @@ describe('Declarations - Class', () => {
         }).to.throw();
     });
 
-    it('should fail if duplicate constructor in the same class', () => {
+    it('should fail if async constructor', () => {
         expect(() => {
             parseScript(`class A {async constructor() { }}`, {
                 next: true
@@ -270,95 +273,6 @@ describe('Declarations - Class', () => {
                                     "type": "BlockStatement",
                                     "start": 17,
                                     "end": 19,
-                                    "body": []
-                                }
-                            }
-                        }
-                    ]
-                }
-            }],
-            "sourceType": "script"
-        });
-    });
-
-    it('should parse "class A {a(){};b(){}}"', () => {
-        expect(parseScript(`class A {a(){};b(){}}`, {
-            ranges: true
-        })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 21,
-            "body": [{
-                "type": "ClassDeclaration",
-                "start": 0,
-                "end": 21,
-                "id": {
-                    "type": "Identifier",
-                    "start": 6,
-                    "end": 7,
-                    "name": "A"
-                },
-                "superClass": null,
-                "body": {
-                    "type": "ClassBody",
-                    "start": 8,
-                    "end": 21,
-                    "body": [{
-                            "type": "MethodDefinition",
-                            "start": 9,
-                            "end": 14,
-                            "computed": false,
-                            "key": {
-                                "type": "Identifier",
-                                "start": 9,
-                                "end": 10,
-                                "name": "a"
-                            },
-                            "static": false,
-                            "kind": "method",
-                            "value": {
-                                "type": "FunctionExpression",
-                                "start": 10,
-                                "end": 14,
-                                "id": null,
-                                "generator": false,
-                                "expression": false,
-                                "async": false,
-                                "params": [],
-                                "body": {
-                                    "type": "BlockStatement",
-                                    "start": 12,
-                                    "end": 14,
-                                    "body": []
-                                }
-                            }
-                        },
-                        {
-                            "type": "MethodDefinition",
-                            "start": 15,
-                            "end": 20,
-                            "computed": false,
-                            "key": {
-                                "type": "Identifier",
-                                "start": 15,
-                                "end": 16,
-                                "name": "b"
-                            },
-                            "static": false,
-                            "kind": "method",
-                            "value": {
-                                "type": "FunctionExpression",
-                                "start": 16,
-                                "end": 20,
-                                "id": null,
-                                "generator": false,
-                                "expression": false,
-                                "async": false,
-                                "params": [],
-                                "body": {
-                                    "type": "BlockStatement",
-                                    "start": 18,
-                                    "end": 20,
                                     "body": []
                                 }
                             }

@@ -693,7 +693,6 @@ describe('TC39 - String literals', () => {
         expect(parseScript(`"\\u0430"`, {
             ranges: true,
             raw: true,
-            directives: true
         })).to.eql({
             "type": "Program",
             "end": 8,
@@ -708,8 +707,7 @@ describe('TC39 - String literals', () => {
                     "start": 0,
                     "value": "а",
                     "raw": "\"\\u0430\""
-                },
-                "directive": "\\u0430"
+                }
             }],
             "sourceType": "script"
         })
@@ -718,8 +716,7 @@ describe('TC39 - String literals', () => {
     it('should parse "\u0430"', () => {
         expect(parseModule(`"\\u0430"`, {
             ranges: true,
-            raw: true,
-            directives: true
+            raw: true
         })).to.eql({
             "type": "Program",
             "end": 8,
@@ -734,8 +731,7 @@ describe('TC39 - String literals', () => {
                     "start": 0,
                     "value": "а",
                     "raw": "\"\\u0430\""
-                },
-                "directive": "\\u0430"
+                }
             }],
             "sourceType": "module"
         })

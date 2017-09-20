@@ -36,7 +36,7 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 * `locations` - Enables location tracking. (*4 min fix, but on hold for now*)
 * `jsx` - Enables JSX
 
-# API
+## API
 
 Cherow can be used to perform syntactic analysis of Javascript program, or lexical analysis (tokenization).
 
@@ -81,20 +81,6 @@ cherow.parseScript('// foo',
     }
     );
 
-```
-
-## Acorn and Esprima
-
-If you prefer Acorn, you can use some of the options to let Cherow parse and give you the same output as you would do
-with Acorn. Same for Esprima.
-
-Here is how you do it:
-
-**Acorn**
-
-```js
-
-cherow.parseScript('{ a: b}', { raw: true, ranges: true });
 ```
 
 **Esprima**

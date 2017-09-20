@@ -88,30 +88,15 @@ export class Parser {
         });
     }
 
-    /**
-     * Throws an error
-     *
-     * @param type Errors
-     * @param params string[]
-     */
     private error(type: Errors, ...params: string[]): void {
         throw createError(type, this.index, this.line, this.column, ...params);
     }
 
-    /**
-     * Thros an error at given index position
-     *
-     * @param type
-     * @param params
-     */
     private throwError(type: Errors, ...params: string[]): void {
         const loc: any = this.errorLocation;
         throw createError(type, loc.index, loc.line, loc.column, ...params);
     }
 
-    /**
-     * Get current location
-     */
     private trackErrorLocation(): ErrorLocation {
         return {
             index: this.index,
@@ -120,9 +105,6 @@ export class Parser {
         };
     }
 
-    /**
-     * Save lexer state
-     */
     private saveState(): any {
         return {
             index: this.index,
@@ -138,11 +120,6 @@ export class Parser {
         };
     }
 
-    /**
-     * Restore lexer state
-     *
-     * @param state SavedState
-     */
     private restoreState(state: any): any {
         this.index = state.index;
         this.column = state.column;
@@ -1545,17 +1522,6 @@ export class Parser {
         const statements: ESTree.Statement[] = [];
 
         while (this.token !== Token.EndOfSource) {
-            if (this.flags & Flags.OptionsDirective) {
-                if (!(this.token & Token.StringLiteral)) break;
-                const raw = this.tokenRaw;
-                statements.push(this.finishNode(pos, {
-                    type: 'ExpressionStatement',
-                    expression: this.parseExpression(context),
-                    directive: raw.slice(1, -1)
-                }));
-                break;
-            }
-
             statements.push(this.parseModuleItem(context));
         }
 
@@ -1570,29 +1536,7 @@ export class Parser {
 
         while (this.token !== Token.EndOfSource) {
             if (!(this.token & Token.StringLiteral)) break;
-            if (this.flags & Flags.OptionsDirective) {
-                const pos = this.startNode();
-                const raw = this.tokenRaw;
-                const expr = this.parseExpression(context);
-                this.consumeSemicolon(context);
-                if (expr.type === 'Literal') {
-                    if (expr.value === 'use strict') context |= Context.Strict;
-                    statements.push(this.finishNode(pos, {
-                        type: 'ExpressionStatement',
-                        expression: expr,
-                        directive: raw.slice(1, -1) // slice of the quotes at the end of the directive prologue
-                    }));
-                } else {
-                    statements.push(this.finishNode(pos, {
-                        type: 'ExpressionStatement',
-                        expression: expr
-                    }));
-                }
-
-                break;
-            }
-
-            const item: any = this.parseStatementListItem(context);
+            const item: ESTree.Statement = this.parseStatementListItem(context);
             statements.push(item);
             if (!isDirective(item)) break;
             if (item.expression.value === 'use strict') {

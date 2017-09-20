@@ -1351,69 +1351,97 @@ describe('Espressions - Object', () => {
             y: 'second'
         };`, {
             raw: true,
-            directives: true,
-            ranges: false
+            ranges: true
         })).to.eql({
             "type": "Program",
-            "body": [{
-                    "type": "ExpressionStatement",
-                    "expression": {
-                        "type": "Literal",
-                        "value": "use strict",
-                        "raw": "\"use strict\""
-                    },
-                    "directive": "use strict"
-                },
-                {
-                    "type": "VariableDeclaration",
-                    "declarations": [{
-                        "type": "VariableDeclarator",
-                        "id": {
-                            "type": "Identifier",
-                            "name": "x"
-                        },
-                        "init": {
-                            "type": "ObjectExpression",
-                            "properties": [{
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "y"
-                                    },
-                                    "computed": false,
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": "first",
-                                        "raw": "'first'"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                },
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "y"
-                                    },
-                                    "computed": false,
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": "second",
-                                        "raw": "'second'"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                }
-                            ]
-                        }
-                    }],
-                    "kind": "var"
+            "start": 0,
+            "end": 99,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 13,
+                "expression": {
+                  "type": "Literal",
+                  "start": 0,
+                  "end": 12,
+                  "value": "use strict",
+                  "raw": "\"use strict\""
                 }
+              },
+              {
+                "type": "VariableDeclaration",
+                "start": 31,
+                "end": 99,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 35,
+                    "end": 98,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 35,
+                      "end": 36,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "ObjectExpression",
+                      "start": 39,
+                      "end": 98,
+                      "properties": [
+                        {
+                          "type": "Property",
+                          "start": 53,
+                          "end": 63,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 53,
+                            "end": 54,
+                            "name": "y"
+                          },
+                          "value": {
+                            "type": "Literal",
+                            "start": 56,
+                            "end": 63,
+                            "value": "first",
+                            "raw": "'first'"
+                          },
+                          "kind": "init"
+                        },
+                        {
+                          "type": "Property",
+                          "start": 77,
+                          "end": 88,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 77,
+                            "end": 78,
+                            "name": "y"
+                          },
+                          "value": {
+                            "type": "Literal",
+                            "start": 80,
+                            "end": 88,
+                            "value": "second",
+                            "raw": "'second'"
+                          },
+                          "kind": "init"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "kind": "var"
+              }
             ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should parse duplicate properties and computed properties', () => {
@@ -1427,118 +1455,170 @@ describe('Espressions - Object', () => {
             ["__" + "proto" + "__"]: proto
         };`, {
             raw: true,
-            directives: true,
-            ranges: false
+            ranges: true
         })).to.eql({
             "type": "Program",
-            "body": [{
-                    "type": "ExpressionStatement",
-                    "expression": {
-                        "type": "Literal",
-                        "value": "use strict",
-                        "raw": "\"use strict\""
-                    },
-                    "directive": "use strict"
-                },
-                {
-                    "type": "VariableDeclaration",
-                    "declarations": [{
-                        "type": "VariableDeclarator",
-                        "id": {
-                            "type": "Identifier",
-                            "name": "proto"
-                        },
-                        "init": {
-                            "type": "ObjectExpression",
-                            "properties": []
-                        }
-                    }],
-                    "kind": "var"
-                },
-                {
-                    "type": "VariableDeclaration",
-                    "declarations": [{
-                        "type": "VariableDeclarator",
-                        "id": {
-                            "type": "Identifier",
-                            "name": "x"
-                        },
-                        "init": {
-                            "type": "ObjectExpression",
-                            "properties": [{
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Literal",
-                                        "value": "__proto__",
-                                        "raw": "\"__proto__\""
-                                    },
-                                    "computed": true,
-                                    "value": {
-                                        "type": "Identifier",
-                                        "name": "proto"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                },
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Literal",
-                                        "value": "__proto__",
-                                        "raw": "\"__proto__\""
-                                    },
-                                    "computed": true,
-                                    "value": {
-                                        "type": "Identifier",
-                                        "name": "proto"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                },
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "BinaryExpression",
-                                        "operator": "+",
-                                        "left": {
-                                            "type": "BinaryExpression",
-                                            "operator": "+",
-                                            "left": {
-                                                "type": "Literal",
-                                                "value": "__",
-                                                "raw": "\"__\""
-                                            },
-                                            "right": {
-                                                "type": "Literal",
-                                                "value": "proto",
-                                                "raw": "\"proto\""
-                                            }
-                                        },
-                                        "right": {
-                                            "type": "Literal",
-                                            "value": "__",
-                                            "raw": "\"__\""
-                                        }
-                                    },
-                                    "computed": true,
-                                    "value": {
-                                        "type": "Identifier",
-                                        "name": "proto"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                }
-                            ]
-                        }
-                    }],
-                    "kind": "var"
+            "start": 0,
+            "end": 195,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 13,
+                "expression": {
+                  "type": "Literal",
+                  "start": 0,
+                  "end": 12,
+                  "value": "use strict",
+                  "raw": "\"use strict\""
                 }
+              },
+              {
+                "type": "VariableDeclaration",
+                "start": 31,
+                "end": 46,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 35,
+                    "end": 45,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 35,
+                      "end": 40,
+                      "name": "proto"
+                    },
+                    "init": {
+                      "type": "ObjectExpression",
+                      "start": 43,
+                      "end": 45,
+                      "properties": []
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              {
+                "type": "VariableDeclaration",
+                "start": 64,
+                "end": 195,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 68,
+                    "end": 194,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 68,
+                      "end": 69,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "ObjectExpression",
+                      "start": 72,
+                      "end": 194,
+                      "properties": [
+                        {
+                          "type": "Property",
+                          "start": 86,
+                          "end": 106,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": true,
+                          "key": {
+                            "type": "Literal",
+                            "start": 87,
+                            "end": 98,
+                            "value": "__proto__",
+                            "raw": "\"__proto__\""
+                          },
+                          "value": {
+                            "type": "Identifier",
+                            "start": 101,
+                            "end": 106,
+                            "name": "proto"
+                          },
+                          "kind": "init"
+                        },
+                        {
+                          "type": "Property",
+                          "start": 120,
+                          "end": 140,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": true,
+                          "key": {
+                            "type": "Literal",
+                            "start": 121,
+                            "end": 132,
+                            "value": "__proto__",
+                            "raw": "\"__proto__\""
+                          },
+                          "value": {
+                            "type": "Identifier",
+                            "start": 135,
+                            "end": 140,
+                            "name": "proto"
+                          },
+                          "kind": "init"
+                        },
+                        {
+                          "type": "Property",
+                          "start": 154,
+                          "end": 184,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": true,
+                          "key": {
+                            "type": "BinaryExpression",
+                            "start": 155,
+                            "end": 176,
+                            "left": {
+                              "type": "BinaryExpression",
+                              "start": 155,
+                              "end": 169,
+                              "left": {
+                                "type": "Literal",
+                                "start": 155,
+                                "end": 159,
+                                "value": "__",
+                                "raw": "\"__\""
+                              },
+                              "operator": "+",
+                              "right": {
+                                "type": "Literal",
+                                "start": 162,
+                                "end": 169,
+                                "value": "proto",
+                                "raw": "\"proto\""
+                              }
+                            },
+                            "operator": "+",
+                            "right": {
+                              "type": "Literal",
+                              "start": 172,
+                              "end": 176,
+                              "value": "__",
+                              "raw": "\"__\""
+                            }
+                          },
+                          "value": {
+                            "type": "Identifier",
+                            "start": 179,
+                            "end": 184,
+                            "name": "proto"
+                          },
+                          "kind": "init"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "kind": "var"
+              }
             ],
             "sourceType": "script"
-        })
+          })
     });
 
     it('should parse computed addition property', () => {
@@ -5121,70 +5201,95 @@ describe('Espressions - Object', () => {
     it('should parse ""use strict";x={y:1,y:1}"', () => {
         expect(parseScript('"use strict";x={y:1,y:1}', {
             raw: true,
-            directives: true
+            ranges: true
         })).to.eql({
             "type": "Program",
+            "start": 0,
+            "end": 24,
             "body": [
-                {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                        "type": "Literal",
-                        "value": "use strict",
-                        "raw": "\"use strict\""
-                    },
-                    "directive": "use strict"
-                },
-                {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                        "type": "AssignmentExpression",
-                        "operator": "=",
-                        "left": {
-                            "type": "Identifier",
-                            "name": "x"
-                        },
-                        "right": {
-                            "type": "ObjectExpression",
-                            "properties": [
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "y"
-                                    },
-                                    "computed": false,
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": 1,
-                                        "raw": "1"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                },
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "y"
-                                    },
-                                    "computed": false,
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": 1,
-                                        "raw": "1"
-                                    },
-                                    "kind": "init",
-                                    "method": false,
-                                    "shorthand": false
-                                }
-                            ]
-                        }
-                    }
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 13,
+                "expression": {
+                  "type": "Literal",
+                  "start": 0,
+                  "end": 12,
+                  "value": "use strict",
+                  "raw": "\"use strict\""
                 }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start": 13,
+                "end": 24,
+                "expression": {
+                  "type": "AssignmentExpression",
+                  "start": 13,
+                  "end": 24,
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 14,
+                    "name": "x"
+                  },
+                  "right": {
+                    "type": "ObjectExpression",
+                    "start": 15,
+                    "end": 24,
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "start": 16,
+                        "end": 19,
+                        "method": false,
+                        "shorthand": false,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 16,
+                          "end": 17,
+                          "name": "y"
+                        },
+                        "value": {
+                          "type": "Literal",
+                          "start": 18,
+                          "end": 19,
+                          "value": 1,
+                          "raw": "1"
+                        },
+                        "kind": "init"
+                      },
+                      {
+                        "type": "Property",
+                        "start": 20,
+                        "end": 23,
+                        "method": false,
+                        "shorthand": false,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 20,
+                          "end": 21,
+                          "name": "y"
+                        },
+                        "value": {
+                          "type": "Literal",
+                          "start": 22,
+                          "end": 23,
+                          "value": 1,
+                          "raw": "1"
+                        },
+                        "kind": "init"
+                      }
+                    ]
+                  }
+                }
+              }
             ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should parse "({[a]:()=>{}})"', () => {

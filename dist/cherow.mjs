@@ -637,24 +637,12 @@ Parser.prototype.parseScript = function parseScript (context) {
         sourceType: 'script'
     });
 };
-/**
- * Throws an error
- *
- * @param type Errors
- * @param params string[]
- */
 Parser.prototype.error = function error (type) {
         var params = [], len = arguments.length - 1;
         while ( len-- > 0 ) params[ len ] = arguments[ len + 1 ];
 
     throw createError.apply(void 0, [ type, this.index, this.line, this.column ].concat( params ));
 };
-/**
- * Thros an error at given index position
- *
- * @param type
- * @param params
- */
 Parser.prototype.throwError = function throwError (type) {
         var params = [], len = arguments.length - 1;
         while ( len-- > 0 ) params[ len ] = arguments[ len + 1 ];
@@ -662,9 +650,6 @@ Parser.prototype.throwError = function throwError (type) {
     var loc = this.errorLocation;
     throw createError.apply(void 0, [ type, loc.index, loc.line, loc.column ].concat( params ));
 };
-/**
- * Get current location
- */
 Parser.prototype.trackErrorLocation = function trackErrorLocation () {
     return {
         index: this.index,
@@ -672,9 +657,6 @@ Parser.prototype.trackErrorLocation = function trackErrorLocation () {
         column: this.column
     };
 };
-/**
- * Save lexer state
- */
 Parser.prototype.saveState = function saveState () {
     return {
         index: this.index,
@@ -689,11 +671,6 @@ Parser.prototype.saveState = function saveState () {
         flags: this.flags,
     };
 };
-/**
- * Restore lexer state
- *
- * @param state SavedState
- */
 Parser.prototype.restoreState = function restoreState (state) {
     this.index = state.index;
     this.column = state.column;
@@ -1967,17 +1944,6 @@ Parser.prototype.parseModuleItems = function parseModuleItems (context) {
     this.nextToken(context);
     var statements = [];
     while (this.token !== 0 /* EndOfSource */) {
-        if (this$1.flags & 268435456 /* OptionsDirective */) {
-            if (!(this$1.token & 3 /* StringLiteral */))
-                { break; }
-            var raw = this$1.tokenRaw;
-            statements.push(this$1.finishNode(pos, {
-                type: 'ExpressionStatement',
-                expression: this$1.parseExpression(context),
-                directive: raw.slice(1, -1)
-            }));
-            break;
-        }
         statements.push(this$1.parseModuleItem(context));
     }
     return statements;
@@ -1990,28 +1956,6 @@ Parser.prototype.parseScriptBody = function parseScriptBody (context) {
     while (this.token !== 0 /* EndOfSource */) {
         if (!(this$1.token & 3 /* StringLiteral */))
             { break; }
-        if (this$1.flags & 268435456 /* OptionsDirective */) {
-            var pos = this$1.startNode();
-            var raw = this$1.tokenRaw;
-            var expr = this$1.parseExpression(context);
-            this$1.consumeSemicolon(context);
-            if (expr.type === 'Literal') {
-                if (expr.value === 'use strict')
-                    { context |= 2 /* Strict */; }
-                statements.push(this$1.finishNode(pos, {
-                    type: 'ExpressionStatement',
-                    expression: expr,
-                    directive: raw.slice(1, -1) // slice of the quotes at the end of the directive prologue
-                }));
-            }
-            else {
-                statements.push(this$1.finishNode(pos, {
-                    type: 'ExpressionStatement',
-                    expression: expr
-                }));
-            }
-            break;
-        }
         var item = this$1.parseStatementListItem(context);
         statements.push(item);
         if (!isDirective(item))
