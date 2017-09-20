@@ -1,5 +1,7 @@
 # Cherow
 
+[![Build Status](https://travis-ci.org/cherow/cherow.svg?branch=master)](https://travis-ci.org/cherow/cherow)
+
 Cherow is a very fast, standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm) parser written in ECMAScript. 
 
 It strictly follows the ECMAScript® 2018 Language Specification and should parse acc. these specifications
@@ -81,9 +83,6 @@ cherow.parseScript('// foo',
     }
     );
 
-// Parsing module code
-cherow.parseModule('const fooBar = 123;');
-
 ```
 
 ## Acorn and Esprima
@@ -97,14 +96,14 @@ Here is how you do it:
 
 ```js
 
-cherow.parseScript('// foo', { raw: true, ranges: true });
+cherow.parseScript('{ a: b}', { raw: true, ranges: true });
 ```
 
 **Esprima**
 
 ```js
 
-cherow.parseScript('// foo', { raw: true, directives: true });
+cherow.parseScript('{ a: b}', { raw: true, directives: true });
 
 ```
 
