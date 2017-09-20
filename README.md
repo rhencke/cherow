@@ -1,5 +1,3 @@
-# Cherow
-
 [![Build Status](https://travis-ci.org/cherow/cherow.svg?branch=master)](https://travis-ci.org/cherow/cherow)
 
 Cherow is a very fast, standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm) parser written in ECMAScript. 
@@ -8,7 +6,7 @@ It strictly follows the ECMAScript® 2018 Language Specification and should pars
 
 It's safe to use in production even I'm not done with this parser. I'm finishing the parser in the dev branch.
 
-# Features 
+## Features 
 
 - Full support for ECMAScript® 2018 [(ECMA-262 8th Edition)](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 - Stage 3 proposals (*experimental*)
@@ -16,7 +14,7 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 - Optional tracking of syntax node location (index-based and line-column)
 - 4400 unit tests with full code coverage
 
-# ESNext features
+## ESNext features
 
 `Stage 3` features support. This need to be enabled with the `next` option
 
@@ -27,7 +25,7 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 - Optional catch binding
 - Regular Expression's new `DotAll` flag
 
-# Options
+## Options
 
 * `next` - Enables `ECMAScript Next` support and let you use proposals at `stage 3` or higher such as `Dynamic Import`.
 * `directives` - Enables support for [directive nodes](https://github.com/estree/estree/pull/152)
@@ -107,9 +105,17 @@ cherow.parseScript('{ a: b}', { raw: true, directives: true });
 
 ```
 
-# Benchmarks
+## Benchmarks
 
 See the benchmarks [here](BENCHMARK.md)
+
+## ESTree
+
+Cherow outputs a sensible syntax tree format as standardized by [ESTree project](https://github.com/estree/estree), and does
+not add any "extra" properties to any of it's node like [Esprima](https://github.com/jquery/esprima).
+
+However. There is a small difference from other parsers because Cherow outputs a `await` property on the `ForStatement` node.
+This because of the support of `For Await` and `Async Generators`.
 
 
 ## Contribution
