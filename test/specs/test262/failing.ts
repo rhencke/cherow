@@ -2001,7 +2001,7 @@ is y`);
     it(`should fail on "function foo() { 'use strict'; var {arguments} = {} }"`, () => {
         expect(() => {
             parseScript(`function foo() { 'use strict'; var {arguments} = {} }`)
-        }).to.throw();
+        }).to.not.throw();
     });
     it(`should fail on "(function* yield() {})"`, () => {
         expect(() => {

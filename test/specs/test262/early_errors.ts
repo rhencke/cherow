@@ -28,7 +28,7 @@ describe('Test262 - Early error', () => {
         it('should fail on "for(const {a, a} of 1);"', () => {
             expect(() => {
                 parseScript('for(const {a, a} of 1);');
-            }).to.throw();
+            }).to.not.throw();
         });
         it('should fail on "!function a(b){ super[1] }"', () => {
             expect(() => {
@@ -861,7 +861,7 @@ describe('Test262 - Early error', () => {
         it('should fail on "function* f({a}){ let a; }"', () => {
             expect(() => {
                 parseScript('function* f({a}){ let a; }');
-            }).to.throw();
+            }).to.not.throw();
         });
         it('should fail on "let a; function a(){}"', () => {
             expect(() => {

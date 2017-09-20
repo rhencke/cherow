@@ -23023,5 +23023,5814 @@ describe('TC262 - passing', () => {
                 "sourceType": "script"
               });
         });
-        
+
+        it('should parse "a: for (;;) break a"', () => {
+        expect(parseScript('a: for (;;) break a', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 19,
+          "body": [
+            {
+              "type": "LabeledStatement",
+              "start": 0,
+              "end": 19,
+              "body": {
+                "type": "ForStatement",
+                "start": 3,
+                "end": 19,
+                "init": null,
+                "test": null,
+                "update": null,
+                "body": {
+                  "type": "BreakStatement",
+                  "start": 12,
+                  "end": 19,
+                  "label": {
+                    "type": "Identifier",
+                    "start": 18,
+                    "end": 19,
+                    "name": "a"
+                  }
+                }
+              },
+              "label": {
+                "type": "Identifier",
+                "start": 0,
+                "end": 1,
+                "name": "a"
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+      
+      it('should parse "({a: b = c = 1} = 2)"', () => {
+        expect(parseScript('({a: b = c = 1} = 2)', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 20,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 20,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 1,
+                "end": 19,
+                "operator": "=",
+                "left": {
+                  "type": "ObjectPattern",
+                  "start": 1,
+                  "end": 15,
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 2,
+                      "end": 14,
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 2,
+                        "end": 3,
+                        "name": "a"
+                      },
+                      "value": {
+                        "type": "AssignmentPattern",
+                        "start": 5,
+                        "end": 14,
+                        "left": {
+                          "type": "Identifier",
+                          "start": 5,
+                          "end": 6,
+                          "name": "b"
+                        },
+                        "right": {
+                          "type": "AssignmentExpression",
+                          "start": 9,
+                          "end": 14,
+                          "operator": "=",
+                          "left": {
+                            "type": "Identifier",
+                            "start": 9,
+                            "end": 10,
+                            "name": "c"
+                          },
+                          "right": {
+                            "type": "Literal",
+                            "start": 13,
+                            "end": 14,
+                            "value": 1,
+                            "raw": "1"
+                          }
+                        }
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 18,
+                  "end": 19,
+                  "value": 2,
+                  "raw": "2"
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "export const a = 1;"', () => {
+        expect(parseModule('export const a = 1;', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 19,
+          "body": [
+            {
+              "type": "ExportNamedDeclaration",
+              "start": 0,
+              "end": 19,
+              "declaration": {
+                "type": "VariableDeclaration",
+                "start": 7,
+                "end": 19,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 13,
+                    "end": 18,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 14,
+                      "name": "a"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 17,
+                      "end": 18,
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  }
+                ],
+                "kind": "const"
+              },
+              "specifiers": [],
+              "source": null
+            }
+          ],
+          "sourceType": "module"
+        });
+      });
+
+      it('should parse "[...a[1]] = 2;"', () => {
+        expect(parseScript('[...a[1]] = 2;', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 14,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 14,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 13,
+                "operator": "=",
+                "left": {
+                  "type": "ArrayPattern",
+                  "start": 0,
+                  "end": 9,
+                  "elements": [
+                    {
+                      "type": "RestElement",
+                      "start": 1,
+                      "end": 8,
+                      "argument": {
+                        "type": "MemberExpression",
+                        "start": 4,
+                        "end": 8,
+                        "object": {
+                          "type": "Identifier",
+                          "start": 4,
+                          "end": 5,
+                          "name": "a"
+                        },
+                        "property": {
+                          "type": "Literal",
+                          "start": 6,
+                          "end": 7,
+                          "value": 1,
+                          "raw": "1"
+                        },
+                        "computed": true
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 12,
+                  "end": 13,
+                  "value": 2,
+                  "raw": "2"
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "function eval() { function a() { "use strict" } }"', () => {
+        expect(parseScript('function eval() { function a() { "use strict" } }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 49,
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start": 0,
+              "end": 49,
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 13,
+                "name": "eval"
+              },
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 16,
+                "end": 49,
+                "body": [
+                  {
+                    "type": "FunctionDeclaration",
+                    "start": 18,
+                    "end": 47,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 27,
+                      "end": 28,
+                      "name": "a"
+                    },
+                    "generator": false,
+                    "expression": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 31,
+                      "end": 47,
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 33,
+                          "end": 45,
+                          "expression": {
+                            "type": "Literal",
+                            "start": 33,
+                            "end": 45,
+                            "value": "use strict",
+                            "raw": "\"use strict\""
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "class a {b(){};c(){};}"', () => {
+        expect(parseScript('class a {b(){};c(){};}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 22,
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start": 0,
+              "end": 22,
+              "id": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "name": "a"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start": 8,
+                "end": 22,
+                "body": [
+                  {
+                    "type": "MethodDefinition",
+                    "start": 9,
+                    "end": 14,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 9,
+                      "end": 10,
+                      "name": "b"
+                    },
+                    "static": false,
+                    "kind": "method",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 10,
+                      "end": 14,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 12,
+                        "end": 14,
+                        "body": []
+                      }
+                    }
+                  },
+                  {
+                    "type": "MethodDefinition",
+                    "start": 15,
+                    "end": 20,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 15,
+                      "end": 16,
+                      "name": "c"
+                    },
+                    "static": false,
+                    "kind": "method",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 16,
+                      "end": 20,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 18,
+                        "end": 20,
+                        "body": []
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "var _፩፪፫፬፭፮፯፰፱"', () => {
+        expect(parseScript('var _፩፪፫፬፭፮፯፰፱', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 14,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 14,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 14,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 14,
+                    "name": "_፩፪፫፬፭፮፯፰፱"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "class a { set b(c) {} get b() {} }"', () => {
+        expect(parseScript('class a { set b(c) {} get b() {} }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 34,
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start": 0,
+              "end": 34,
+              "id": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "name": "a"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start": 8,
+                "end": 34,
+                "body": [
+                  {
+                    "type": "MethodDefinition",
+                    "start": 10,
+                    "end": 21,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 14,
+                      "end": 15,
+                      "name": "b"
+                    },
+                    "static": false,
+                    "kind": "set",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 15,
+                      "end": 21,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start": 16,
+                          "end": 17,
+                          "name": "c"
+                        }
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 19,
+                        "end": 21,
+                        "body": []
+                      }
+                    }
+                  },
+                  {
+                    "type": "MethodDefinition",
+                    "start": 22,
+                    "end": 32,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 26,
+                      "end": 27,
+                      "name": "b"
+                    },
+                    "static": false,
+                    "kind": "get",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 27,
+                      "end": 32,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 30,
+                        "end": 32,
+                        "body": []
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "function *a(){yield/=3/}"', () => {
+        expect(parseScript('function *a(){yield/=3/}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "FunctionDeclaration",
+                  "params": [],
+                  "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                          {
+                              "type": "ExpressionStatement",
+                              "expression": {
+                                  "type": "YieldExpression",
+                                  "argument": {
+                                      "type": "Literal",
+                                      "value": /=3/,
+                                      "regex": {
+                                          "pattern": "=3",
+                                          "flags": ""
+                                      },
+                                      "start": 19,
+                                      "end": 23,
+                                      "raw": "/=3/"
+                                  },
+                                  "delegate": false,
+                                  "start": 14,
+                                  "end": 23
+                              },
+                              "start": 14,
+                              "end": 23
+                          }
+                      ],
+                      "start": 13,
+                      "end": 24
+                  },
+                  "async": false,
+                  "generator": true,
+                  "expression": false,
+                  "id": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 10,
+                      "end": 11
+                  },
+                  "start": 0,
+                  "end": 24
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 24
+      });
+      });
+      
+      it('should parse "(function(){ a() })();"', () => {
+        expect(parseScript('(function(){ a() })();', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 22,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 22,
+              "expression": {
+                "type": "CallExpression",
+                "start": 0,
+                "end": 21,
+                "callee": {
+                  "type": "FunctionExpression",
+                  "start": 1,
+                  "end": 18,
+                  "id": null,
+                  "generator": false,
+                  "expression": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 11,
+                    "end": 18,
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 13,
+                        "end": 16,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 13,
+                          "end": 16,
+                          "callee": {
+                            "type": "Identifier",
+                            "start": 13,
+                            "end": 14,
+                            "name": "a"
+                          },
+                          "arguments": []
+                        }
+                      }
+                    ]
+                  }
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "var a = class extends b {}"', () => {
+        expect(parseScript('var a = class extends b {}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 26,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 26,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 26,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 5,
+                    "name": "a"
+                  },
+                  "init": {
+                    "type": "ClassExpression",
+                    "start": 8,
+                    "end": 26,
+                    "id": null,
+                    "superClass": {
+                      "type": "Identifier",
+                      "start": 22,
+                      "end": 23,
+                      "name": "b"
+                    },
+                    "body": {
+                      "type": "ClassBody",
+                      "start": 24,
+                      "end": 26,
+                      "body": []
+                    }
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "(class {get a() {}})"', () => {
+        expect(parseScript('(class {get a() {}})', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 20,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 20,
+              "expression": {
+                "type": "ClassExpression",
+                "start": 1,
+                "end": 19,
+                "id": null,
+                "superClass": null,
+                "body": {
+                  "type": "ClassBody",
+                  "start": 7,
+                  "end": 19,
+                  "body": [
+                    {
+                      "type": "MethodDefinition",
+                      "start": 8,
+                      "end": 18,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 12,
+                        "end": 13,
+                        "name": "a"
+                      },
+                      "static": false,
+                      "kind": "get",
+                      "value": {
+                        "type": "FunctionExpression",
+                        "start": 13,
+                        "end": 18,
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 16,
+                          "end": 18,
+                          "body": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "((a,a),(a,a))"', () => {
+        expect(parseScript('((a,a),(a,a))', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 13,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 13,
+              "expression": {
+                "type": "SequenceExpression",
+                "start": 1,
+                "end": 12,
+                "expressions": [
+                  {
+                    "type": "SequenceExpression",
+                    "start": 2,
+                    "end": 5,
+                    "expressions": [
+                      {
+                        "type": "Identifier",
+                        "start": 2,
+                        "end": 3,
+                        "name": "a"
+                      },
+                      {
+                        "type": "Identifier",
+                        "start": 4,
+                        "end": 5,
+                        "name": "a"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SequenceExpression",
+                    "start": 8,
+                    "end": 11,
+                    "expressions": [
+                      {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 9,
+                        "name": "a"
+                      },
+                      {
+                        "type": "Identifier",
+                        "start": 10,
+                        "end": 11,
+                        "name": "a"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "[a, ...{0: b}] = 1"', () => {
+        expect(parseScript('[a, ...{0: b}] = 1', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                      "type": "AssignmentExpression",
+                      "left": {
+                          "type": "ArrayPattern",
+                          "elements": [
+                              {
+                                  "type": "Identifier",
+                                  "name": "a",
+                                  "start": 1,
+                                  "end": 2
+                              },
+                              {
+                                  "type": "RestElement",
+                                  "argument": {
+                                      "type": "ObjectPattern",
+                                      "properties": [
+                                          {
+                                              "type": "Property",
+                                              "computed": false,
+                                              "key": {
+                                                  "type": "Literal",
+                                                  "value": 0,
+                                                  "start": 8,
+                                                  "end": 9,
+                                                  "raw": "0"
+                                              },
+                                              "kind": "init",
+                                              "method": false,
+                                              "shorthand": false,
+                                              "value": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 11,
+                                                  "end": 12
+                                              },
+                                              "start": 8,
+                                              "end": 12
+                                          }
+                                      ],
+                                      "start": 7,
+                                      "end": 13
+                                  },
+                                  "start": 4,
+                                  "end": 13
+                              }
+                          ],
+                          "start": 0,
+                          "end": 14
+                      },
+                      "operator": "=",
+                      "right": {
+                          "type": "Literal",
+                          "value": 1,
+                          "start": 17,
+                          "end": 18,
+                          "raw": "1"
+                      },
+                      "start": 0,
+                      "end": 18
+                  },
+                  "start": 0,
+                  "end": 18
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 18
+      });
+      });
+
+      it('should parse "({set a(yield){}})"', () => {
+        expect(parseScript('({set a(yield){}})', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 18,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 18,
+              "expression": {
+                "type": "ObjectExpression",
+                "start": 1,
+                "end": 17,
+                "properties": [
+                  {
+                    "type": "Property",
+                    "start": 2,
+                    "end": 16,
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 6,
+                      "end": 7,
+                      "name": "a"
+                    },
+                    "kind": "set",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 7,
+                      "end": 16,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start": 8,
+                          "end": 13,
+                          "name": "yield"
+                        }
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 14,
+                        "end": 16,
+                        "body": []
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "class a extends b { constructor() { () => { super(); } } }"', () => {
+        expect(parseScript('class a extends b { constructor() { () => { super(); } } }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 58,
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start": 0,
+              "end": 58,
+              "id": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "name": "a"
+              },
+              "superClass": {
+                "type": "Identifier",
+                "start": 16,
+                "end": 17,
+                "name": "b"
+              },
+              "body": {
+                "type": "ClassBody",
+                "start": 18,
+                "end": 58,
+                "body": [
+                  {
+                    "type": "MethodDefinition",
+                    "start": 20,
+                    "end": 56,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 20,
+                      "end": 31,
+                      "name": "constructor"
+                    },
+                    "static": false,
+                    "kind": "constructor",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 31,
+                      "end": 56,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 34,
+                        "end": 56,
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start": 36,
+                            "end": 54,
+                            "expression": {
+                              "type": "ArrowFunctionExpression",
+                              "start": 36,
+                              "end": 54,
+                              "id": null,
+                              "generator": false,
+                              "expression": false,
+                              "async": false,
+                              "params": [],
+                              "body": {
+                                "type": "BlockStatement",
+                                "start": 42,
+                                "end": 54,
+                                "body": [
+                                  {
+                                    "type": "ExpressionStatement",
+                                    "start": 44,
+                                    "end": 52,
+                                    "expression": {
+                                      "type": "CallExpression",
+                                      "start": 44,
+                                      "end": 51,
+                                      "callee": {
+                                        "type": "Super",
+                                        "start": 44,
+                                        "end": 49
+                                      },
+                                      "arguments": []
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "0008"', () => {
+        expect(parseScript('0008', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                      "type": "Literal",
+                      "value": 8,
+                      "start": 0,
+                      "end": 4,
+                      "raw": "0008"
+                  },
+                  "start": 0,
+                  "end": 4
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 4
+      });
+      });
+      
+      it('should parse "a = { b(...c) { } }"', () => {
+        expect(parseScript('a = { b(...c) { } }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 19,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 19,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 19,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "ObjectExpression",
+                  "start": 4,
+                  "end": 19,
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 6,
+                      "end": 17,
+                      "method": true,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 6,
+                        "end": 7,
+                        "name": "b"
+                      },
+                      "kind": "init",
+                      "value": {
+                        "type": "FunctionExpression",
+                        "start": 7,
+                        "end": 17,
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [
+                          {
+                            "type": "RestElement",
+                            "start": 8,
+                            "end": 12,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 11,
+                              "end": 12,
+                              "name": "c"
+                            }
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 14,
+                          "end": 17,
+                          "body": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "let {a:{}} = 1"', () => {
+        expect(parseScript('let {a:{}} = 1', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 14,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 14,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 14,
+                  "id": {
+                    "type": "ObjectPattern",
+                    "start": 4,
+                    "end": 10,
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "start": 5,
+                        "end": 9,
+                        "method": false,
+                        "shorthand": false,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 5,
+                          "end": 6,
+                          "name": "a"
+                        },
+                        "value": {
+                          "type": "ObjectPattern",
+                          "start": 7,
+                          "end": 9,
+                          "properties": []
+                        },
+                        "kind": "init"
+                      }
+                    ]
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 13,
+                    "end": 14,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
+              ],
+              "kind": "let"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+    
+      it('should parse "({ *a() {} })"', () => {
+        expect(parseScript('({ *a() {} })', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 13,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 13,
+              "expression": {
+                "type": "ObjectExpression",
+                "start": 1,
+                "end": 12,
+                "properties": [
+                  {
+                    "type": "Property",
+                    "start": 3,
+                    "end": 10,
+                    "method": true,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 4,
+                      "end": 5,
+                      "name": "a"
+                    },
+                    "kind": "init",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 5,
+                      "end": 10,
+                      "id": null,
+                      "generator": true,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 8,
+                        "end": 10,
+                        "body": []
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse complex', () => {
+        expect(parseScript(`c: {
+          a();
+          switch (1) {
+            case 2:
+              b();
+              if (a) break c;
+              for (var b = 3; b < 4; b++) {
+                  if (b > 5) break; // this break refers to the for, not to the switch; thus it
+                                    // shouldn't ruin our optimization
+                  d.e(b);
+              }
+              f();
+            case 6+7:
+              g();
+              break;
+            default:
+              h();
+          }
+      }`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "LabeledStatement",
+                  "label": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 0,
+                      "end": 1
+                  },
+                  "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                          {
+                              "type": "ExpressionStatement",
+                              "expression": {
+                                  "type": "CallExpression",
+                                  "arguments": [],
+                                  "callee": {
+                                      "type": "Identifier",
+                                      "name": "a",
+                                      "start": 15,
+                                      "end": 16
+                                  },
+                                  "start": 15,
+                                  "end": 18
+                              },
+                              "start": 15,
+                              "end": 19
+                          },
+                          {
+                              "type": "SwitchStatement",
+                              "discriminant": {
+                                  "type": "Literal",
+                                  "value": 1,
+                                  "start": 38,
+                                  "end": 39,
+                                  "raw": "1"
+                              },
+                              "cases": [
+                                  {
+                                      "type": "SwitchCase",
+                                      "test": {
+                                          "type": "Literal",
+                                          "value": 2,
+                                          "start": 60,
+                                          "end": 61,
+                                          "raw": "2"
+                                      },
+                                      "consequent": [
+                                          {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "b",
+                                                      "start": 77,
+                                                      "end": 78
+                                                  },
+                                                  "start": 77,
+                                                  "end": 80
+                                              },
+                                              "start": 77,
+                                              "end": 81
+                                          },
+                                          {
+                                              "type": "IfStatement",
+                                              "test": {
+                                                  "type": "Identifier",
+                                                  "name": "a",
+                                                  "start": 100,
+                                                  "end": 101
+                                              },
+                                              "alternate": null,
+                                              "consequent": {
+                                                  "type": "BreakStatement",
+                                                  "label": {
+                                                      "type": "Identifier",
+                                                      "name": "c",
+                                                      "start": 109,
+                                                      "end": 110
+                                                  },
+                                                  "start": 103,
+                                                  "end": 111
+                                              },
+                                              "start": 96,
+                                              "end": 111
+                                          },
+                                          {
+                                              "type": "ForStatement",
+                                              "body": {
+                                                  "type": "BlockStatement",
+                                                  "body": [
+                                                      {
+                                                          "type": "IfStatement",
+                                                          "test": {
+                                                              "type": "BinaryExpression",
+                                                              "left": {
+                                                                  "type": "Identifier",
+                                                                  "name": "b",
+                                                                  "start": 178,
+                                                                  "end": 179
+                                                              },
+                                                              "right": {
+                                                                  "type": "Literal",
+                                                                  "value": 5,
+                                                                  "start": 182,
+                                                                  "end": 183,
+                                                                  "raw": "5"
+                                                              },
+                                                              "operator": ">",
+                                                              "start": 178,
+                                                              "end": 183
+                                                          },
+                                                          "alternate": null,
+                                                          "consequent": {
+                                                              "type": "BreakStatement",
+                                                              "label": null,
+                                                              "start": 185,
+                                                              "end": 191
+                                                          },
+                                                          "start": 174,
+                                                          "end": 191
+                                                      },
+                                                      {
+                                                          "type": "ExpressionStatement",
+                                                          "expression": {
+                                                              "type": "CallExpression",
+                                                              "arguments": [
+                                                                  {
+                                                                      "type": "Identifier",
+                                                                      "name": "b",
+                                                                      "start": 345,
+                                                                      "end": 346
+                                                                  }
+                                                              ],
+                                                              "callee": {
+                                                                  "type": "MemberExpression",
+                                                                  "object": {
+                                                                      "type": "Identifier",
+                                                                      "name": "d",
+                                                                      "start": 341,
+                                                                      "end": 342
+                                                                  },
+                                                                  "computed": false,
+                                                                  "property": {
+                                                                      "type": "Identifier",
+                                                                      "name": "e",
+                                                                      "start": 343,
+                                                                      "end": 344
+                                                                  },
+                                                                  "start": 341,
+                                                                  "end": 344
+                                                              },
+                                                              "start": 341,
+                                                              "end": 347
+                                                          },
+                                                          "start": 341,
+                                                          "end": 348
+                                                      }
+                                                  ],
+                                                  "start": 154,
+                                                  "end": 364
+                                              },
+                                              "init": {
+                                                  "type": "VariableDeclaration",
+                                                  "declarations": [
+                                                      {
+                                                          "type": "VariableDeclarator",
+                                                          "init": {
+                                                              "type": "Literal",
+                                                              "value": 3,
+                                                              "start": 139,
+                                                              "end": 140,
+                                                              "raw": "3"
+                                                          },
+                                                          "id": {
+                                                              "type": "Identifier",
+                                                              "name": "b",
+                                                              "start": 135,
+                                                              "end": 136
+                                                          },
+                                                          "start": 135,
+                                                          "end": 140
+                                                      }
+                                                  ],
+                                                  "kind": "var",
+                                                  "start": 131,
+                                                  "end": 140
+                                              },
+                                              "test": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "b",
+                                                      "start": 142,
+                                                      "end": 143
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 4,
+                                                      "start": 146,
+                                                      "end": 147,
+                                                      "raw": "4"
+                                                  },
+                                                  "operator": "<",
+                                                  "start": 142,
+                                                  "end": 147
+                                              },
+                                              "update": {
+                                                  "type": "UpdateExpression",
+                                                  "argument": {
+                                                      "type": "Identifier",
+                                                      "name": "b",
+                                                      "start": 149,
+                                                      "end": 150
+                                                  },
+                                                  "operator": "++",
+                                                  "prefix": false,
+                                                  "start": 149,
+                                                  "end": 152
+                                              },
+                                              "start": 126,
+                                              "end": 364
+                                          },
+                                          {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "f",
+                                                      "start": 379,
+                                                      "end": 380
+                                                  },
+                                                  "start": 379,
+                                                  "end": 382
+                                              },
+                                              "start": 379,
+                                              "end": 383
+                                          }
+                                      ],
+                                      "start": 55,
+                                      "end": 383
+                                  },
+                                  {
+                                      "type": "SwitchCase",
+                                      "test": {
+                                          "type": "BinaryExpression",
+                                          "left": {
+                                              "type": "Literal",
+                                              "value": 6,
+                                              "start": 401,
+                                              "end": 402,
+                                              "raw": "6"
+                                          },
+                                          "right": {
+                                              "type": "Literal",
+                                              "value": 7,
+                                              "start": 403,
+                                              "end": 404,
+                                              "raw": "7"
+                                          },
+                                          "operator": "+",
+                                          "start": 401,
+                                          "end": 404
+                                      },
+                                      "consequent": [
+                                          {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "g",
+                                                      "start": 420,
+                                                      "end": 421
+                                                  },
+                                                  "start": 420,
+                                                  "end": 423
+                                              },
+                                              "start": 420,
+                                              "end": 424
+                                          },
+                                          {
+                                              "type": "BreakStatement",
+                                              "label": null,
+                                              "start": 439,
+                                              "end": 445
+                                          }
+                                      ],
+                                      "start": 396,
+                                      "end": 445
+                                  },
+                                  {
+                                      "type": "SwitchCase",
+                                      "test": null,
+                                      "consequent": [
+                                          {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "h",
+                                                      "start": 481,
+                                                      "end": 482
+                                                  },
+                                                  "start": 481,
+                                                  "end": 484
+                                              },
+                                              "start": 481,
+                                              "end": 485
+                                          }
+                                      ],
+                                      "start": 458,
+                                      "end": 485
+                                  }
+                              ],
+                              "start": 30,
+                              "end": 497
+                          }
+                      ],
+                      "start": 3,
+                      "end": 505
+                  },
+                  "start": 0,
+                  "end": 505
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 505
+      });
+      });
+
+      it('should parse "(0o0)"', () => {
+        expect(parseScript('(0o0)', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 5,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 5,
+              "expression": {
+                "type": "Literal",
+                "start": 1,
+                "end": 4,
+                "value": 0,
+                "raw": "0o0"
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "[(a.b)] = 0"', () => {
+        expect(parseScript('[(a.b)] = 0', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 11,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 11,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 11,
+                "operator": "=",
+                "left": {
+                  "type": "ArrayPattern",
+                  "start": 0,
+                  "end": 7,
+                  "elements": [
+                    {
+                      "type": "MemberExpression",
+                      "start": 2,
+                      "end": 5,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 2,
+                        "end": 3,
+                        "name": "a"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 4,
+                        "end": 5,
+                        "name": "b"
+                      },
+                      "computed": false
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 10,
+                  "end": 11,
+                  "value": 0,
+                  "raw": "0"
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "!function(){a()}(),!function(){b()}(),c()+1"', () => {
+        expect(parseScript('!function(){a()}(),!function(){b()}(),c()+1', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 43,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 43,
+              "expression": {
+                "type": "SequenceExpression",
+                "start": 0,
+                "end": 43,
+                "expressions": [
+                  {
+                    "type": "UnaryExpression",
+                    "start": 0,
+                    "end": 18,
+                    "operator": "!",
+                    "prefix": true,
+                    "argument": {
+                      "type": "CallExpression",
+                      "start": 1,
+                      "end": 18,
+                      "callee": {
+                        "type": "FunctionExpression",
+                        "start": 1,
+                        "end": 16,
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 11,
+                          "end": 16,
+                          "body": [
+                            {
+                              "type": "ExpressionStatement",
+                              "start": 12,
+                              "end": 15,
+                              "expression": {
+                                "type": "CallExpression",
+                                "start": 12,
+                                "end": 15,
+                                "callee": {
+                                  "type": "Identifier",
+                                  "start": 12,
+                                  "end": 13,
+                                  "name": "a"
+                                },
+                                "arguments": []
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "arguments": []
+                    }
+                  },
+                  {
+                    "type": "UnaryExpression",
+                    "start": 19,
+                    "end": 37,
+                    "operator": "!",
+                    "prefix": true,
+                    "argument": {
+                      "type": "CallExpression",
+                      "start": 20,
+                      "end": 37,
+                      "callee": {
+                        "type": "FunctionExpression",
+                        "start": 20,
+                        "end": 35,
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 30,
+                          "end": 35,
+                          "body": [
+                            {
+                              "type": "ExpressionStatement",
+                              "start": 31,
+                              "end": 34,
+                              "expression": {
+                                "type": "CallExpression",
+                                "start": 31,
+                                "end": 34,
+                                "callee": {
+                                  "type": "Identifier",
+                                  "start": 31,
+                                  "end": 32,
+                                  "name": "b"
+                                },
+                                "arguments": []
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "arguments": []
+                    }
+                  },
+                  {
+                    "type": "BinaryExpression",
+                    "start": 38,
+                    "end": 43,
+                    "left": {
+                      "type": "CallExpression",
+                      "start": 38,
+                      "end": 41,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 38,
+                        "end": 39,
+                        "name": "c"
+                      },
+                      "arguments": []
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 42,
+                      "end": 43,
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+      
+      it('should parse "a = {"__proto__": 1 }"', () => {
+        expect(parseScript('a = {"__proto__": 1 }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 21,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 21,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 21,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "ObjectExpression",
+                  "start": 4,
+                  "end": 21,
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 5,
+                      "end": 19,
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Literal",
+                        "start": 5,
+                        "end": 16,
+                        "value": "__proto__",
+                        "raw": "\"__proto__\""
+                      },
+                      "value": {
+                        "type": "Literal",
+                        "start": 18,
+                        "end": 19,
+                        "value": 1,
+                        "raw": "1"
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "[a, b] = [b, a]"', () => {
+        expect(parseScript('[a, b] = [b, a]', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 15,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 15,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 15,
+                "operator": "=",
+                "left": {
+                  "type": "ArrayPattern",
+                  "start": 0,
+                  "end": 6,
+                  "elements": [
+                    {
+                      "type": "Identifier",
+                      "start": 1,
+                      "end": 2,
+                      "name": "a"
+                    },
+                    {
+                      "type": "Identifier",
+                      "start": 4,
+                      "end": 5,
+                      "name": "b"
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "ArrayExpression",
+                  "start": 9,
+                  "end": 15,
+                  "elements": [
+                    {
+                      "type": "Identifier",
+                      "start": 10,
+                      "end": 11,
+                      "name": "b"
+                    },
+                    {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 14,
+                      "name": "a"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse complex 2', () => {
+        expect(parseScript(`// adapted from http://asmjs.org/spec/latest/
+        function a(b, c, d) {
+          "use asm";
+          var e = b.f.e;
+          var g = b.f.g;
+          var h = new b.i(d);
+          function j(k, l) {
+            k = k|1;
+            l = l|2;
+            var m = 0.0, n = 3, o = 4;
+            // asm.js forces byte addressing of the heap by requiring shifting by 3
+            for (n = k << 5, o = l << 6; (n|7) < (o|8); n = (n + 9)|10) {
+              m = m + +g(h[n>>11]);
+            }
+            return +m;
+          }
+          function p(k, l) {
+            k = k|12;
+            l = l|13;
+            return +e(+j(k, l) / +((l - k)|14));
+          }
+          return { p: p };
+        }
+        function q(b, c, d) {
+          var e = b.f.e;
+          var g = b.f.g;
+          var h = new b.i(d);
+          function j(k, l) {
+            k = k|15;
+            l = l|16;
+            var m = 0.0, n = 17, o = 18;
+            // asm.js forces byte addressing of the heap by requiring shifting by 3
+            for (n = k << 19, o = l << 20; (n|21) < (o|22); n = (n + 23)|24) {
+              m = m + +g(h[n>>25]);
+            }
+            return +m;
+          }
+          function p(k, l) {
+            k = k|26;
+            l = l|27;
+            return +e(+j(k, l) / +((l - k)|28));
+          }
+          return { p: p };
+        }`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "FunctionDeclaration",
+                  "params": [
+                      {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 65,
+                          "end": 66
+                      },
+                      {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 68,
+                          "end": 69
+                      },
+                      {
+                          "type": "Identifier",
+                          "name": "d",
+                          "start": 71,
+                          "end": 72
+                      }
+                  ],
+                  "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                          {
+                              "type": "ExpressionStatement",
+                              "expression": {
+                                  "type": "Literal",
+                                  "value": "use asm",
+                                  "start": 86,
+                                  "end": 95,
+                                  "raw": "\"use asm\""
+                              },
+                              "start": 86,
+                              "end": 96
+                          },
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "MemberExpression",
+                                          "object": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 115,
+                                                  "end": 116
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "f",
+                                                  "start": 117,
+                                                  "end": 118
+                                              },
+                                              "start": 115,
+                                              "end": 118
+                                          },
+                                          "computed": false,
+                                          "property": {
+                                              "type": "Identifier",
+                                              "name": "e",
+                                              "start": 119,
+                                              "end": 120
+                                          },
+                                          "start": 115,
+                                          "end": 120
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "e",
+                                          "start": 111,
+                                          "end": 112
+                                      },
+                                      "start": 111,
+                                      "end": 120
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 107,
+                              "end": 121
+                          },
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "MemberExpression",
+                                          "object": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 140,
+                                                  "end": 141
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "f",
+                                                  "start": 142,
+                                                  "end": 143
+                                              },
+                                              "start": 140,
+                                              "end": 143
+                                          },
+                                          "computed": false,
+                                          "property": {
+                                              "type": "Identifier",
+                                              "name": "g",
+                                              "start": 144,
+                                              "end": 145
+                                          },
+                                          "start": 140,
+                                          "end": 145
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "g",
+                                          "start": 136,
+                                          "end": 137
+                                      },
+                                      "start": 136,
+                                      "end": 145
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 132,
+                              "end": 146
+                          },
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "NewExpression",
+                                          "callee": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 169,
+                                                  "end": 170
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "i",
+                                                  "start": 171,
+                                                  "end": 172
+                                              },
+                                              "start": 165,
+                                              "end": 172
+                                          },
+                                          "arguments": [
+                                              {
+                                                  "type": "Identifier",
+                                                  "name": "d",
+                                                  "start": 173,
+                                                  "end": 174
+                                              }
+                                          ],
+                                          "start": 165,
+                                          "end": 175
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "h",
+                                          "start": 161,
+                                          "end": 162
+                                      },
+                                      "start": 161,
+                                      "end": 175
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 157,
+                              "end": 176
+                          },
+                          {
+                              "type": "FunctionDeclaration",
+                              "params": [
+                                  {
+                                      "type": "Identifier",
+                                      "name": "k",
+                                      "start": 198,
+                                      "end": 199
+                                  },
+                                  {
+                                      "type": "Identifier",
+                                      "name": "l",
+                                      "start": 201,
+                                      "end": 202
+                                  }
+                              ],
+                              "body": {
+                                  "type": "BlockStatement",
+                                  "body": [
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "k",
+                                                  "start": 218,
+                                                  "end": 219
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "k",
+                                                      "start": 222,
+                                                      "end": 223
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 1,
+                                                      "start": 224,
+                                                      "end": 225,
+                                                      "raw": "1"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 222,
+                                                  "end": 225
+                                              },
+                                              "start": 218,
+                                              "end": 225
+                                          },
+                                          "start": 218,
+                                          "end": 226
+                                      },
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "l",
+                                                  "start": 239,
+                                                  "end": 240
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "l",
+                                                      "start": 243,
+                                                      "end": 244
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 2,
+                                                      "start": 245,
+                                                      "end": 246,
+                                                      "raw": "2"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 243,
+                                                  "end": 246
+                                              },
+                                              "start": 239,
+                                              "end": 246
+                                          },
+                                          "start": 239,
+                                          "end": 247
+                                      },
+                                      {
+                                          "type": "VariableDeclaration",
+                                          "declarations": [
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 0,
+                                                      "start": 268,
+                                                      "end": 271,
+                                                      "raw": "0.0"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "m",
+                                                      "start": 264,
+                                                      "end": 265
+                                                  },
+                                                  "start": 264,
+                                                  "end": 271
+                                              },
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 3,
+                                                      "start": 277,
+                                                      "end": 278,
+                                                      "raw": "3"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "n",
+                                                      "start": 273,
+                                                      "end": 274
+                                                  },
+                                                  "start": 273,
+                                                  "end": 278
+                                              },
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 4,
+                                                      "start": 284,
+                                                      "end": 285,
+                                                      "raw": "4"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "o",
+                                                      "start": 280,
+                                                      "end": 281
+                                                  },
+                                                  "start": 280,
+                                                  "end": 285
+                                              }
+                                          ],
+                                          "kind": "var",
+                                          "start": 260,
+                                          "end": 286
+                                      },
+                                      {
+                                          "type": "ForStatement",
+                                          "body": {
+                                              "type": "BlockStatement",
+                                              "body": [
+                                                  {
+                                                      "type": "ExpressionStatement",
+                                                      "expression": {
+                                                          "type": "AssignmentExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "m",
+                                                              "start": 459,
+                                                              "end": 460
+                                                          },
+                                                          "operator": "=",
+                                                          "right": {
+                                                              "type": "BinaryExpression",
+                                                              "left": {
+                                                                  "type": "Identifier",
+                                                                  "name": "m",
+                                                                  "start": 463,
+                                                                  "end": 464
+                                                              },
+                                                              "right": {
+                                                                  "type": "UnaryExpression",
+                                                                  "operator": "+",
+                                                                  "argument": {
+                                                                      "type": "CallExpression",
+                                                                      "arguments": [
+                                                                          {
+                                                                              "type": "MemberExpression",
+                                                                              "object": {
+                                                                                  "type": "Identifier",
+                                                                                  "name": "h",
+                                                                                  "start": 470,
+                                                                                  "end": 471
+                                                                              },
+                                                                              "computed": true,
+                                                                              "property": {
+                                                                                  "type": "BinaryExpression",
+                                                                                  "left": {
+                                                                                      "type": "Identifier",
+                                                                                      "name": "n",
+                                                                                      "start": 472,
+                                                                                      "end": 473
+                                                                                  },
+                                                                                  "right": {
+                                                                                      "type": "Literal",
+                                                                                      "value": 11,
+                                                                                      "start": 475,
+                                                                                      "end": 477,
+                                                                                      "raw": "11"
+                                                                                  },
+                                                                                  "operator": ">>",
+                                                                                  "start": 472,
+                                                                                  "end": 477
+                                                                              },
+                                                                              "start": 470,
+                                                                              "end": 478
+                                                                          }
+                                                                      ],
+                                                                      "callee": {
+                                                                          "type": "Identifier",
+                                                                          "name": "g",
+                                                                          "start": 468,
+                                                                          "end": 469
+                                                                      },
+                                                                      "start": 468,
+                                                                      "end": 479
+                                                                  },
+                                                                  "prefix": true,
+                                                                  "start": 467,
+                                                                  "end": 479
+                                                              },
+                                                              "operator": "+",
+                                                              "start": 463,
+                                                              "end": 479
+                                                          },
+                                                          "start": 459,
+                                                          "end": 479
+                                                      },
+                                                      "start": 459,
+                                                      "end": 480
+                                                  }
+                                              ],
+                                              "start": 443,
+                                              "end": 494
+                                          },
+                                          "init": {
+                                              "type": "SequenceExpression",
+                                              "expressions": [
+                                                  {
+                                                      "type": "AssignmentExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "n",
+                                                          "start": 388,
+                                                          "end": 389
+                                                      },
+                                                      "operator": "=",
+                                                      "right": {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "k",
+                                                              "start": 392,
+                                                              "end": 393
+                                                          },
+                                                          "right": {
+                                                              "type": "Literal",
+                                                              "value": 5,
+                                                              "start": 397,
+                                                              "end": 398,
+                                                              "raw": "5"
+                                                          },
+                                                          "operator": "<<",
+                                                          "start": 392,
+                                                          "end": 398
+                                                      },
+                                                      "start": 388,
+                                                      "end": 398
+                                                  },
+                                                  {
+                                                      "type": "AssignmentExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "o",
+                                                          "start": 400,
+                                                          "end": 401
+                                                      },
+                                                      "operator": "=",
+                                                      "right": {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "l",
+                                                              "start": 404,
+                                                              "end": 405
+                                                          },
+                                                          "right": {
+                                                              "type": "Literal",
+                                                              "value": 6,
+                                                              "start": 409,
+                                                              "end": 410,
+                                                              "raw": "6"
+                                                          },
+                                                          "operator": "<<",
+                                                          "start": 404,
+                                                          "end": 410
+                                                      },
+                                                      "start": 400,
+                                                      "end": 410
+                                                  }
+                                              ],
+                                              "start": 388,
+                                              "end": 410
+                                          },
+                                          "test": {
+                                              "type": "BinaryExpression",
+                                              "left": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "n",
+                                                      "start": 413,
+                                                      "end": 414
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 7,
+                                                      "start": 415,
+                                                      "end": 416,
+                                                      "raw": "7"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 413,
+                                                  "end": 416
+                                              },
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "o",
+                                                      "start": 421,
+                                                      "end": 422
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 8,
+                                                      "start": 423,
+                                                      "end": 424,
+                                                      "raw": "8"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 421,
+                                                  "end": 424
+                                              },
+                                              "operator": "<",
+                                              "start": 412,
+                                              "end": 425
+                                          },
+                                          "update": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "n",
+                                                  "start": 427,
+                                                  "end": 428
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "BinaryExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "n",
+                                                          "start": 432,
+                                                          "end": 433
+                                                      },
+                                                      "right": {
+                                                          "type": "Literal",
+                                                          "value": 9,
+                                                          "start": 436,
+                                                          "end": 437,
+                                                          "raw": "9"
+                                                      },
+                                                      "operator": "+",
+                                                      "start": 432,
+                                                      "end": 437
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 10,
+                                                      "start": 439,
+                                                      "end": 441,
+                                                      "raw": "10"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 431,
+                                                  "end": 441
+                                              },
+                                              "start": 427,
+                                              "end": 441
+                                          },
+                                          "start": 383,
+                                          "end": 494
+                                      },
+                                      {
+                                          "type": "ReturnStatement",
+                                          "argument": {
+                                              "type": "UnaryExpression",
+                                              "operator": "+",
+                                              "argument": {
+                                                  "type": "Identifier",
+                                                  "name": "m",
+                                                  "start": 515,
+                                                  "end": 516
+                                              },
+                                              "prefix": true,
+                                              "start": 514,
+                                              "end": 516
+                                          },
+                                          "start": 507,
+                                          "end": 517
+                                      }
+                                  ],
+                                  "start": 204,
+                                  "end": 529
+                              },
+                              "async": false,
+                              "generator": false,
+                              "expression": false,
+                              "id": {
+                                  "type": "Identifier",
+                                  "name": "j",
+                                  "start": 196,
+                                  "end": 197
+                              },
+                              "start": 187,
+                              "end": 529
+                          },
+                          {
+                              "type": "FunctionDeclaration",
+                              "params": [
+                                  {
+                                      "type": "Identifier",
+                                      "name": "k",
+                                      "start": 551,
+                                      "end": 552
+                                  },
+                                  {
+                                      "type": "Identifier",
+                                      "name": "l",
+                                      "start": 554,
+                                      "end": 555
+                                  }
+                              ],
+                              "body": {
+                                  "type": "BlockStatement",
+                                  "body": [
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "k",
+                                                  "start": 571,
+                                                  "end": 572
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "k",
+                                                      "start": 575,
+                                                      "end": 576
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 12,
+                                                      "start": 577,
+                                                      "end": 579,
+                                                      "raw": "12"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 575,
+                                                  "end": 579
+                                              },
+                                              "start": 571,
+                                              "end": 579
+                                          },
+                                          "start": 571,
+                                          "end": 580
+                                      },
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "l",
+                                                  "start": 593,
+                                                  "end": 594
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "l",
+                                                      "start": 597,
+                                                      "end": 598
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 13,
+                                                      "start": 599,
+                                                      "end": 601,
+                                                      "raw": "13"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 597,
+                                                  "end": 601
+                                              },
+                                              "start": 593,
+                                              "end": 601
+                                          },
+                                          "start": 593,
+                                          "end": 602
+                                      },
+                                      {
+                                          "type": "ReturnStatement",
+                                          "argument": {
+                                              "type": "UnaryExpression",
+                                              "operator": "+",
+                                              "argument": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [
+                                                      {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "UnaryExpression",
+                                                              "operator": "+",
+                                                              "argument": {
+                                                                  "type": "CallExpression",
+                                                                  "arguments": [
+                                                                      {
+                                                                          "type": "Identifier",
+                                                                          "name": "k",
+                                                                          "start": 628,
+                                                                          "end": 629
+                                                                      },
+                                                                      {
+                                                                          "type": "Identifier",
+                                                                          "name": "l",
+                                                                          "start": 631,
+                                                                          "end": 632
+                                                                      }
+                                                                  ],
+                                                                  "callee": {
+                                                                      "type": "Identifier",
+                                                                      "name": "j",
+                                                                      "start": 626,
+                                                                      "end": 627
+                                                                  },
+                                                                  "start": 626,
+                                                                  "end": 633
+                                                              },
+                                                              "prefix": true,
+                                                              "start": 625,
+                                                              "end": 633
+                                                          },
+                                                          "right": {
+                                                              "type": "UnaryExpression",
+                                                              "operator": "+",
+                                                              "argument": {
+                                                                  "type": "BinaryExpression",
+                                                                  "left": {
+                                                                      "type": "BinaryExpression",
+                                                                      "left": {
+                                                                          "type": "Identifier",
+                                                                          "name": "l",
+                                                                          "start": 639,
+                                                                          "end": 640
+                                                                      },
+                                                                      "right": {
+                                                                          "type": "Identifier",
+                                                                          "name": "k",
+                                                                          "start": 643,
+                                                                          "end": 644
+                                                                      },
+                                                                      "operator": "-",
+                                                                      "start": 639,
+                                                                      "end": 644
+                                                                  },
+                                                                  "right": {
+                                                                      "type": "Literal",
+                                                                      "value": 14,
+                                                                      "start": 646,
+                                                                      "end": 648,
+                                                                      "raw": "14"
+                                                                  },
+                                                                  "operator": "|",
+                                                                  "start": 638,
+                                                                  "end": 648
+                                                              },
+                                                              "prefix": true,
+                                                              "start": 636,
+                                                              "end": 649
+                                                          },
+                                                          "operator": "/",
+                                                          "start": 625,
+                                                          "end": 649
+                                                      }
+                                                  ],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "e",
+                                                      "start": 623,
+                                                      "end": 624
+                                                  },
+                                                  "start": 623,
+                                                  "end": 650
+                                              },
+                                              "prefix": true,
+                                              "start": 622,
+                                              "end": 650
+                                          },
+                                          "start": 615,
+                                          "end": 651
+                                      }
+                                  ],
+                                  "start": 557,
+                                  "end": 663
+                              },
+                              "async": false,
+                              "generator": false,
+                              "expression": false,
+                              "id": {
+                                  "type": "Identifier",
+                                  "name": "p",
+                                  "start": 549,
+                                  "end": 550
+                              },
+                              "start": 540,
+                              "end": 663
+                          },
+                          {
+                              "type": "ReturnStatement",
+                              "argument": {
+                                  "type": "ObjectExpression",
+                                  "properties": [
+                                      {
+                                          "type": "Property",
+                                          "computed": false,
+                                          "key": {
+                                              "type": "Identifier",
+                                              "name": "p",
+                                              "start": 683,
+                                              "end": 684
+                                          },
+                                          "kind": "init",
+                                          "method": false,
+                                          "shorthand": false,
+                                          "value": {
+                                              "type": "Identifier",
+                                              "name": "p",
+                                              "start": 686,
+                                              "end": 687
+                                          },
+                                          "start": 683,
+                                          "end": 687
+                                      }
+                                  ],
+                                  "start": 681,
+                                  "end": 689
+                              },
+                              "start": 674,
+                              "end": 690
+                          }
+                      ],
+                      "start": 74,
+                      "end": 700
+                  },
+                  "async": false,
+                  "generator": false,
+                  "expression": false,
+                  "id": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 63,
+                      "end": 64
+                  },
+                  "start": 54,
+                  "end": 700
+              },
+              {
+                  "type": "FunctionDeclaration",
+                  "params": [
+                      {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 720,
+                          "end": 721
+                      },
+                      {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 723,
+                          "end": 724
+                      },
+                      {
+                          "type": "Identifier",
+                          "name": "d",
+                          "start": 726,
+                          "end": 727
+                      }
+                  ],
+                  "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "MemberExpression",
+                                          "object": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 749,
+                                                  "end": 750
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "f",
+                                                  "start": 751,
+                                                  "end": 752
+                                              },
+                                              "start": 749,
+                                              "end": 752
+                                          },
+                                          "computed": false,
+                                          "property": {
+                                              "type": "Identifier",
+                                              "name": "e",
+                                              "start": 753,
+                                              "end": 754
+                                          },
+                                          "start": 749,
+                                          "end": 754
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "e",
+                                          "start": 745,
+                                          "end": 746
+                                      },
+                                      "start": 745,
+                                      "end": 754
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 741,
+                              "end": 755
+                          },
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "MemberExpression",
+                                          "object": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 774,
+                                                  "end": 775
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "f",
+                                                  "start": 776,
+                                                  "end": 777
+                                              },
+                                              "start": 774,
+                                              "end": 777
+                                          },
+                                          "computed": false,
+                                          "property": {
+                                              "type": "Identifier",
+                                              "name": "g",
+                                              "start": 778,
+                                              "end": 779
+                                          },
+                                          "start": 774,
+                                          "end": 779
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "g",
+                                          "start": 770,
+                                          "end": 771
+                                      },
+                                      "start": 770,
+                                      "end": 779
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 766,
+                              "end": 780
+                          },
+                          {
+                              "type": "VariableDeclaration",
+                              "declarations": [
+                                  {
+                                      "type": "VariableDeclarator",
+                                      "init": {
+                                          "type": "NewExpression",
+                                          "callee": {
+                                              "type": "MemberExpression",
+                                              "object": {
+                                                  "type": "Identifier",
+                                                  "name": "b",
+                                                  "start": 803,
+                                                  "end": 804
+                                              },
+                                              "computed": false,
+                                              "property": {
+                                                  "type": "Identifier",
+                                                  "name": "i",
+                                                  "start": 805,
+                                                  "end": 806
+                                              },
+                                              "start": 799,
+                                              "end": 806
+                                          },
+                                          "arguments": [
+                                              {
+                                                  "type": "Identifier",
+                                                  "name": "d",
+                                                  "start": 807,
+                                                  "end": 808
+                                              }
+                                          ],
+                                          "start": 799,
+                                          "end": 809
+                                      },
+                                      "id": {
+                                          "type": "Identifier",
+                                          "name": "h",
+                                          "start": 795,
+                                          "end": 796
+                                      },
+                                      "start": 795,
+                                      "end": 809
+                                  }
+                              ],
+                              "kind": "var",
+                              "start": 791,
+                              "end": 810
+                          },
+                          {
+                              "type": "FunctionDeclaration",
+                              "params": [
+                                  {
+                                      "type": "Identifier",
+                                      "name": "k",
+                                      "start": 832,
+                                      "end": 833
+                                  },
+                                  {
+                                      "type": "Identifier",
+                                      "name": "l",
+                                      "start": 835,
+                                      "end": 836
+                                  }
+                              ],
+                              "body": {
+                                  "type": "BlockStatement",
+                                  "body": [
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "k",
+                                                  "start": 852,
+                                                  "end": 853
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "k",
+                                                      "start": 856,
+                                                      "end": 857
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 15,
+                                                      "start": 858,
+                                                      "end": 860,
+                                                      "raw": "15"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 856,
+                                                  "end": 860
+                                              },
+                                              "start": 852,
+                                              "end": 860
+                                          },
+                                          "start": 852,
+                                          "end": 861
+                                      },
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "l",
+                                                  "start": 874,
+                                                  "end": 875
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "l",
+                                                      "start": 878,
+                                                      "end": 879
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 16,
+                                                      "start": 880,
+                                                      "end": 882,
+                                                      "raw": "16"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 878,
+                                                  "end": 882
+                                              },
+                                              "start": 874,
+                                              "end": 882
+                                          },
+                                          "start": 874,
+                                          "end": 883
+                                      },
+                                      {
+                                          "type": "VariableDeclaration",
+                                          "declarations": [
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 0,
+                                                      "start": 904,
+                                                      "end": 907,
+                                                      "raw": "0.0"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "m",
+                                                      "start": 900,
+                                                      "end": 901
+                                                  },
+                                                  "start": 900,
+                                                  "end": 907
+                                              },
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 17,
+                                                      "start": 913,
+                                                      "end": 915,
+                                                      "raw": "17"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "n",
+                                                      "start": 909,
+                                                      "end": 910
+                                                  },
+                                                  "start": 909,
+                                                  "end": 915
+                                              },
+                                              {
+                                                  "type": "VariableDeclarator",
+                                                  "init": {
+                                                      "type": "Literal",
+                                                      "value": 18,
+                                                      "start": 921,
+                                                      "end": 923,
+                                                      "raw": "18"
+                                                  },
+                                                  "id": {
+                                                      "type": "Identifier",
+                                                      "name": "o",
+                                                      "start": 917,
+                                                      "end": 918
+                                                  },
+                                                  "start": 917,
+                                                  "end": 923
+                                              }
+                                          ],
+                                          "kind": "var",
+                                          "start": 896,
+                                          "end": 924
+                                      },
+                                      {
+                                          "type": "ForStatement",
+                                          "body": {
+                                              "type": "BlockStatement",
+                                              "body": [
+                                                  {
+                                                      "type": "ExpressionStatement",
+                                                      "expression": {
+                                                          "type": "AssignmentExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "m",
+                                                              "start": 1102,
+                                                              "end": 1103
+                                                          },
+                                                          "operator": "=",
+                                                          "right": {
+                                                              "type": "BinaryExpression",
+                                                              "left": {
+                                                                  "type": "Identifier",
+                                                                  "name": "m",
+                                                                  "start": 1106,
+                                                                  "end": 1107
+                                                              },
+                                                              "right": {
+                                                                  "type": "UnaryExpression",
+                                                                  "operator": "+",
+                                                                  "argument": {
+                                                                      "type": "CallExpression",
+                                                                      "arguments": [
+                                                                          {
+                                                                              "type": "MemberExpression",
+                                                                              "object": {
+                                                                                  "type": "Identifier",
+                                                                                  "name": "h",
+                                                                                  "start": 1113,
+                                                                                  "end": 1114
+                                                                              },
+                                                                              "computed": true,
+                                                                              "property": {
+                                                                                  "type": "BinaryExpression",
+                                                                                  "left": {
+                                                                                      "type": "Identifier",
+                                                                                      "name": "n",
+                                                                                      "start": 1115,
+                                                                                      "end": 1116
+                                                                                  },
+                                                                                  "right": {
+                                                                                      "type": "Literal",
+                                                                                      "value": 25,
+                                                                                      "start": 1118,
+                                                                                      "end": 1120,
+                                                                                      "raw": "25"
+                                                                                  },
+                                                                                  "operator": ">>",
+                                                                                  "start": 1115,
+                                                                                  "end": 1120
+                                                                              },
+                                                                              "start": 1113,
+                                                                              "end": 1121
+                                                                          }
+                                                                      ],
+                                                                      "callee": {
+                                                                          "type": "Identifier",
+                                                                          "name": "g",
+                                                                          "start": 1111,
+                                                                          "end": 1112
+                                                                      },
+                                                                      "start": 1111,
+                                                                      "end": 1122
+                                                                  },
+                                                                  "prefix": true,
+                                                                  "start": 1110,
+                                                                  "end": 1122
+                                                              },
+                                                              "operator": "+",
+                                                              "start": 1106,
+                                                              "end": 1122
+                                                          },
+                                                          "start": 1102,
+                                                          "end": 1122
+                                                      },
+                                                      "start": 1102,
+                                                      "end": 1123
+                                                  }
+                                              ],
+                                              "start": 1086,
+                                              "end": 1137
+                                          },
+                                          "init": {
+                                              "type": "SequenceExpression",
+                                              "expressions": [
+                                                  {
+                                                      "type": "AssignmentExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "n",
+                                                          "start": 1026,
+                                                          "end": 1027
+                                                      },
+                                                      "operator": "=",
+                                                      "right": {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "k",
+                                                              "start": 1030,
+                                                              "end": 1031
+                                                          },
+                                                          "right": {
+                                                              "type": "Literal",
+                                                              "value": 19,
+                                                              "start": 1035,
+                                                              "end": 1037,
+                                                              "raw": "19"
+                                                          },
+                                                          "operator": "<<",
+                                                          "start": 1030,
+                                                          "end": 1037
+                                                      },
+                                                      "start": 1026,
+                                                      "end": 1037
+                                                  },
+                                                  {
+                                                      "type": "AssignmentExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "o",
+                                                          "start": 1039,
+                                                          "end": 1040
+                                                      },
+                                                      "operator": "=",
+                                                      "right": {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "Identifier",
+                                                              "name": "l",
+                                                              "start": 1043,
+                                                              "end": 1044
+                                                          },
+                                                          "right": {
+                                                              "type": "Literal",
+                                                              "value": 20,
+                                                              "start": 1048,
+                                                              "end": 1050,
+                                                              "raw": "20"
+                                                          },
+                                                          "operator": "<<",
+                                                          "start": 1043,
+                                                          "end": 1050
+                                                      },
+                                                      "start": 1039,
+                                                      "end": 1050
+                                                  }
+                                              ],
+                                              "start": 1026,
+                                              "end": 1050
+                                          },
+                                          "test": {
+                                              "type": "BinaryExpression",
+                                              "left": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "n",
+                                                      "start": 1053,
+                                                      "end": 1054
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 21,
+                                                      "start": 1055,
+                                                      "end": 1057,
+                                                      "raw": "21"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 1053,
+                                                  "end": 1057
+                                              },
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "o",
+                                                      "start": 1062,
+                                                      "end": 1063
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 22,
+                                                      "start": 1064,
+                                                      "end": 1066,
+                                                      "raw": "22"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 1062,
+                                                  "end": 1066
+                                              },
+                                              "operator": "<",
+                                              "start": 1052,
+                                              "end": 1067
+                                          },
+                                          "update": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "n",
+                                                  "start": 1069,
+                                                  "end": 1070
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "BinaryExpression",
+                                                      "left": {
+                                                          "type": "Identifier",
+                                                          "name": "n",
+                                                          "start": 1074,
+                                                          "end": 1075
+                                                      },
+                                                      "right": {
+                                                          "type": "Literal",
+                                                          "value": 23,
+                                                          "start": 1078,
+                                                          "end": 1080,
+                                                          "raw": "23"
+                                                      },
+                                                      "operator": "+",
+                                                      "start": 1074,
+                                                      "end": 1080
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 24,
+                                                      "start": 1082,
+                                                      "end": 1084,
+                                                      "raw": "24"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 1073,
+                                                  "end": 1084
+                                              },
+                                              "start": 1069,
+                                              "end": 1084
+                                          },
+                                          "start": 1021,
+                                          "end": 1137
+                                      },
+                                      {
+                                          "type": "ReturnStatement",
+                                          "argument": {
+                                              "type": "UnaryExpression",
+                                              "operator": "+",
+                                              "argument": {
+                                                  "type": "Identifier",
+                                                  "name": "m",
+                                                  "start": 1158,
+                                                  "end": 1159
+                                              },
+                                              "prefix": true,
+                                              "start": 1157,
+                                              "end": 1159
+                                          },
+                                          "start": 1150,
+                                          "end": 1160
+                                      }
+                                  ],
+                                  "start": 838,
+                                  "end": 1172
+                              },
+                              "async": false,
+                              "generator": false,
+                              "expression": false,
+                              "id": {
+                                  "type": "Identifier",
+                                  "name": "j",
+                                  "start": 830,
+                                  "end": 831
+                              },
+                              "start": 821,
+                              "end": 1172
+                          },
+                          {
+                              "type": "FunctionDeclaration",
+                              "params": [
+                                  {
+                                      "type": "Identifier",
+                                      "name": "k",
+                                      "start": 1194,
+                                      "end": 1195
+                                  },
+                                  {
+                                      "type": "Identifier",
+                                      "name": "l",
+                                      "start": 1197,
+                                      "end": 1198
+                                  }
+                              ],
+                              "body": {
+                                  "type": "BlockStatement",
+                                  "body": [
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "k",
+                                                  "start": 1214,
+                                                  "end": 1215
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "k",
+                                                      "start": 1218,
+                                                      "end": 1219
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 26,
+                                                      "start": 1220,
+                                                      "end": 1222,
+                                                      "raw": "26"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 1218,
+                                                  "end": 1222
+                                              },
+                                              "start": 1214,
+                                              "end": 1222
+                                          },
+                                          "start": 1214,
+                                          "end": 1223
+                                      },
+                                      {
+                                          "type": "ExpressionStatement",
+                                          "expression": {
+                                              "type": "AssignmentExpression",
+                                              "left": {
+                                                  "type": "Identifier",
+                                                  "name": "l",
+                                                  "start": 1236,
+                                                  "end": 1237
+                                              },
+                                              "operator": "=",
+                                              "right": {
+                                                  "type": "BinaryExpression",
+                                                  "left": {
+                                                      "type": "Identifier",
+                                                      "name": "l",
+                                                      "start": 1240,
+                                                      "end": 1241
+                                                  },
+                                                  "right": {
+                                                      "type": "Literal",
+                                                      "value": 27,
+                                                      "start": 1242,
+                                                      "end": 1244,
+                                                      "raw": "27"
+                                                  },
+                                                  "operator": "|",
+                                                  "start": 1240,
+                                                  "end": 1244
+                                              },
+                                              "start": 1236,
+                                              "end": 1244
+                                          },
+                                          "start": 1236,
+                                          "end": 1245
+                                      },
+                                      {
+                                          "type": "ReturnStatement",
+                                          "argument": {
+                                              "type": "UnaryExpression",
+                                              "operator": "+",
+                                              "argument": {
+                                                  "type": "CallExpression",
+                                                  "arguments": [
+                                                      {
+                                                          "type": "BinaryExpression",
+                                                          "left": {
+                                                              "type": "UnaryExpression",
+                                                              "operator": "+",
+                                                              "argument": {
+                                                                  "type": "CallExpression",
+                                                                  "arguments": [
+                                                                      {
+                                                                          "type": "Identifier",
+                                                                          "name": "k",
+                                                                          "start": 1271,
+                                                                          "end": 1272
+                                                                      },
+                                                                      {
+                                                                          "type": "Identifier",
+                                                                          "name": "l",
+                                                                          "start": 1274,
+                                                                          "end": 1275
+                                                                      }
+                                                                  ],
+                                                                  "callee": {
+                                                                      "type": "Identifier",
+                                                                      "name": "j",
+                                                                      "start": 1269,
+                                                                      "end": 1270
+                                                                  },
+                                                                  "start": 1269,
+                                                                  "end": 1276
+                                                              },
+                                                              "prefix": true,
+                                                              "start": 1268,
+                                                              "end": 1276
+                                                          },
+                                                          "right": {
+                                                              "type": "UnaryExpression",
+                                                              "operator": "+",
+                                                              "argument": {
+                                                                  "type": "BinaryExpression",
+                                                                  "left": {
+                                                                      "type": "BinaryExpression",
+                                                                      "left": {
+                                                                          "type": "Identifier",
+                                                                          "name": "l",
+                                                                          "start": 1282,
+                                                                          "end": 1283
+                                                                      },
+                                                                      "right": {
+                                                                          "type": "Identifier",
+                                                                          "name": "k",
+                                                                          "start": 1286,
+                                                                          "end": 1287
+                                                                      },
+                                                                      "operator": "-",
+                                                                      "start": 1282,
+                                                                      "end": 1287
+                                                                  },
+                                                                  "right": {
+                                                                      "type": "Literal",
+                                                                      "value": 28,
+                                                                      "start": 1289,
+                                                                      "end": 1291,
+                                                                      "raw": "28"
+                                                                  },
+                                                                  "operator": "|",
+                                                                  "start": 1281,
+                                                                  "end": 1291
+                                                              },
+                                                              "prefix": true,
+                                                              "start": 1279,
+                                                              "end": 1292
+                                                          },
+                                                          "operator": "/",
+                                                          "start": 1268,
+                                                          "end": 1292
+                                                      }
+                                                  ],
+                                                  "callee": {
+                                                      "type": "Identifier",
+                                                      "name": "e",
+                                                      "start": 1266,
+                                                      "end": 1267
+                                                  },
+                                                  "start": 1266,
+                                                  "end": 1293
+                                              },
+                                              "prefix": true,
+                                              "start": 1265,
+                                              "end": 1293
+                                          },
+                                          "start": 1258,
+                                          "end": 1294
+                                      }
+                                  ],
+                                  "start": 1200,
+                                  "end": 1306
+                              },
+                              "async": false,
+                              "generator": false,
+                              "expression": false,
+                              "id": {
+                                  "type": "Identifier",
+                                  "name": "p",
+                                  "start": 1192,
+                                  "end": 1193
+                              },
+                              "start": 1183,
+                              "end": 1306
+                          },
+                          {
+                              "type": "ReturnStatement",
+                              "argument": {
+                                  "type": "ObjectExpression",
+                                  "properties": [
+                                      {
+                                          "type": "Property",
+                                          "computed": false,
+                                          "key": {
+                                              "type": "Identifier",
+                                              "name": "p",
+                                              "start": 1326,
+                                              "end": 1327
+                                          },
+                                          "kind": "init",
+                                          "method": false,
+                                          "shorthand": false,
+                                          "value": {
+                                              "type": "Identifier",
+                                              "name": "p",
+                                              "start": 1329,
+                                              "end": 1330
+                                          },
+                                          "start": 1326,
+                                          "end": 1330
+                                      }
+                                  ],
+                                  "start": 1324,
+                                  "end": 1332
+                              },
+                              "start": 1317,
+                              "end": 1333
+                          }
+                      ],
+                      "start": 729,
+                      "end": 1343
+                  },
+                  "async": false,
+                  "generator": false,
+                  "expression": false,
+                  "id": {
+                      "type": "Identifier",
+                      "name": "q",
+                      "start": 718,
+                      "end": 719
+                  },
+                  "start": 709,
+                  "end": 1343
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 1343
+      });
+      });
+
+      it('should parse "for (var {a, b} of c);"', () => {
+        expect(parseScript('for (var {a, b} of c);', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 22,
+          "body": [
+            {
+              "type": "ForOfStatement",
+              "start": 0,
+              "end": 22,
+              "await": false,
+              "left": {
+                "type": "VariableDeclaration",
+                "start": 5,
+                "end": 15,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 9,
+                    "end": 15,
+                    "id": {
+                      "type": "ObjectPattern",
+                      "start": 9,
+                      "end": 15,
+                      "properties": [
+                        {
+                          "type": "Property",
+                          "start": 10,
+                          "end": 11,
+                          "method": false,
+                          "shorthand": true,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 10,
+                            "end": 11,
+                            "name": "a"
+                          },
+                          "kind": "init",
+                          "value": {
+                            "type": "Identifier",
+                            "start": 10,
+                            "end": 11,
+                            "name": "a"
+                          }
+                        },
+                        {
+                          "type": "Property",
+                          "start": 13,
+                          "end": 14,
+                          "method": false,
+                          "shorthand": true,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 13,
+                            "end": 14,
+                            "name": "b"
+                          },
+                          "kind": "init",
+                          "value": {
+                            "type": "Identifier",
+                            "start": 13,
+                            "end": 14,
+                            "name": "b"
+                          }
+                        }
+                      ]
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "var"
+              },
+              "right": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 20,
+                "name": "c"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start": 21,
+                "end": 22
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "new a(b, ...c, d)"', () => {
+        expect(parseScript('new a(b, ...c, d)', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 17,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 17,
+              "expression": {
+                "type": "NewExpression",
+                "start": 0,
+                "end": 17,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 4,
+                  "end": 5,
+                  "name": "a"
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "start": 6,
+                    "end": 7,
+                    "name": "b"
+                  },
+                  {
+                    "type": "SpreadElement",
+                    "start": 9,
+                    "end": 13,
+                    "argument": {
+                      "type": "Identifier",
+                      "start": 12,
+                      "end": 13,
+                      "name": "c"
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 15,
+                    "end": 16,
+                    "name": "d"
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "if(1)/  foo/"', () => {
+        expect(parseScript('if(1)/  foo/', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 12,
+          "body": [
+            {
+              "type": "IfStatement",
+              "start": 0,
+              "end": 12,
+              "test": {
+                "type": "Literal",
+                "start": 3,
+                "end": 4,
+                "value": 1,
+                "raw": "1"
+              },
+              "consequent": {
+                "type": "ExpressionStatement",
+                "start": 5,
+                "end": 12,
+                "expression": {
+                  "type": "Literal",
+                  "start": 5,
+                  "end": 12,
+                  "value": /  foo/,
+                  "raw": "/  foo/",
+                  "regex": {
+                    "pattern": "  foo",
+                    "flags": ""
+                  }
+                }
+              },
+              "alternate": null
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "function *a({yield: b}){}"', () => {
+        expect(parseScript('function *a({yield: b}){}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "body": [
+              {
+                  "type": "FunctionDeclaration",
+                  "params": [
+                      {
+                          "type": "ObjectPattern",
+                          "properties": [
+                              {
+                                  "type": "Property",
+                                  "kind": "init",
+                                  "key": {
+                                      "type": "Identifier",
+                                      "name": "yield",
+                                      "start": 13,
+                                      "end": 18
+                                  },
+                                  "computed": false,
+                                  "value": {
+                                      "type": "Identifier",
+                                      "name": "b",
+                                      "start": 20,
+                                      "end": 21
+                                  },
+                                  "method": false,
+                                  "shorthand": false,
+                                  "start": 13,
+                                  "end": 21
+                              }
+                          ],
+                          "start": 12,
+                          "end": 22
+                      }
+                  ],
+                  "body": {
+                      "type": "BlockStatement",
+                      "body": [],
+                      "start": 23,
+                      "end": 25
+                  },
+                  "async": false,
+                  "generator": true,
+                  "expression": false,
+                  "id": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 10,
+                      "end": 11
+                  },
+                  "start": 0,
+                  "end": 25
+              }
+          ],
+          "sourceType": "script",
+          "start": 0,
+          "end": 25
+      });
+      });
+
+      it('should parse "var yield = function yield(){};"', () => {
+        expect(parseScript('var yield = function yield(){};', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 31,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 31,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 30,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 9,
+                    "name": "yield"
+                  },
+                  "init": {
+                    "type": "FunctionExpression",
+                    "start": 12,
+                    "end": 30,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 21,
+                      "end": 26,
+                      "name": "yield"
+                    },
+                    "generator": false,
+                    "expression": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 28,
+                      "end": 30,
+                      "body": []
+                    }
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+      
+      it('should parse "((a))()"', () => {
+        expect(parseScript('((a))()', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 7,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 7,
+              "expression": {
+                "type": "CallExpression",
+                "start": 0,
+                "end": 7,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 2,
+                  "end": 3,
+                  "name": "a"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "var a = /[\uD834\uDF06-\uD834\uDF08a-z]/u"', () => {
+        expect(parseScript('var a = /[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 41,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 41,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 41,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 5,
+                    "name": "a"
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 8,
+                    "end": 41,
+                    "value": /[\uD834\uDF06-\uD834\uDF08a-z]/u,
+                    "raw": "/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u",
+                    "regex": {
+                      "pattern": "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
+                      "flags": "u"
+                    }
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "var eval = 1, arguments = 2"', () => {
+        expect(parseScript('var eval = 1, arguments = 2', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 27,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 27,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 12,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 8,
+                    "name": "eval"
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 11,
+                    "end": 12,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "start": 14,
+                  "end": 27,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 14,
+                    "end": 23,
+                    "name": "arguments"
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 26,
+                    "end": 27,
+                    "value": 2,
+                    "raw": "2"
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "function *a(){yield void 0}"', () => {
+        expect(parseScript('function *a(){yield void 0}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 27,
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start": 0,
+              "end": 27,
+              "id": {
+                "type": "Identifier",
+                "start": 10,
+                "end": 11,
+                "name": "a"
+              },
+              "generator": true,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 27,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 14,
+                    "end": 26,
+                    "expression": {
+                      "type": "YieldExpression",
+                      "start": 14,
+                      "end": 26,
+                      "delegate": false,
+                      "argument": {
+                        "type": "UnaryExpression",
+                        "start": 20,
+                        "end": 26,
+                        "operator": "void",
+                        "prefix": true,
+                        "argument": {
+                          "type": "Literal",
+                          "start": 25,
+                          "end": 26,
+                          "value": 0,
+                          "raw": "0"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "class a {;b(){};c(){};}"', () => {
+        expect(parseScript('class a {;b(){};c(){};}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 23,
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start": 0,
+              "end": 23,
+              "id": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "name": "a"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start": 8,
+                "end": 23,
+                "body": [
+                  {
+                    "type": "MethodDefinition",
+                    "start": 10,
+                    "end": 15,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 10,
+                      "end": 11,
+                      "name": "b"
+                    },
+                    "static": false,
+                    "kind": "method",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 11,
+                      "end": 15,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 13,
+                        "end": 15,
+                        "body": []
+                      }
+                    }
+                  },
+                  {
+                    "type": "MethodDefinition",
+                    "start": 16,
+                    "end": 21,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 16,
+                      "end": 17,
+                      "name": "c"
+                    },
+                    "static": false,
+                    "kind": "method",
+                    "value": {
+                      "type": "FunctionExpression",
+                      "start": 17,
+                      "end": 21,
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 19,
+                        "end": 21,
+                        "body": []
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "switch(a){case 1:default:}"', () => {
+        expect(parseScript('switch(a){case 1:default:}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 26,
+          "body": [
+            {
+              "type": "SwitchStatement",
+              "start": 0,
+              "end": 26,
+              "discriminant": {
+                "type": "Identifier",
+                "start": 7,
+                "end": 8,
+                "name": "a"
+              },
+              "cases": [
+                {
+                  "type": "SwitchCase",
+                  "start": 10,
+                  "end": 17,
+                  "consequent": [],
+                  "test": {
+                    "type": "Literal",
+                    "start": 15,
+                    "end": 16,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                },
+                {
+                  "type": "SwitchCase",
+                  "start": 17,
+                  "end": 25,
+                  "consequent": [],
+                  "test": null
+                }
+              ]
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "(function({a}){})"', () => {
+        expect(parseScript('(function({a}){})', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 17,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 17,
+              "expression": {
+                "type": "FunctionExpression",
+                "start": 1,
+                "end": 16,
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "ObjectPattern",
+                    "start": 10,
+                    "end": 13,
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "start": 11,
+                        "end": 12,
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 11,
+                          "end": 12,
+                          "name": "a"
+                        },
+                        "kind": "init",
+                        "value": {
+                          "type": "Identifier",
+                          "start": 11,
+                          "end": 12,
+                          "name": "a"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 14,
+                  "end": 16,
+                  "body": []
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "for(let a in a);"', () => {
+        expect(parseScript('for(let a in a);', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 16,
+          "body": [
+            {
+              "type": "ForInStatement",
+              "start": 0,
+              "end": 16,
+              "left": {
+                "type": "VariableDeclaration",
+                "start": 4,
+                "end": 9,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 8,
+                    "end": 9,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 8,
+                      "end": 9,
+                      "name": "a"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "let"
+              },
+              "right": {
+                "type": "Identifier",
+                "start": 13,
+                "end": 14,
+                "name": "a"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start": 15,
+                "end": 16
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "for(var a = 1, b = 2;;);"', () => {
+        expect(parseScript('for(var a = 1, b = 2;;);', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 24,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 24,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 4,
+                "end": 20,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 8,
+                    "end": 13,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 8,
+                      "end": 9,
+                      "name": "a"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 12,
+                      "end": 13,
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  },
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 15,
+                    "end": 20,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 15,
+                      "end": 16,
+                      "name": "b"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 19,
+                      "end": 20,
+                      "value": 2,
+                      "raw": "2"
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "EmptyStatement",
+                "start": 23,
+                "end": 24
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "a > b"', () => {
+        expect(parseScript('a > b', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 5,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 5,
+              "expression": {
+                "type": "BinaryExpression",
+                "start": 0,
+                "end": 5,
+                "left": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "operator": ">",
+                "right": {
+                  "type": "Identifier",
+                  "start": 4,
+                  "end": 5,
+                  "name": "b"
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "void "test string""', () => {
+        expect(parseScript('void "test string"', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 18,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 18,
+              "expression": {
+                "type": "UnaryExpression",
+                "start": 0,
+                "end": 18,
+                "operator": "void",
+                "prefix": true,
+                "argument": {
+                  "type": "Literal",
+                  "start": 5,
+                  "end": 18,
+                  "value": "test string",
+                  "raw": "\"test string\""
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "[a.b=b] = c"', () => {
+        expect(parseScript('[a.b=b] = c', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 11,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 11,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 11,
+                "operator": "=",
+                "left": {
+                  "type": "ArrayPattern",
+                  "start": 0,
+                  "end": 7,
+                  "elements": [
+                    {
+                      "type": "AssignmentPattern",
+                      "start": 1,
+                      "end": 6,
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 1,
+                        "end": 4,
+                        "object": {
+                          "type": "Identifier",
+                          "start": 1,
+                          "end": 2,
+                          "name": "a"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 3,
+                          "end": 4,
+                          "name": "b"
+                        },
+                        "computed": false
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 5,
+                        "end": 6,
+                        "name": "b"
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 11,
+                  "name": "c"
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "let [[]]=1"', () => {
+        expect(parseScript('let [[]]=1', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 10,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 10,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 10,
+                  "id": {
+                    "type": "ArrayPattern",
+                    "start": 4,
+                    "end": 8,
+                    "elements": [
+                      {
+                        "type": "ArrayPattern",
+                        "start": 5,
+                        "end": 7,
+                        "elements": []
+                      }
+                    ]
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 9,
+                    "end": 10,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
+              ],
+              "kind": "let"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "for(let a = 1, b = 2;;);"', () => {
+        expect(parseScript('for(let a = 1, b = 2;;);', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 24,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 24,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 4,
+                "end": 20,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 8,
+                    "end": 13,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 8,
+                      "end": 9,
+                      "name": "a"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 12,
+                      "end": 13,
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  },
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 15,
+                    "end": 20,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 15,
+                      "end": 16,
+                      "name": "b"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 19,
+                      "end": 20,
+                      "value": 2,
+                      "raw": "2"
+                    }
+                  }
+                ],
+                "kind": "let"
+              },
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "EmptyStatement",
+                "start": 23,
+                "end": 24
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "a[b]"', () => {
+        expect(parseScript('a[b]', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 4,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 4,
+              "expression": {
+                "type": "MemberExpression",
+                "start": 0,
+                "end": 4,
+                "object": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 2,
+                  "end": 3,
+                  "name": "b"
+                },
+                "computed": true
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "(class {get a() {}})"', () => {
+        expect(parseScript(`switch (1) {
+          case 2: a();
+          case 3+4: b(); break;
+          case 5+6+7: c();
+        }`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 104,
+          "body": [
+            {
+              "type": "SwitchStatement",
+              "start": 0,
+              "end": 104,
+              "discriminant": {
+                "type": "Literal",
+                "start": 8,
+                "end": 9,
+                "value": 1,
+                "raw": "1"
+              },
+              "cases": [
+                {
+                  "type": "SwitchCase",
+                  "start": 23,
+                  "end": 35,
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 31,
+                      "end": 35,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 31,
+                        "end": 34,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 31,
+                          "end": 32,
+                          "name": "a"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "test": {
+                    "type": "Literal",
+                    "start": 28,
+                    "end": 29,
+                    "value": 2,
+                    "raw": "2"
+                  }
+                },
+                {
+                  "type": "SwitchCase",
+                  "start": 46,
+                  "end": 67,
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 56,
+                      "end": 60,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 56,
+                        "end": 59,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 56,
+                          "end": 57,
+                          "name": "b"
+                        },
+                        "arguments": []
+                      }
+                    },
+                    {
+                      "type": "BreakStatement",
+                      "start": 61,
+                      "end": 67,
+                      "label": null
+                    }
+                  ],
+                  "test": {
+                    "type": "BinaryExpression",
+                    "start": 51,
+                    "end": 54,
+                    "left": {
+                      "type": "Literal",
+                      "start": 51,
+                      "end": 52,
+                      "value": 3,
+                      "raw": "3"
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 53,
+                      "end": 54,
+                      "value": 4,
+                      "raw": "4"
+                    }
+                  }
+                },
+                {
+                  "type": "SwitchCase",
+                  "start": 78,
+                  "end": 94,
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 90,
+                      "end": 94,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 90,
+                        "end": 93,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 90,
+                          "end": 91,
+                          "name": "c"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "test": {
+                    "type": "BinaryExpression",
+                    "start": 83,
+                    "end": 88,
+                    "left": {
+                      "type": "BinaryExpression",
+                      "start": 83,
+                      "end": 86,
+                      "left": {
+                        "type": "Literal",
+                        "start": 83,
+                        "end": 84,
+                        "value": 5,
+                        "raw": "5"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "Literal",
+                        "start": 85,
+                        "end": 86,
+                        "value": 6,
+                        "raw": "6"
+                      }
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 87,
+                      "end": 88,
+                      "value": 7,
+                      "raw": "7"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "function a() { return "<!--HTML-->comment in<!--string literal-->"; }"', () => {
+        expect(parseScript('function a() { return "<!--HTML-->comment in<!--string literal-->"; }', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 69,
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start": 0,
+              "end": 69,
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "name": "a"
+              },
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 69,
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start": 15,
+                    "end": 67,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 22,
+                      "end": 66,
+                      "value": "<!--HTML-->comment in<!--string literal-->",
+                      "raw": "\"<!--HTML-->comment in<!--string literal-->\""
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "(class {get a() {}})"', () => {
+        expect(parseScript(`a = "b".c;
+        a = ("b" + "d")["e" + "f"];
+        a = g.c;
+        a = ("b" + g).c;`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 88,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 10,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 0,
+                "end": 9,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "MemberExpression",
+                  "start": 4,
+                  "end": 9,
+                  "object": {
+                    "type": "Literal",
+                    "start": 4,
+                    "end": 7,
+                    "value": "b",
+                    "raw": "\"b\""
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 8,
+                    "end": 9,
+                    "name": "c"
+                  },
+                  "computed": false
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 19,
+              "end": 46,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 19,
+                "end": 45,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 19,
+                  "end": 20,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "MemberExpression",
+                  "start": 23,
+                  "end": 45,
+                  "object": {
+                    "type": "BinaryExpression",
+                    "start": 24,
+                    "end": 33,
+                    "left": {
+                      "type": "Literal",
+                      "start": 24,
+                      "end": 27,
+                      "value": "b",
+                      "raw": "\"b\""
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 30,
+                      "end": 33,
+                      "value": "d",
+                      "raw": "\"d\""
+                    }
+                  },
+                  "property": {
+                    "type": "BinaryExpression",
+                    "start": 35,
+                    "end": 44,
+                    "left": {
+                      "type": "Literal",
+                      "start": 35,
+                      "end": 38,
+                      "value": "e",
+                      "raw": "\"e\""
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 41,
+                      "end": 44,
+                      "value": "f",
+                      "raw": "\"f\""
+                    }
+                  },
+                  "computed": true
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 55,
+              "end": 63,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 55,
+                "end": 62,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 55,
+                  "end": 56,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "MemberExpression",
+                  "start": 59,
+                  "end": 62,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 59,
+                    "end": 60,
+                    "name": "g"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 61,
+                    "end": 62,
+                    "name": "c"
+                  },
+                  "computed": false
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 72,
+              "end": 88,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 72,
+                "end": 87,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 72,
+                  "end": 73,
+                  "name": "a"
+                },
+                "right": {
+                  "type": "MemberExpression",
+                  "start": 76,
+                  "end": 87,
+                  "object": {
+                    "type": "BinaryExpression",
+                    "start": 77,
+                    "end": 84,
+                    "left": {
+                      "type": "Literal",
+                      "start": 77,
+                      "end": 80,
+                      "value": "b",
+                      "raw": "\"b\""
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Identifier",
+                      "start": 83,
+                      "end": 84,
+                      "name": "g"
+                    }
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 86,
+                    "end": 87,
+                    "name": "c"
+                  },
+                  "computed": false
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "/**/ function a() {function b() {}}"', () => {
+        expect(parseScript('/**/ function a() {function b() {}}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 35,
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start": 5,
+              "end": 35,
+              "id": {
+                "type": "Identifier",
+                "start": 14,
+                "end": 15,
+                "name": "a"
+              },
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 18,
+                "end": 35,
+                "body": [
+                  {
+                    "type": "FunctionDeclaration",
+                    "start": 19,
+                    "end": 34,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 28,
+                      "end": 29,
+                      "name": "b"
+                    },
+                    "generator": false,
+                    "expression": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 32,
+                      "end": 34,
+                      "body": []
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "(class {get a() {}})"', () => {
+        expect(parseScript(`var a = {};
+        a.b = 1;
+        a.c = 2;
+        d.e(a.c);`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 63,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 11,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 10,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 4,
+                    "end": 5,
+                    "name": "a"
+                  },
+                  "init": {
+                    "type": "ObjectExpression",
+                    "start": 8,
+                    "end": 10,
+                    "properties": []
+                  }
+                }
+              ],
+              "kind": "var"
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 20,
+              "end": 28,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 20,
+                "end": 27,
+                "operator": "=",
+                "left": {
+                  "type": "MemberExpression",
+                  "start": 20,
+                  "end": 23,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 20,
+                    "end": 21,
+                    "name": "a"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 22,
+                    "end": 23,
+                    "name": "b"
+                  },
+                  "computed": false
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 26,
+                  "end": 27,
+                  "value": 1,
+                  "raw": "1"
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 37,
+              "end": 45,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 37,
+                "end": 44,
+                "operator": "=",
+                "left": {
+                  "type": "MemberExpression",
+                  "start": 37,
+                  "end": 40,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 37,
+                    "end": 38,
+                    "name": "a"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 39,
+                    "end": 40,
+                    "name": "c"
+                  },
+                  "computed": false
+                },
+                "right": {
+                  "type": "Literal",
+                  "start": 43,
+                  "end": 44,
+                  "value": 2,
+                  "raw": "2"
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 54,
+              "end": 63,
+              "expression": {
+                "type": "CallExpression",
+                "start": 54,
+                "end": 62,
+                "callee": {
+                  "type": "MemberExpression",
+                  "start": 54,
+                  "end": 57,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 54,
+                    "end": 55,
+                    "name": "d"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 56,
+                    "end": 57,
+                    "name": "e"
+                  },
+                  "computed": false
+                },
+                "arguments": [
+                  {
+                    "type": "MemberExpression",
+                    "start": 58,
+                    "end": 61,
+                    "object": {
+                      "type": "Identifier",
+                      "start": 58,
+                      "end": 59,
+                      "name": "a"
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 60,
+                      "end": 61,
+                      "name": "c"
+                    },
+                    "computed": false
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "with(1);"', () => {
+        expect(parseScript('with(1);', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 8,
+          "body": [
+            {
+              "type": "WithStatement",
+              "start": 0,
+              "end": 8,
+              "object": {
+                "type": "Literal",
+                "start": 5,
+                "end": 6,
+                "value": 1,
+                "raw": "1"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start": 7,
+                "end": 8
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "a => "b""', () => {
+        expect(parseScript('a => "b"', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 8,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 8,
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start": 0,
+                "end": 8,
+                "id": null,
+                "generator": false,
+                "expression": true,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 0,
+                    "end": 1,
+                    "name": "a"
+                  }
+                ],
+                "body": {
+                  "type": "Literal",
+                  "start": 5,
+                  "end": 8,
+                  "value": "b",
+                  "raw": "\"b\""
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "a+(b(), c(), d())  // do not transform because of global getter"', () => {
+        expect(parseScript('a+(b(), c(), d())  // do not transform because of global getter', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 63,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 0,
+              "end": 17,
+              "expression": {
+                "type": "BinaryExpression",
+                "start": 0,
+                "end": 17,
+                "left": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 1,
+                  "name": "a"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "SequenceExpression",
+                  "start": 3,
+                  "end": 16,
+                  "expressions": [
+                    {
+                      "type": "CallExpression",
+                      "start": 3,
+                      "end": 6,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 3,
+                        "end": 4,
+                        "name": "b"
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "type": "CallExpression",
+                      "start": 8,
+                      "end": 11,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 9,
+                        "name": "c"
+                      },
+                      "arguments": []
+                    },
+                    {
+                      "type": "CallExpression",
+                      "start": 13,
+                      "end": 16,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 13,
+                        "end": 14,
+                        "name": "d"
+                      },
+                      "arguments": []
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
+
+      it('should parse "var {[a]: b} = {y}', () => {
+        expect(parseScript('var {[a]: b} = {y}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 18,
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 0,
+              "end": 18,
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 4,
+                  "end": 18,
+                  "id": {
+                    "type": "ObjectPattern",
+                    "start": 4,
+                    "end": 12,
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "start": 5,
+                        "end": 11,
+                        "method": false,
+                        "shorthand": false,
+                        "computed": true,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 6,
+                          "end": 7,
+                          "name": "a"
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "start": 10,
+                          "end": 11,
+                          "name": "b"
+                        },
+                        "kind": "init"
+                      }
+                    ]
+                  },
+                  "init": {
+                    "type": "ObjectExpression",
+                    "start": 15,
+                    "end": 18,
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "start": 16,
+                        "end": 17,
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 16,
+                          "end": 17,
+                          "name": "y"
+                        },
+                        "kind": "init",
+                        "value": {
+                          "type": "Identifier",
+                          "start": 16,
+                          "end": 17,
+                          "name": "y"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "sourceType": "script"
+        });
+      });
     });

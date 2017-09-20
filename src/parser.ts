@@ -3488,6 +3488,21 @@ export class Parser {
         });
     }
 
+    private parseObjectPropertyKey(context: Context) {
+        switch (this.token) {
+            case Token.StringLiteral:
+            case Token.NumericLiteral:
+                return this.parseLiteral(context);
+            case Token.LeftBracket:
+                this.expect(context, Token.LeftBracket);
+                let expression = this.parseExpression(context);
+                this.expect(context, Token.RightBracket);
+                return expression;
+            default:
+                return this.parseIdentifier(context);
+        }
+    }
+
     private parseAssignmentProperty(context: Context): ESTree.AssignmentProperty | ESTree.RestElement {
 
         const pos = this.startNode();
@@ -3503,7 +3518,8 @@ export class Parser {
         if (isIdentifier) {
 
             const tokenValue = this.tokenValue;
-            key = this.parseBindingIdentifier(context);
+            computed = this.token === Token.LeftBracket;
+            key = this.parseObjectPropertyKey(context);
             const init = this.finishNode(pos, {
                 type: 'Identifier',
                 name: tokenValue
@@ -3542,25 +3558,10 @@ export class Parser {
                 value = init;
             }
         } else {
-            // fast path for identifiers
-            switch (this.token) {
-                case Token.Identifier:
-                    key = this.parseIdentifier(context);
-                    break;
-                case Token.StringLiteral:
-                case Token.NumericLiteral:
-                    key = this.parseLiteral(context);
-                    break;
-                case Token.LeftBracket:
-                    computed = true;
-                    key = this.parseComputedPropertyName(context | Context.AllowIn);
-                    break;
-                default:
-                    key = this.parseIdentifier(context);
-            }
-
+            computed = this.token === Token.LeftBracket;
+            if (context & Context.Strict && this.isEvalOrArguments(this.tokenValue)) this.error(Errors.UnexpectedReservedWord);
+            key = this.parseObjectPropertyKey(context);
             this.expect(context, Token.Colon);
-
             value = this.parseBindingPatternOrIdentifier(context | Context.Binding);
             if (this.parseOptional(context, Token.Assign)) value = this.parseAssignmentPattern(context, value, pos);
         }

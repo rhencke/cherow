@@ -3719,6 +3719,20 @@ Parser.prototype.parseAssignmentPropertyList = function parseAssignmentPropertyL
         properties: properties
     });
 };
+Parser.prototype.parseObjectPropertyKey = function parseObjectPropertyKey (context) {
+    switch (this.token) {
+        case 3 /* StringLiteral */:
+        case 2 /* NumericLiteral */:
+            return this.parseLiteral(context);
+        case 131091 /* LeftBracket */:
+            this.expect(context, 131091 /* LeftBracket */);
+            var expression = this.parseExpression(context);
+            this.expect(context, 20 /* RightBracket */);
+            return expression;
+        default:
+            return this.parseIdentifier(context);
+    }
+};
 Parser.prototype.parseAssignmentProperty = function parseAssignmentProperty (context) {
     var pos = this.startNode();
     var method = false;
@@ -3730,7 +3744,8 @@ Parser.prototype.parseAssignmentProperty = function parseAssignmentProperty (con
     var key;
     if (isIdentifier) {
         var tokenValue = this.tokenValue;
-        key = this.parseBindingIdentifier(context);
+        computed = this.token === 131091 /* LeftBracket */;
+        key = this.parseObjectPropertyKey(context);
         var init = this.finishNode(pos, {
             type: 'Identifier',
             name: tokenValue
@@ -3774,22 +3789,10 @@ Parser.prototype.parseAssignmentProperty = function parseAssignmentProperty (con
         }
     }
     else {
-        // fast path for identifiers
-        switch (this.token) {
-            case 131073 /* Identifier */:
-                key = this.parseIdentifier(context);
-                break;
-            case 3 /* StringLiteral */:
-            case 2 /* NumericLiteral */:
-                key = this.parseLiteral(context);
-                break;
-            case 131091 /* LeftBracket */:
-                computed = true;
-                key = this.parseComputedPropertyName(context | 16384 /* AllowIn */);
-                break;
-            default:
-                key = this.parseIdentifier(context);
-        }
+        computed = this.token === 131091 /* LeftBracket */;
+        if (context & 2 /* Strict */ && this.isEvalOrArguments(this.tokenValue))
+            { this.error(103 /* UnexpectedReservedWord */); }
+        key = this.parseObjectPropertyKey(context);
         this.expect(context, 21 /* Colon */);
         value = this.parseBindingPatternOrIdentifier(context | 8388608 /* Binding */);
         if (this.parseOptional(context, 29 /* Assign */))
