@@ -111,7 +111,7 @@ describe('Statements - Generator', () => {
     it('should fail if on "function*g() { for ({yield} in 0); }"', () => {
         expect(() => {
             parseScript('function*g() { for ({yield} in 0); }');
-        }).to.not.throw('');
+        }).to.throw('');
     });
     it('should fail if on "function*g() { ({yield = 0}); }"', () => {
         expect(() => {
