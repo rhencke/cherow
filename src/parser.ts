@@ -4993,6 +4993,7 @@ export class Parser {
     }
 
     private scanJSXAttributeValue(context: Context): Token | undefined {
+
         this.startPos = this.index;
 
         switch (this.nextChar()) {
@@ -5061,15 +5062,10 @@ export class Parser {
         this.expect(context, Token.LeftBrace);
 
         switch (this.token) {
-
-            // '}'
             case Token.RightBrace:
                 this.error(Errors.NonEmptyJSXExpression);
-
-                // '...'
             case Token.Ellipsis:
                 return this.parseJSXSpreadChild(context);
-
             default: // ignore
         }
 

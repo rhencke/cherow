@@ -9,9 +9,7 @@ export const enum Token {
     Contextual      = 1 << 12,
     Reserved        = 1 << 13,
     FutureReserved  = 1 << 14,
-    TypeScript      = 1 << 16,
-    BindingPattern  = 1 << 17,
-    Early           = 1 << 19,
+    BindingPattern  = 1 << 16,
 
     /* Node types */
     EndOfSource = 0, // Pseudo
@@ -114,7 +112,7 @@ export const enum Token {
     DoKeyword       = 81 | Reserved,
     ElseKeyword     = 82 | Reserved,
     ExportKeyword   = 83 | Reserved,
-    ExtendsKeyword  = 84 | Reserved | Early,
+    ExtendsKeyword  = 84 | Reserved,
     FinallyKeyword  = 85 | Reserved,
     ForKeyword      = 86 | Reserved,
     FunctionKeyword = 87 | Reserved,
