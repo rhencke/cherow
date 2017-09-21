@@ -2926,7 +2926,8 @@ export class Parser {
 
     // 12.15.5Destructuring Assignment
     private parseAssignmentPattern(context: Context, left: any, pos: Location): ESTree.AssignmentPattern {
-
+        // Invalid: '({async foo(a = await b) {}})'
+        if (this.flags & Flags.ArgumentList && this.token === Token.AwaitKeyword) this.error(Errors.Unexpected);
         const right = this.parseAssignmentExpression(context);
 
         return this.finishNode(pos, {
@@ -3513,6 +3514,7 @@ export class Parser {
                 shorthand = true;
                 value = this.parseAssignmentPattern(context, init, pos);
             } else if (this.parseOptional(context, Token.Colon)) {
+
                 if (context & Context.Yield && this.flags & Flags.ArgumentList && this.token === Token.YieldKeyword) {
                     this.error(Errors.DisallowedInContext, tokenValue);
                 }
@@ -3543,6 +3545,8 @@ export class Parser {
             if (context & Context.Strict && this.isEvalOrArguments(this.tokenValue)) this.error(Errors.UnexpectedReservedWord);
             key = this.parseObjectPropertyKey(context);
             this.expect(context, Token.Colon);
+
+            if (context & Context.Await && this.token === Token.AwaitKeyword) this.error(Errors.UnexpectedStrictReserved);
             value = this.parseBindingPatternOrIdentifier(context | Context.Binding);
             if (this.parseOptional(context, Token.Assign)) value = this.parseAssignmentPattern(context, value, pos);
         }
@@ -4080,7 +4084,8 @@ export class Parser {
             // Invalid: '(function* yield() {})'
             // Invalid: '+function* yield() {}'
             if ((context & Context.AwaitOrYield || (context & Context.Strict && parentHasYield)) && this.token === Token.YieldKeyword) this.error(Errors.YieldReservedWord);
-
+            // Invalid `(async function* await() { });`
+            if (context & Context.AwaitOrYield && this.token === Token.AwaitKeyword) this.error(Errors.Unexpected);
             // **Module code only**
             // Invalid: '(function package() {'use strict'; })()'
             // Invalid: '"use strict"; (function package() {})()'
@@ -4706,6 +4711,8 @@ export class Parser {
                 if (context & Context.Strict) {
                     if (this.token === Token.Identifier && (this.isEvalOrArguments(this.tokenValue))) this.error(Errors.UnexpectedStrictReserved);
                 }
+                // Invalid: `async ({a: await}) =>  1`
+                if (this.flags & Flags.AsyncArrow && this.token === Token.AwaitKeyword)  this.error(Errors.UnexpectedStrictReserved);
 
                 value = this.parseAssignmentExpression(context | Context.AllowIn);
 
@@ -4826,10 +4833,6 @@ export class Parser {
         const name = this.tokenValue;
         const pos = this.startNode();
         if (this.flags & Flags.ArgumentList) this.setGlobalFlag(Flags.NonSimpleParameter, true);
-
-        // Invalid: `async() => { await };`
-        // Invalid: `async(a) => { await };`
-        if (context & Context.AsyncFunctionBody && this.token === Token.AwaitKeyword) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
 
         this.nextToken(context);
 

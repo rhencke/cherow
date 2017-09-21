@@ -246,7 +246,7 @@ it("should fail if rest parameter has an initializer", () => {
     it('should fail on "async ({a: await}) => 1"', () => {
         expect(() => {
             parseScript(`async ({a: await}) => 1`);
-          }).to.not.throw();
+          }).to.throw();
     });
 
     it('should fail on "async ([await]) => 1"', () => {
@@ -308,7 +308,7 @@ it("should fail if rest parameter has an initializer", () => {
     it('should fail on "({async foo(a = await b) {}})"', () => {
         expect(() => {
             parseScript(`({async foo(a = await b) {}})`);
-          }).to.not.throw();
+          }).to.throw();
     });
 
     it('should parse parse valid, but invalid syntax without arrows', () => {

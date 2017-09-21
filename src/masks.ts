@@ -70,7 +70,7 @@ export const enum Flags {
     OptionsNext                  = 1 << 25,
     OptionsOnComment             = 1 << 26,
     OptionsOnToken               = 1 << 27,
-    OptionsV8                    = 1 << 28,
+    OptionsV8                    = 1 << 28
 }
 
 // Shared bitmasks used by both object expression and class declaration / expression

@@ -3191,6 +3191,9 @@ Parser.prototype.parseYieldExpression = function parseYieldExpression (context, 
 };
 // 12.15.5Destructuring Assignment
 Parser.prototype.parseAssignmentPattern = function parseAssignmentPattern (context, left, pos) {
+    // Invalid: '({async foo(a = await b) {}})'
+    if (this.flags & 2048 /* ArgumentList */ && this.token === 4205 /* AwaitKeyword */)
+        { this.error(0 /* Unexpected */); }
     var right = this.parseAssignmentExpression(context);
     return this.finishNode(pos, {
         type: 'AssignmentPattern',
@@ -3759,6 +3762,8 @@ Parser.prototype.parseAssignmentProperty = function parseAssignmentProperty (con
             { this.error(103 /* UnexpectedReservedWord */); }
         key = this.parseObjectPropertyKey(context);
         this.expect(context, 21 /* Colon */);
+        if (context & 8192 /* Await */ && this.token === 4205 /* AwaitKeyword */)
+            { this.error(108 /* UnexpectedStrictReserved */); }
         value = this.parseBindingPatternOrIdentifier(context | 16777216 /* Binding */);
         if (this.parseOptional(context, 29 /* Assign */))
             { value = this.parseAssignmentPattern(context, value, pos); }
@@ -4225,6 +4230,9 @@ Parser.prototype.parseFunctionExpression = function parseFunctionExpression (con
         // Invalid: '+function* yield() {}'
         if ((context & 24576 /* AwaitOrYield */ || (context & 2 /* Strict */ && parentHasYield)) && this.token === 16490 /* YieldKeyword */)
             { this.error(109 /* YieldReservedWord */); }
+        // Invalid `(async function* await() { });`
+        if (context & 24576 /* AwaitOrYield */ && this.token === 4205 /* AwaitKeyword */)
+            { this.error(0 /* Unexpected */); }
         // **Module code only**
         // Invalid: '(function package() {'use strict'; })()'
         // Invalid: '"use strict"; (function package() {})()'
@@ -4816,6 +4824,9 @@ Parser.prototype.parseObjectElement = function parseObjectElement (context) {
                 if (this.token === 65537 /* Identifier */ && (this.isEvalOrArguments(this.tokenValue)))
                     { this.error(108 /* UnexpectedStrictReserved */); }
             }
+            // Invalid: `async ({a: await}) =>  1`
+            if (this.flags & 262144 /* AsyncArrow */ && this.token === 4205 /* AwaitKeyword */)
+                { this.error(108 /* UnexpectedStrictReserved */); }
             value = this.parseAssignmentExpression(context | 32768 /* AllowIn */);
             break;
         // '='
@@ -4914,10 +4925,6 @@ Parser.prototype.parseIdentifier = function parseIdentifier (context) {
     var pos = this.startNode();
     if (this.flags & 2048 /* ArgumentList */)
         { this.setGlobalFlag(512 /* NonSimpleParameter */, true); }
-    // Invalid: `async() => { await };`
-    // Invalid: `async(a) => { await };`
-    if (context & 1024 /* AsyncFunctionBody */ && this.token === 4205 /* AwaitKeyword */)
-        { this.error(1 /* UnexpectedToken */, tokenDesc(this.token)); }
     this.nextToken(context);
     return this.finishNode(pos, {
         type: 'Identifier',

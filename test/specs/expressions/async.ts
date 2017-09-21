@@ -76,7 +76,7 @@ describe('Espressions - Async', () => {
         it('should fail on "({async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseScript(`({async foo(a = await b) {}})`);
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on invalid async getter', () => {
@@ -898,7 +898,7 @@ describe('Espressions - Async', () => {
         it('should fail on "async function foo(bar = await baz()) {}"', () => {
             expect(() => {
                 parseModule(`async function foo(bar = await baz()) {}`, {});
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on "await"', () => {
@@ -934,13 +934,13 @@ describe('Espressions - Async', () => {
         it('should fail on "({async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseModule(`({async foo(a = await b) {}})`, {});
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on "(class {async foo(a = await b) {}})"', () => {
             expect(() => {
                 parseModule(`(class {async foo(a = await b) {}})`, {});
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on "(async)(a) => 12"', () => {

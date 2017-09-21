@@ -2301,7 +2301,7 @@ is y`);
     it('should fail on " async ({a: await}) => 1"', () => {
         expect(() => {
             parseScript('async ({a: await}) => 1');
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it('should fail on " async ([await]) => 1"', () => {
@@ -2418,7 +2418,7 @@ is y`);
     it('should fail on " async ({a: await}) => 1"', () => {
         expect(() => {
             parseScript('async ({a: await}) => 1');
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it('should fail on " class A {static async set foo(value) { }}"', () => {
