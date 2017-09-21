@@ -68,7 +68,7 @@ export class Parser {
         if (options.comments) this.flags |= Flags.OptionsOnComment;
         if (options.raw) this.flags |= Flags.OptionsRaw;
         if (options.tokens) this.flags |= Flags.OptionsOnToken;
-        if (options.directives) this.flags |= Flags.OptionsDirective;
+        if (options.v8) this.flags |= Flags.OptionsV8;
     }
 
     public parseModule(context: any): ESTree.Node {
@@ -1228,7 +1228,7 @@ export class Parser {
         this.tokenValue = ret;
 
         // raw
-        if (this.flags & Flags.RawDirective) this.tokenRaw = this.source.slice(rawStart, this.index);
+        if (this.flags & Flags.OptionsRaw) this.tokenRaw = this.source.slice(rawStart, this.index);
 
         return Token.StringLiteral;
     }
@@ -2006,7 +2006,7 @@ export class Parser {
                 if (this.parseOptional(context, Token.DefaultKeyword)) return this.parseExportDefault(context | Context.AllowIn, pos);
                 return this.parseExportDeclaration(context, pos);
             case Token.ImportKeyword:
-                if (!(this.flags & Flags.OptionsNext && this.nextTokenIsLeftParen(context | Context.AllowIn))) return this.parseImportDeclaration(context | Context.AllowIn);
+                if (!(this.flags & Flags.OptionsNext && this.nextTokenIsLeftParen(context))) return this.parseImportDeclaration(context | Context.AllowIn);
                 // falls through
             default:
                 return this.parseStatementListItem(context | Context.AllowIn);
@@ -2036,7 +2036,7 @@ export class Parser {
             case Token.ClassKeyword:
                 return this.parseClassDeclaration(context);
             case Token.ConstKeyword:
-                return this.parseVariableStatement(context | Context.Const);
+                return this.parseVariableStatement(context | (Context.Const));
             case Token.LetKeyword:
                 // If let follows identifier on the same line, it is an declaration. Parse it as variable statement
                 if (this.isLexical(context)) return this.parseVariableStatement(context | Context.Let);
@@ -2911,8 +2911,6 @@ export class Parser {
     // 12.15.5Destructuring Assignment
     private parseAssignmentPattern(context: Context, left: any, pos: Location): ESTree.AssignmentPattern {
 
-        // Invalid: 'use strict"; function g(x = yield){}'
-        if (context & Context.Strict && this.flags & Flags.ArgumentList && this.token === Token.YieldKeyword) this.error(Errors.YieldInParameter);
         const right = this.parseAssignmentExpression(context);
 
         return this.finishNode(pos, {
@@ -2926,19 +2924,7 @@ export class Parser {
 
         const pos = this.startNode();
 
-        if (context & Context.Yield && this.token === Token.YieldKeyword) {
-            // `yield` is a reserved keyword within async generator function bodies and may
-            // not be used as the binding identifier of a parameter.
-            if (this.flags & Flags.ArgumentList &&
-                context & Context.Assignment &&
-                context & Context.Await) this.error(Errors.UnexpectedStrictReserved);
-            // Invalid: '"use strict"; function* fn() { (a, b = 3, x = yield) => {}; }'
-            if (context & Context.Strict &&
-                this.flags & Flags.InFunctionBody &&
-                context & Context.Parenthesis &&
-                context & Context.Assignment) this.error(Errors.YieldInParameter);
-            return this.parseYieldExpression(context, pos);
-        }
+        if (context & Context.Yield && this.token === Token.YieldKeyword) return this.parseYieldExpression(context, pos);
 
         const expr = this.parseBinaryExpression(context, 0, pos);
 
@@ -2980,15 +2966,18 @@ export class Parser {
      */
     private parseConditionalExpression(context: Context, expression: ESTree.Expression, pos: Location): ESTree.Expression {
 
+        if (this.token !== Token.QuestionMark) return expression;
+
+        // Valid: '(b = c) => d ? (e, f) : g;'
         // Invalid: '() => {} ? 1 : 2;'
-        if (this.flags & Flags.Arrow || this.token !== Token.QuestionMark) return expression;
+        if (!(context & Context.Concisebody) && this.flags & Flags.Arrow) return expression;
 
         this.nextToken(context);
 
-        const consequent = this.parseAssignmentExpression(context | Context.AllowIn);
+        const consequent = this.parseAssignmentExpression(context & ~Context.Concisebody | Context.AllowIn);
         this.expect(context, Token.Colon);
 
-        const alternate = this.parseAssignmentExpression(context &= ~Context.AllowIn);
+        const alternate = this.parseAssignmentExpression(context &= ~(Context.AllowIn | Context.Concisebody));
 
         return this.finishNode(pos, {
             type: 'ConditionalExpression',
@@ -3195,6 +3184,8 @@ export class Parser {
 
     private parseImportCall(context: Context, pos: Location): ESTree.Expression {
         this.expect(context, Token.ImportKeyword);
+        // Invalid: 'function failsParse() { return import.then(); }'
+        if (this.token !== Token.LeftParen) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
         return this.finishNode(pos, {
             type: 'Import'
         });
@@ -3204,7 +3195,7 @@ export class Parser {
         switch (this.token) {
             case Token.ImportKeyword:
                 if (!(this.flags & Flags.OptionsNext)) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
-                if (this.nextTokenIsLeftParen(context)) return this.parseCallExpression(context | Context.DynamicImport, pos, this.parseImportCall(context, pos));
+                return this.parseCallExpression(context | Context.DynamicImport, pos, this.parseImportCall(context, pos));
             case Token.SuperKeyword:
                 return this.parseCallExpression(context, pos, this.parseSuper(context));
             default:
@@ -3497,6 +3488,7 @@ export class Parser {
                 type: 'Identifier',
                 name: tokenValue
             });
+
             if (this.parseOptional(context, Token.Assign)) {
                 // Invalid: 'function*g() { var {yield = 0} = 0; }'
                 if (context & Context.Yield &&
@@ -3644,7 +3636,7 @@ export class Parser {
             expression = false;
             body = this.parseFunctionBody(context & ~Context.SimpleArrow | Context.AllowIn);
         } else {
-            body = this.parseAssignmentExpression(context & ~Context.SimpleArrow);
+            body = this.parseAssignmentExpression(context & ~Context.SimpleArrow | (Context.Concisebody | Context.AllowIn));
         }
 
         this.exitFunctionScope(savedScope);
@@ -3836,7 +3828,7 @@ export class Parser {
                             }
                             // falls through
                         default:
-
+                       
                             if (context & Context.DynamicImport && args.length !== 1 &&
                                 expr.type as any === 'Import') this.error(Errors.BadImportCallArity);
 
@@ -4237,6 +4229,8 @@ export class Parser {
                 return this.parseSuper(context);
             case Token.ClassKeyword:
                 return this.parseClassExpression(context);
+            case Token.DoKeyword:
+                if (this.flags & Flags.OptionsV8) return this.parseDoExpression(context);
             case Token.TemplateTail:
                 return this.parseTemplateTail(context, pos);
             case Token.TemplateCont:
@@ -4280,6 +4274,10 @@ export class Parser {
 
                 // Return identifier
                 return expr;
+
+                // Invalid: `(async function *() { void yield; });`
+            case Token.YieldKeyword:
+                if (context & Context.Yield) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
 
             case Token.LetKeyword:
                 // Invalid: '"use strict"; let instanceof Foo'
@@ -4989,7 +4987,7 @@ export class Parser {
         this.tokenValue = ret;
 
         // raw
-        if (this.flags & Flags.RawDirective) this.tokenRaw = this.source.slice(rawStart, this.index);
+        if (this.flags & Flags.OptionsRaw) this.tokenRaw = this.source.slice(rawStart, this.index);
 
         return Token.StringLiteral;
     }
@@ -5439,5 +5437,23 @@ export class Parser {
 
     private removeLabel(name: string) {
         delete(this.labelSet as any)['@' + name];
+    }
+
+    /** V8 */
+
+    private parseDoExpression(context: Context): ESTree.Expression {
+        const pos = this.startNode();
+        this.expect(context, Token.DoKeyword);
+        const previousLabelSet = this.labelSet;
+        const savedFlags = this.flags;
+        this.labelSet = {};
+        const body = this.parseBlockStatement(context);
+        this.labelSet = previousLabelSet;
+        this.flags = savedFlags;
+
+        return this.finishNode(pos, {
+            type: 'DoExpression',
+            body
+        });
     }
 }

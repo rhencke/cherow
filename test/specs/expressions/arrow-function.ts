@@ -764,6 +764,89 @@ var await;
         });
     });
 
+    it('should parse conditional after concise body', () => {
+        expect(parseScript(`(b = c) => d ? (e, f) : g;`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 26,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 26,
+                "expression": {
+                  "type": "ArrowFunctionExpression",
+                  "start": 0,
+                  "end": 25,
+                  "id": null,
+                  "generator": false,
+                  "expression": true,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "AssignmentPattern",
+                      "start": 1,
+                      "end": 6,
+                      "left": {
+                        "type": "Identifier",
+                        "start": 1,
+                        "end": 2,
+                        "name": "b"
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 5,
+                        "end": 6,
+                        "name": "c"
+                      }
+                    }
+                  ],
+                  "body": {
+                    "type": "ConditionalExpression",
+                    "start": 11,
+                    "end": 25,
+                    "test": {
+                      "type": "Identifier",
+                      "start": 11,
+                      "end": 12,
+                      "name": "d"
+                    },
+                    "consequent": {
+                      "type": "SequenceExpression",
+                      "start": 16,
+                      "end": 20,
+                      "expressions": [
+                        {
+                          "type": "Identifier",
+                          "start": 16,
+                          "end": 17,
+                          "name": "e"
+                        },
+                        {
+                          "type": "Identifier",
+                          "start": 19,
+                          "end": 20,
+                          "name": "f"
+                        }
+                      ]
+                    },
+                    "alternate": {
+                      "type": "Identifier",
+                      "start": 24,
+                      "end": 25,
+                      "name": "g"
+                    }
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
     it('should parse arrowparameters cover concisebody assignment expression', () => {
         expect(parseScript(`var af = (x) => x;`, {
             ranges: true,

@@ -18,12 +18,17 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 
 `Stage 3` features support. This need to be enabled with the `next` option
 
-- Dynamic Import
-- Async generators
-- Async Await
-- Object spread
+- Import()
+- Asynchronous Iteration
+- Rest/Spread Properties
 - Optional catch binding
 - Regular Expression's new `DotAll` flag
+
+## V8 experimal features
+
+This need to be enabled with the `v8` option
+
+- Do expressions
 
 ## Options
 

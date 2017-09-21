@@ -289,12 +289,10 @@ describe('Next - Async Generators', () => {
 
     it("should fail if yield are used as binding identifier", () => {
         expect(() => {
-            parseScript(`var gen = async function *() {
-                void yield;
-              };`, {
+            parseScript(`(async function *() { void yield; });`, {
                 next: true
             })
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it("should fail if await used as label", () => {

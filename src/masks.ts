@@ -11,24 +11,25 @@ export const enum Context {
     Arrow               = 1 << 8,   // If node was parsed in a arrow context
     AsyncArrow          = 1 << 9,   // If node was parsed in a async arrow context
     AsyncFunctionBody   = 1 << 10,  // If node was parsed in a async arrow body context
-    Parenthesis         = 1 << 11,  // If node was parsed in a parenthesized expression context
-    Await               = 1 << 12,  // If node was parsed in the 'await' context created when parsing an async function
-    Yield               = 1 << 13,  // If node was parsed in the 'yield' context created when parsing a generator
-    AllowIn             = 1 << 14,  // If node was parsed in a context where 'in-expressions' are allowed
-    ForStatement        = 1 << 15,  // If node was parsed in a for / for - in / for -of context
-    AnnexB              = 1 << 16,  // If node was parsed in the 'if statement' with the AnnexB semtantic
-    OptionalIdentifier  = 1 << 17,  // Optional identifier for export of either anonymous class or function declaration
-    IfClause            = 1 << 18,  // If node was parsed in a if statement (early error related)
-    Super               = 1 << 19,  // If super are required
-    DynamicImport       = 1 << 20,  // If node was parsed in dynamic import context (ESNext feature)
-    NewExpression       = 1 << 21,  // If node was parsed in the 'New' expression
-    Method              = 1 << 22,  // If node was parsed in a object method context
-    Binding             = 1 << 23,  // If node was parsed in a binding context
-    IfStatement         = 1 << 23,  // If node was parsed in a binding context
-    RequireInitializer  = 1 << 24,  // If node was parsed in a context where a variable declaration initializer are required (export)
-    Const               = 1 << 25,  // Variable declaration
-    Let                 = 1 << 26,  // Variable declaration
-    Var                 = 1 << 27,  // Variable declaration
+    Concisebody         = 1 << 11,  // If node was parsed in a arrow body context with concise body
+    Parenthesis         = 1 << 12,  // If node was parsed in a parenthesized expression context
+    Await               = 1 << 13,  // If node was parsed in the 'await' context created when parsing an async function
+    Yield               = 1 << 14,  // If node was parsed in the 'yield' context created when parsing a generator
+    AllowIn             = 1 << 15,  // If node was parsed in a context where 'in-expressions' are allowed
+    ForStatement        = 1 << 16,  // If node was parsed in a for / for - in / for -of context
+    AnnexB              = 1 << 17,  // If node was parsed in the 'if statement' with the AnnexB semtantic
+    OptionalIdentifier  = 1 << 18,  // Optional identifier for export of either anonymous class or function declaration
+    IfClause            = 1 << 19,  // If node was parsed in a if statement (early error related)
+    Super               = 1 << 20,  // If super are required
+    DynamicImport       = 1 << 21,  // If node was parsed in dynamic import context (ESNext feature)
+    NewExpression       = 1 << 22,  // If node was parsed in the 'New' expression
+    Method              = 1 << 23,  // If node was parsed in a object method context
+    Binding             = 1 << 24,  // If node was parsed in a binding context
+    IfStatement         = 1 << 25,  // If node was parsed in a binding context
+    RequireInitializer  = 1 << 26,  // If node was parsed in a context where a variable declaration initializer are required (export)
+    Const               = 1 << 27,  // Variable declaration
+    Let                 = 1 << 28,  // Variable declaration
+    Var                 = 1 << 29,  // Variable declaration
 
     // An Lexical declaration can be either 'const¨' or 'let
     Lexical = Let | Const,
@@ -69,13 +70,7 @@ export const enum Flags {
     OptionsNext                  = 1 << 25,
     OptionsOnComment             = 1 << 26,
     OptionsOnToken               = 1 << 27,
-    OptionsDirective             = 1 << 28,
-
-
-    // Enable 'raw' property on literals node, but in cases where the 'Directive' option
-    // are enabled, the raw property has to be set regardless of whether the
-    // 'raw' option are enabled
-    RawDirective = OptionsDirective | OptionsRaw
+    OptionsV8                    = 1 << 28,
 }
 
 // Shared bitmasks used by both object expression and class declaration / expression
