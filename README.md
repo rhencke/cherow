@@ -24,7 +24,7 @@ It's safe to use in production even I'm not done with this parser. I'm finishing
 - Optional catch binding
 - Regular Expression's new `DotAll` flag
 
-## V8 experimal features
+## V8 experimental features
 
 This need to be enabled with the `v8` option
 
