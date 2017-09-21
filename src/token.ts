@@ -10,11 +10,6 @@ export const enum Token {
     Reserved        = 1 << 13,
     FutureReserved  = 1 << 14,
     BindingPattern  = 1 << 16,
-    UpdateOperator    = 1 << 17,
-    AssignOperator    = 1 << 18,
-    UnaryOperator     = 1 << 19,
-    BinaryOperator    = 1 << 20,
-
 
     /* Node types */
     EndOfSource = 0, // Pseudo
@@ -76,30 +71,30 @@ export const enum Token {
     VoidKeyword        = 44 | Reserved,
     Negate             = 45, // !
     Complement         = 46, // ~
-    Add                = 47 | BinaryOperator | 9 << PrecStart, // +
-    Subtract           = 48 | BinaryOperator | 9 << PrecStart, // -
-    InKeyword          = 49 | BinaryOperator | 7 << PrecStart | Reserved,
-    InstanceofKeyword  = 50 | BinaryOperator | 7 << PrecStart | Reserved,
-    Multiply           = 51 | BinaryOperator | 10 << PrecStart, // *
-    Modulo             = 52 | BinaryOperator | 10 << PrecStart, // %
-    Divide             = 53 | BinaryOperator | 10 << PrecStart, // /
-    Exponentiate       = 54 | BinaryOperator | 11 << PrecStart, // **
-    LogicalAnd         = 55 | BinaryOperator | 2 << PrecStart, // &&
-    LogicalOr          = 56 | BinaryOperator | 1 << PrecStart, // ||
-    StrictEqual        = 57 | BinaryOperator | 6 << PrecStart, // ===
-    StrictNotEqual     = 58 | BinaryOperator | 6 << PrecStart, // !==
-    LooseEqual         = 59 | BinaryOperator | 6 << PrecStart, // ==
-    LooseNotEqual      = 60 | BinaryOperator | 6 << PrecStart, // !=
-    LessThanOrEqual    = 61 | BinaryOperator | 7 << PrecStart, // <=
-    GreaterThanOrEqual = 62 | BinaryOperator | 7 << PrecStart, // >=
-    LessThan           = 63 | BinaryOperator | 7 << PrecStart, // <
-    GreaterThan        = 64 | BinaryOperator | 7 << PrecStart, // >
-    ShiftLeft          = 65 | BinaryOperator | 8 << PrecStart, // <<
-    ShiftRight         = 66 | BinaryOperator | 8 << PrecStart, // >>
-    LogicalShiftRight  = 67 | BinaryOperator | 8 << PrecStart, // >>>
-    BitwiseAnd         = 68 | BinaryOperator | 5 << PrecStart, // &
-    BitwiseOr          = 69 | BinaryOperator | 3 << PrecStart, // |
-    BitwiseXor         = 70 | BinaryOperator | 4 << PrecStart, // ^
+    Add                = 47 | 9 << PrecStart, // +
+    Subtract           = 48 | 9 << PrecStart, // -
+    InKeyword          = 49 | 7 << PrecStart | Reserved,
+    InstanceofKeyword  = 50 | 7 << PrecStart | Reserved,
+    Multiply           = 51 | 10 << PrecStart, // *
+    Modulo             = 52 | 10 << PrecStart, // %
+    Divide             = 53 | 10 << PrecStart, // /
+    Exponentiate       = 54 | 11 << PrecStart, // **
+    LogicalAnd         = 55 | 2 << PrecStart, // &&
+    LogicalOr          = 56 | 1 << PrecStart, // ||
+    StrictEqual        = 57 | 6 << PrecStart, // ===
+    StrictNotEqual     = 58 | 6 << PrecStart, // !==
+    LooseEqual         = 59 | 6 << PrecStart, // ==
+    LooseNotEqual      = 60 | 6 << PrecStart, // !=
+    LessThanOrEqual    = 61 | 7 << PrecStart, // <=
+    GreaterThanOrEqual = 62 | 7 << PrecStart, // >=
+    LessThan           = 63 | 7 << PrecStart, // <
+    GreaterThan        = 64 | 7 << PrecStart, // >
+    ShiftLeft          = 65 | 8 << PrecStart, // <<
+    ShiftRight         = 66 | 8 << PrecStart, // >>
+    LogicalShiftRight  = 67 | 8 << PrecStart, // >>>
+    BitwiseAnd         = 68 | 5 << PrecStart, // &
+    BitwiseOr          = 69 | 3 << PrecStart, // |
+    BitwiseXor         = 70 | 4 << PrecStart, // ^
 
     /* Variable declaration kinds */
     VarKeyword   = 71 | Reserved,

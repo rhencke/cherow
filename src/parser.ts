@@ -2993,9 +2993,7 @@ export class Parser {
      * @param context Context
      */
     private getBinaryPrecedence(context: Context): any {
-        if (hasMask(this.token, Token.BinaryOperator)) {
-            return  this.token & Token.Precedence;
-        }
+        if (isBinaryOperator(this.token)) return this.token & Token.Precedence;
         if (!(context & Context.AllowIn) && this.token & Token.InKeyword) return 0;
         return 0;
     }
