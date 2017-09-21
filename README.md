@@ -43,7 +43,7 @@ This need to be enabled with the `v8` option
 
 ## API
 
-Cherow can be used to perform syntactic analysis of Javascript program, or lexical analysis (tokenization).
+Cherow can be used to perform syntactic analysis of Javascript program.
 
 ```js
 
@@ -63,7 +63,6 @@ cherow.parseModule('const fooBar = 123;');
 cherow.parseScript('const fooBar = 123;', { ranges: true, raw: true, next: true});
 
 ```
-
 
 ### Collecting comments
 
@@ -96,9 +95,14 @@ cherow.parseScript('{ a: b}', { raw: true, directives: true });
 
 ```
 
-## Benchmarks
+## Performance and benchmarks
 
-See the benchmarks [here](BENCHMARK.md)
+The most important thing for an ECMAScript parser is the performance. Especially important is it when the parser is a 
+dependency in other libraries. Poor performance will slow down the main library.
+
+Cherow has been developed from scratch with only one goal - performance.
+
+You can find the the benchmarks [here](BENCHMARK.md)
 
 ## ESTree
 
