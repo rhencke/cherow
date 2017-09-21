@@ -66,6 +66,24 @@ export function hasMask(mask: number, flags: number) {
     return (mask & flags) === flags;
 }
 
+export function getQualifiedJSXName(object: any): string {
+    switch (object.type) {
+        case 'JSXIdentifier':
+            return object.name;
+        case 'JSXNamespacedName':
+            return object.namespace.name + ':' + object.name.name;
+        case 'JSXMemberExpression':
+            return (
+                getQualifiedJSXName(object.object) + '.' +
+                getQualifiedJSXName(object.property)
+            );
+        default:
+            break;
+    }
+
+    throw new TypeError('Unexpected JSX object');
+}
+
 /**
  * Check if this can be used in an update expression
  *
@@ -141,47 +159,6 @@ export function isBinaryOperator(t: Token): boolean {
             return true;
         default:
             return false;
-    }
-}
-
-export function getQualifiedJSXName(object: any): string {
-    switch (object.type) {
-        case 'JSXIdentifier':
-            return object.name;
-        case 'JSXNamespacedName':
-            return object.namespace.name + ':' + object.name.name;
-        case 'JSXMemberExpression':
-            return (
-                getQualifiedJSXName(object.object) + '.' +
-                getQualifiedJSXName(object.property)
-            );
-        default:
-            break;
-    }
-
-    throw new TypeError('Unexpected JSX object');
-}
-
-export function keywordTypeFromName(value: string): string | undefined {
-    switch (value) {
-        case 'any':
-            return 'TSAnyKeyword';
-        case 'boolean':
-            return 'TSBooleanKeyword';
-        case 'never':
-            return 'TSNeverKeyword';
-        case 'number':
-            return 'TSNumberKeyword';
-        case 'object':
-            return 'TSObjectKeyword';
-        case 'string':
-            return 'TSStringKeyword';
-        case 'symbol':
-            return 'TSSymbolKeyword';
-        case 'undefined':
-            return 'TSUndefinedKeyword';
-        default:
-            return undefined;
     }
 }
 
@@ -289,7 +266,7 @@ export function isAssignmentOperator(t: Token): boolean {
 export function isKeyword(context: Context, t: Token): boolean {
     switch (t) {
         case Token.AwaitKeyword:
-        // if (context & Context.Strict) return false;
+            // if (context & Context.Strict) return false;
             return false;
         case Token.AsKeyword:
         case Token.AsyncKeyword:
@@ -302,7 +279,7 @@ export function isKeyword(context: Context, t: Token): boolean {
         case Token.ContinueKeyword:
         case Token.DebuggerKeyword:
         case Token.DefaultKeyword:
-         case Token.DeleteKeyword:
+        case Token.DeleteKeyword:
         case Token.DoKeyword:
         case Token.ElseKeyword:
         case Token.ExportKeyword:
@@ -310,13 +287,13 @@ export function isKeyword(context: Context, t: Token): boolean {
         case Token.FalseKeyword:
         case Token.FinallyKeyword:
         case Token.ForKeyword:
-         case Token.FromKeyword:
-         case Token.FunctionKeyword:
-         case Token.GetKeyword:
-         case Token.IfKeyword:
-         case Token.ImplementsKeyword:
-         case Token.ImportKeyword:
-         case Token.InKeyword:
+        case Token.FromKeyword:
+        case Token.FunctionKeyword:
+        case Token.GetKeyword:
+        case Token.IfKeyword:
+        case Token.ImplementsKeyword:
+        case Token.ImportKeyword:
+        case Token.InKeyword:
         case Token.InstanceofKeyword:
         case Token.InterfaceKeyword:
         case Token.LetKeyword:
@@ -337,15 +314,13 @@ export function isKeyword(context: Context, t: Token): boolean {
         case Token.TrueKeyword:
         case Token.TryKeyword:
         case Token.TypeofKeyword:
-         case Token.VarKeyword:
+        case Token.VarKeyword:
         case Token.VoidKeyword:
         case Token.WhileKeyword:
         case Token.WithKeyword:
             return true;
         case Token.YieldKeyword:
-            return !!(context & Context.Strict)
-          //  if (context & Context.Strict) return false;
-            //return true;
+            return !!(context & Context.Strict);
         default:
             return false;
     }

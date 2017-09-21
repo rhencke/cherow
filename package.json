@@ -1,14 +1,10 @@
 {
   "name": "cherow",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Fast, standard-compliant ECMAScript parser written in ECMAScript",
   "main": "dist/cherow.js",
   "author": "KFlash",
   "license": "MIT",
-  "engines": {
-    "node": ">= 5.4.1 < 6",
-    "npm": ">= 3.5.3"
-  },
   "homepage": "https://github.com/cherow/cherow",
   "repository": {
     "type": "git",

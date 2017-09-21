@@ -16,6 +16,18 @@ describe('Module - Export', () => {
           parseModule(`var x; export { x }; export { x };`);
       }).to.not.throw();
     });
+    
+    it('should fail on export of arguments', () => {
+        expect(() => {
+            parseModule(' export { x as arguments };');
+        }).to.throw();
+    });
+
+    it('should fail on export of eval', () => {
+        expect(() => {
+            parseModule(' export { x as eval };');
+        }).to.throw();
+    });
 
       it('should fail on "{export default 3;}"', () => {
           expect(() => {

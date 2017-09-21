@@ -435,6 +435,143 @@ describe('Declarations - Functions', () => {
     });
 
     it('should parse "function eval() {"use strict"; }"', () => {
+        expect(parseScript(`function Foo(x = new.target) {}
+        function Bar() { (x = new.target) => {} }`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 81,
+            "body": [
+              {
+                "type": "FunctionDeclaration",
+                "start": 0,
+                "end": 31,
+                "id": {
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 12,
+                  "name": "Foo"
+                },
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "start": 13,
+                    "end": 27,
+                    "left": {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 14,
+                      "name": "x"
+                    },
+                    "right": {
+                      "type": "MetaProperty",
+                      "start": 17,
+                      "end": 27,
+                      "meta": {
+                        "type": "Identifier",
+                        "start": 17,
+                        "end": 20,
+                        "name": "new"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 21,
+                        "end": 27,
+                        "name": "target"
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 29,
+                  "end": 31,
+                  "body": []
+                }
+              },
+              {
+                "type": "FunctionDeclaration",
+                "start": 40,
+                "end": 81,
+                "id": {
+                  "type": "Identifier",
+                  "start": 49,
+                  "end": 52,
+                  "name": "Bar"
+                },
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 55,
+                  "end": 81,
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 57,
+                      "end": 79,
+                      "expression": {
+                        "type": "ArrowFunctionExpression",
+                        "start": 57,
+                        "end": 79,
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [
+                          {
+                            "type": "AssignmentPattern",
+                            "start": 58,
+                            "end": 72,
+                            "left": {
+                              "type": "Identifier",
+                              "start": 58,
+                              "end": 59,
+                              "name": "x"
+                            },
+                            "right": {
+                              "type": "MetaProperty",
+                              "start": 62,
+                              "end": 72,
+                              "meta": {
+                                "type": "Identifier",
+                                "start": 62,
+                                "end": 65,
+                                "name": "new"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 66,
+                                "end": 72,
+                                "name": "target"
+                              }
+                            }
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 77,
+                          "end": 79,
+                          "body": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse "function eval() {"use strict"; }"', () => {
         expect(parseScript(`function eval() {"use strict"; }`, {
             ranges: false
         })).to.eql({

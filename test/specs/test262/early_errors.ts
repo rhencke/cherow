@@ -335,12 +335,12 @@ describe('Test262 - Early error', () => {
         it('should fail on "eval=>0', () => {
             expect(() => {
                 parseModule('eval=>0')
-            }).to.not.throw('');
+            }).to.throw('');
         });
         it('should fail on ""use strict"; eval=>0"', () => {
             expect(() => {
                 parseScript('"use strict";  eval=>0')
-            }).to.not.throw('');
+            }).to.throw('');
         });
         it('should fail on ""use strict"; arguments=>0"', () => {
             expect(() => {
