@@ -360,7 +360,7 @@ ErrorMessages[60 /* MissingMsgDeclarationAfterImport */] = 'Missing declaration 
 ErrorMessages[61 /* ExpectedNamedOrNamespaceImport */] = 'Expected named imports or namespace import after comma';
 ErrorMessages[62 /* MissingExportFromKeyword */] = 'Missing keyword from after import clause';
 ErrorMessages[100 /* UnsupportedObjectSpread */] = 'Unsupported Object rest spread';
-ErrorMessages[63 /* NotAnAsyncGenerator */] = 'Not an async generator. Use ESNext';
+ErrorMessages[63 /* NotAnAsyncGenerator */] = 'Invalid async generator';
 ErrorMessages[64 /* ForAwaitNotOf */] = 'For await loop should be used with \'of\'';
 ErrorMessages[65 /* ExportImportInModuleCode */] = '%0 may only be used with module code';
 ErrorMessages[66 /* LetInLexicalBinding */] = 'let is disallowed as a lexically bound name';
@@ -2518,7 +2518,7 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
                 var startPos = this.startNode();
                 kind = tokenDesc(this.token);
                 if (this.parseOptional(context, 8263 /* VarKeyword */)) {
-                    declarations = this.parseVariableDeclarationList(context | 65536 /* ForStatement */);
+                    declarations = this.parseVariableDeclarationList(context |= (65536 /* ForStatement */));
                 }
                 else if (this.parseOptional(context, 16456 /* LetKeyword */)) {
                     declarations = this.parseVariableDeclarationList(context |= (65536 /* ForStatement */ | 268435456 /* Let */));
@@ -3071,7 +3071,7 @@ Parser.prototype.parseVariableStatement = function parseVariableStatement (conte
     // Invalid:'function* l() { var yield = 12 }'
     if (context & 16384 /* Yield */ && this.flags & 4 /* InFunctionBody */ && this.token === 16490 /* YieldKeyword */)
         { this.error(113 /* DisallowedInContext */, this.tokenValue); }
-    var declarations = this.parseVariableDeclarationList(context & ~65536 /* ForStatement */);
+    var declarations = this.parseVariableDeclarationList(context &= ~65536 /* ForStatement */);
     this.consumeSemicolon(context);
     return this.finishNode(pos, {
         type: 'VariableDeclaration',
@@ -4759,8 +4759,6 @@ Parser.prototype.parseObjectElement = function parseObjectElement (context) {
             key = this.parseIdentifier(context);
             break;
         case 14 /* Ellipsis */:
-            if (!(this.flags & 33554432 /* OptionsNext */))
-                { this.error(100 /* UnsupportedObjectSpread */); }
             key = this.parseIdentifier(context);
             break;
         case 2 /* NumericLiteral */:

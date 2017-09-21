@@ -6,11 +6,10 @@ Use `{ next: true }` to use this features. **Note** Use them at your own risk! T
 
 ### Supported:
 
-- Async generators
-- Async Iteration
-- Dynamic import
-- Rest property
+- Asynchronous Iteration
+- Import()
+- Rest/Spread Properties
 - Optional catch binding
-- Regular expressions
+- Regular Expression's new DotAll flag
 
 **Note** Async generators are not included in this folder. They are so closely integrated with other tests.

@@ -2143,7 +2143,7 @@ export class Parser {
                     const startPos = this.startNode();
                     kind = tokenDesc(this.token);
                     if (this.parseOptional(context, Token.VarKeyword)) {
-                        declarations = this.parseVariableDeclarationList(context | Context.ForStatement);
+                        declarations = this.parseVariableDeclarationList(context |= (Context.ForStatement));
                     } else if (this.parseOptional(context, Token.LetKeyword)) {
                         declarations = this.parseVariableDeclarationList(context |= (Context.ForStatement | Context.Let));
                     } else if (this.parseOptional(context, Token.ConstKeyword)) {
@@ -2799,7 +2799,7 @@ export class Parser {
         // Invalid:'function* l() { var yield = 12 }'
         if (context & Context.Yield && this.flags & Flags.InFunctionBody && this.token === Token.YieldKeyword) this.error(Errors.DisallowedInContext, this.tokenValue);
 
-        const declarations = this.parseVariableDeclarationList(context & ~Context.ForStatement);
+        const declarations = this.parseVariableDeclarationList(context &= ~Context.ForStatement);
         this.consumeSemicolon(context);
         return this.finishNode(pos, {
             type: 'VariableDeclaration',
@@ -4647,7 +4647,6 @@ export class Parser {
                 key = this.parseIdentifier(context);
                 break;
             case Token.Ellipsis:
-                if (!(this.flags & Flags.OptionsNext)) this.error(Errors.UnsupportedObjectSpread);
                 key = this.parseIdentifier(context);
                 break;
             case Token.NumericLiteral:

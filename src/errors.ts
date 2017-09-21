@@ -191,7 +191,7 @@ export const ErrorMessages: {
     [Errors.ExpectedNamedOrNamespaceImport]: 'Expected named imports or namespace import after comma',
     [Errors.MissingExportFromKeyword]: 'Missing keyword from after import clause',
     [Errors.UnsupportedObjectSpread]: 'Unsupported Object rest spread',
-    [Errors.NotAnAsyncGenerator]: 'Not an async generator. Use ESNext',
+    [Errors.NotAnAsyncGenerator]: 'Invalid async generator',
     [Errors.ForAwaitNotOf]: 'For await loop should be used with \'of\'',
     [Errors.ExportImportInModuleCode]: '%0 may only be used with module code',
     [Errors.LetInLexicalBinding]: 'let is disallowed as a lexically bound name',

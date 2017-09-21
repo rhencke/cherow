@@ -3,7 +3,7 @@ import * as chai from 'chai';
 
 const expect = chai.expect;
 
-describe('Next - Async Generators', () => {
+describe('Next - Asynchronous Iteration', () => {
 
     it("should fail if rest parameter has an initializer ", () => {
         expect(() => {
