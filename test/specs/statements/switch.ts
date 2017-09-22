@@ -5,14 +5,12 @@ const expect = chai.expect;
 
 describe('Statement - Switch', () => {
 
-        // NOTE! We are not running all TC39 redeclaration tests here! We have covered what is needed and that's it!
-
-        it('should fail on redeclaration with AsyncFunctionDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with async function declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: async function f() {} }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with AsyncGeneratorDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with async generator declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: async function* f() {} }`, {
                     next: true
@@ -20,65 +18,65 @@ describe('Statement - Switch', () => {
             }).to.throw('');
         });
 
-        it('should fail redeclaration with ClassDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail redeclaration with class declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: class f {}; }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with const-LexicalDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with const lexical declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: const f = 0; }`);
             }).to.throw();
         });
 
-        it('should fail on redeclaration with FunctionDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with FunctionDeclaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: function f() {} }`);
             }).to.throw('');
         });
 
-        it('should fail on redeclaration with let-LexicalDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with let lexical declaration', () => {
             expect(() => {
                 parseScript(`witch (0) { case 1: async function f() {} default: let f; }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with ClassDeclaration (AsyncGeneratorDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with class declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function* f() {} default: class f {}; }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with FunctionDeclaration (AsyncGeneratorDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with function declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function* f() {} default: function f() {} }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with let-LexicalDeclaration (FunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with let-lexical declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: function f() {} default: let f; }`);
             }).to.throw();
         });
-        it('should fail on redeclaration with AsyncGeneratorDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail on redeclaration with async generatorDeclaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: async function* f() {} }`);
             }).to.throw('');
         });
 
-        it('should fail redeclaration with ClassDeclaration (AsyncFunctionDeclaration in SwitchStatement)', () => {
+        it('should fail redeclaration with class declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: async function f() {} default: class f {}; }`);
             }).to.throw('');
         });
-        it('redeclaration with let-LexicalDeclaration (VariableDeclaration in SwitchStatement)', () => {
+        it('redeclaration with let-LexicalDeclaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: var f; default: let f; }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with FunctionDeclaration (LexicalDeclaration (let) in SwitchStatement)', () => {
+        it('should fail on redeclaration with function declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: let f; default: function f() {} }`);
             }).to.throw('');
         });
-        it('should fail on redeclaration with VariableDeclaration (LexicalDeclaration (let) in SwitchStatement)', () => {
+        it('should fail on redeclaration with variable declaration', () => {
             expect(() => {
                 parseScript(`switch (0) { case 1: let f; default: var f; }`);
             }).to.throw();
@@ -173,7 +171,7 @@ describe('Statement - Switch', () => {
             expect(() => {
                 parseScript(`function SwitchTest(value){
                         var result = 0;
-                        
+
                         switch(value) {
                           case 0:
                             result += 2;

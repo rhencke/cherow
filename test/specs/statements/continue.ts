@@ -5,12 +5,6 @@ const expect = chai.expect;
 
 describe('Statement - Continue', () => {
 
-    it('should fail on "if (true) let x;"', () => {
-        expect(() => {
-            parseScript(`if (true) let x;`);
-        }).to.throw();
-    });
-
     it('should fail if appearing of continue without an iteration statement', () => {
         expect(() => {
             parseScript(`var x=1;
@@ -23,196 +17,43 @@ describe('Statement - Continue', () => {
         expect(parseScript(`label: for (let x = 0; x < 10;) {
             while (true) {
               x++;
-              count++;
               continue label;
             }
           }`, {
             ranges: true,
             raw: true
         })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 158,
-            "body": [
-              {
-                "type": "LabeledStatement",
-                "start": 0,
-                "end": 158,
-                "body": {
-                  "type": "ForStatement",
-                  "start": 7,
-                  "end": 158,
-                  "init": {
-                    "type": "VariableDeclaration",
-                    "start": 12,
-                    "end": 21,
-                    "declarations": [
-                      {
-                        "type": "VariableDeclarator",
-                        "start": 16,
-                        "end": 21,
-                        "id": {
-                          "type": "Identifier",
-                          "start": 16,
-                          "end": 17,
-                          "name": "x"
-                        },
-                        "init": {
-                          "type": "Literal",
-                          "start": 20,
-                          "end": 21,
-                          "value": 0,
-                          "raw": "0"
-                        }
-                      }
-                    ],
-                    "kind": "let"
-                  },
-                  "test": {
-                    "type": "BinaryExpression",
-                    "start": 23,
-                    "end": 29,
-                    "left": {
-                      "type": "Identifier",
-                      "start": 23,
-                      "end": 24,
-                      "name": "x"
-                    },
-                    "operator": "<",
-                    "right": {
-                      "type": "Literal",
-                      "start": 27,
-                      "end": 29,
-                      "value": 10,
-                      "raw": "10"
-                    }
-                  },
-                  "update": null,
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 32,
-                    "end": 158,
-                    "body": [
-                      {
-                        "type": "WhileStatement",
-                        "start": 46,
-                        "end": 146,
-                        "test": {
-                          "type": "Literal",
-                          "start": 53,
-                          "end": 57,
-                          "value": true,
-                          "raw": "true"
-                        },
-                        "body": {
-                          "type": "BlockStatement",
-                          "start": 59,
-                          "end": 146,
-                          "body": [
-                            {
-                              "type": "ExpressionStatement",
-                              "start": 75,
-                              "end": 79,
-                              "expression": {
-                                "type": "UpdateExpression",
-                                "start": 75,
-                                "end": 78,
-                                "operator": "++",
-                                "prefix": false,
-                                "argument": {
-                                  "type": "Identifier",
-                                  "start": 75,
-                                  "end": 76,
-                                  "name": "x"
-                                }
-                              }
-                            },
-                            {
-                              "type": "ExpressionStatement",
-                              "start": 94,
-                              "end": 102,
-                              "expression": {
-                                "type": "UpdateExpression",
-                                "start": 94,
-                                "end": 101,
-                                "operator": "++",
-                                "prefix": false,
-                                "argument": {
-                                  "type": "Identifier",
-                                  "start": 94,
-                                  "end": 99,
-                                  "name": "count"
-                                }
-                              }
-                            },
-                            {
-                              "type": "ContinueStatement",
-                              "start": 117,
-                              "end": 132,
-                              "label": {
-                                "type": "Identifier",
-                                "start": 126,
-                                "end": 131,
-                                "name": "label"
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                "label": {
-                  "type": "Identifier",
-                  "start": 0,
-                  "end": 5,
-                  "name": "label"
-                }
-              }
-            ],
-            "sourceType": "script"
-          });
-    });
-   
-    it('should parse nested let bound for loops inner contunue', () => {
-        expect(parseScript(`for (let x = 0; x < 10;) {
-            x++;
-            for (let y = 0; y < 2;) {
-              y++;
-              count++;
-              continue;
-            }
-          }`, {
-            ranges: true,
-            raw: true
-        })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 173,
-            "body": [
-              {
+          "type": "Program",
+          "start": 0,
+          "end": 135,
+          "body": [
+            {
+              "type": "LabeledStatement",
+              "start": 0,
+              "end": 135,
+              "body": {
                 "type": "ForStatement",
-                "start": 0,
-                "end": 173,
+                "start": 7,
+                "end": 135,
                 "init": {
                   "type": "VariableDeclaration",
-                  "start": 5,
-                  "end": 14,
+                  "start": 12,
+                  "end": 21,
                   "declarations": [
                     {
                       "type": "VariableDeclarator",
-                      "start": 9,
-                      "end": 14,
+                      "start": 16,
+                      "end": 21,
                       "id": {
                         "type": "Identifier",
-                        "start": 9,
-                        "end": 10,
+                        "start": 16,
+                        "end": 17,
                         "name": "x"
                       },
                       "init": {
                         "type": "Literal",
-                        "start": 13,
-                        "end": 14,
+                        "start": 20,
+                        "end": 21,
                         "value": 0,
                         "raw": "0"
                       }
@@ -222,19 +63,19 @@ describe('Statement - Continue', () => {
                 },
                 "test": {
                   "type": "BinaryExpression",
-                  "start": 16,
-                  "end": 22,
+                  "start": 23,
+                  "end": 29,
                   "left": {
                     "type": "Identifier",
-                    "start": 16,
-                    "end": 17,
+                    "start": 23,
+                    "end": 24,
                     "name": "x"
                   },
                   "operator": "<",
                   "right": {
                     "type": "Literal",
-                    "start": 20,
-                    "end": 22,
+                    "start": 27,
+                    "end": 29,
                     "value": 10,
                     "raw": "10"
                   }
@@ -242,133 +83,248 @@ describe('Statement - Continue', () => {
                 "update": null,
                 "body": {
                   "type": "BlockStatement",
-                  "start": 25,
-                  "end": 173,
+                  "start": 32,
+                  "end": 135,
                   "body": [
                     {
-                      "type": "ExpressionStatement",
-                      "start": 39,
-                      "end": 43,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 39,
-                        "end": 42,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 39,
-                          "end": 40,
-                          "name": "x"
-                        }
-                      }
-                    },
-                    {
-                      "type": "ForStatement",
-                      "start": 56,
-                      "end": 161,
-                      "init": {
-                        "type": "VariableDeclaration",
-                        "start": 61,
-                        "end": 70,
-                        "declarations": [
-                          {
-                            "type": "VariableDeclarator",
-                            "start": 65,
-                            "end": 70,
-                            "id": {
-                              "type": "Identifier",
-                              "start": 65,
-                              "end": 66,
-                              "name": "y"
-                            },
-                            "init": {
-                              "type": "Literal",
-                              "start": 69,
-                              "end": 70,
-                              "value": 0,
-                              "raw": "0"
-                            }
-                          }
-                        ],
-                        "kind": "let"
-                      },
+                      "type": "WhileStatement",
+                      "start": 46,
+                      "end": 123,
                       "test": {
-                        "type": "BinaryExpression",
-                        "start": 72,
-                        "end": 77,
-                        "left": {
-                          "type": "Identifier",
-                          "start": 72,
-                          "end": 73,
-                          "name": "y"
-                        },
-                        "operator": "<",
-                        "right": {
-                          "type": "Literal",
-                          "start": 76,
-                          "end": 77,
-                          "value": 2,
-                          "raw": "2"
-                        }
+                        "type": "Literal",
+                        "start": 53,
+                        "end": 57,
+                        "value": true,
+                        "raw": "true"
                       },
-                      "update": null,
                       "body": {
                         "type": "BlockStatement",
-                        "start": 80,
-                        "end": 161,
+                        "start": 59,
+                        "end": 123,
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 96,
-                            "end": 100,
+                            "start": 75,
+                            "end": 79,
                             "expression": {
                               "type": "UpdateExpression",
-                              "start": 96,
-                              "end": 99,
+                              "start": 75,
+                              "end": 78,
                               "operator": "++",
                               "prefix": false,
                               "argument": {
                                 "type": "Identifier",
-                                "start": 96,
-                                "end": 97,
-                                "name": "y"
-                              }
-                            }
-                          },
-                          {
-                            "type": "ExpressionStatement",
-                            "start": 115,
-                            "end": 123,
-                            "expression": {
-                              "type": "UpdateExpression",
-                              "start": 115,
-                              "end": 122,
-                              "operator": "++",
-                              "prefix": false,
-                              "argument": {
-                                "type": "Identifier",
-                                "start": 115,
-                                "end": 120,
-                                "name": "count"
+                                "start": 75,
+                                "end": 76,
+                                "name": "x"
                               }
                             }
                           },
                           {
                             "type": "ContinueStatement",
-                            "start": 138,
-                            "end": 147,
-                            "label": null
+                            "start": 94,
+                            "end": 109,
+                            "label": {
+                              "type": "Identifier",
+                              "start": 103,
+                              "end": 108,
+                              "name": "label"
+                            }
                           }
                         ]
                       }
                     }
                   ]
                 }
+              },
+              "label": {
+                "type": "Identifier",
+                "start": 0,
+                "end": 5,
+                "name": "label"
               }
-            ],
-            "sourceType": "script"
-          });
+            }
+          ],
+          "sourceType": "script"
+        });
+    });
+
+    it('should parse nested let bound for loops inner contunue', () => {
+        expect(parseScript(`for (let x = 0; x < 10;) {
+            x++;
+            for (let y = 0; y < 2;) {
+              y++;
+              continue;
+            }
+          }`, {
+            ranges: true,
+            raw: true
+        })).to.eql({
+          "type": "Program",
+          "start": 0,
+          "end": 150,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 150,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 5,
+                "end": 14,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 9,
+                    "end": 14,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 9,
+                      "end": 10,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 13,
+                      "end": 14,
+                      "value": 0,
+                      "raw": "0"
+                    }
+                  }
+                ],
+                "kind": "let"
+              },
+              "test": {
+                "type": "BinaryExpression",
+                "start": 16,
+                "end": 22,
+                "left": {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 17,
+                  "name": "x"
+                },
+                "operator": "<",
+                "right": {
+                  "type": "Literal",
+                  "start": 20,
+                  "end": 22,
+                  "value": 10,
+                  "raw": "10"
+                }
+              },
+              "update": null,
+              "body": {
+                "type": "BlockStatement",
+                "start": 25,
+                "end": 150,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 39,
+                    "end": 43,
+                    "expression": {
+                      "type": "UpdateExpression",
+                      "start": 39,
+                      "end": 42,
+                      "operator": "++",
+                      "prefix": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 39,
+                        "end": 40,
+                        "name": "x"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ForStatement",
+                    "start": 56,
+                    "end": 138,
+                    "init": {
+                      "type": "VariableDeclaration",
+                      "start": 61,
+                      "end": 70,
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start": 65,
+                          "end": 70,
+                          "id": {
+                            "type": "Identifier",
+                            "start": 65,
+                            "end": 66,
+                            "name": "y"
+                          },
+                          "init": {
+                            "type": "Literal",
+                            "start": 69,
+                            "end": 70,
+                            "value": 0,
+                            "raw": "0"
+                          }
+                        }
+                      ],
+                      "kind": "let"
+                    },
+                    "test": {
+                      "type": "BinaryExpression",
+                      "start": 72,
+                      "end": 77,
+                      "left": {
+                        "type": "Identifier",
+                        "start": 72,
+                        "end": 73,
+                        "name": "y"
+                      },
+                      "operator": "<",
+                      "right": {
+                        "type": "Literal",
+                        "start": 76,
+                        "end": 77,
+                        "value": 2,
+                        "raw": "2"
+                      }
+                    },
+                    "update": null,
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 80,
+                      "end": 138,
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 96,
+                          "end": 100,
+                          "expression": {
+                            "type": "UpdateExpression",
+                            "start": 96,
+                            "end": 99,
+                            "operator": "++",
+                            "prefix": false,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 96,
+                              "end": 97,
+                              "name": "y"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ContinueStatement",
+                          "start": 115,
+                          "end": 124,
+                          "label": null
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        });
     });
 
     it('should parse nested let bound for loops outer continue', () => {
@@ -376,320 +332,281 @@ describe('Statement - Continue', () => {
             x++;
             for (let y = 0; y < 2;) {
               y++;
-              count++;
             }
             continue;
           }`, {
             ranges: true,
             raw: true
         })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 171,
-            "body": [
-              {
-                "type": "ForStatement",
-                "start": 0,
-                "end": 171,
-                "init": {
-                  "type": "VariableDeclaration",
-                  "start": 5,
-                  "end": 14,
-                  "declarations": [
-                    {
-                      "type": "VariableDeclarator",
+          "type": "Program",
+          "start": 0,
+          "end": 148,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 148,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 5,
+                "end": 14,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 9,
+                    "end": 14,
+                    "id": {
+                      "type": "Identifier",
                       "start": 9,
+                      "end": 10,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 13,
                       "end": 14,
-                      "id": {
-                        "type": "Identifier",
-                        "start": 9,
-                        "end": 10,
-                        "name": "x"
-                      },
-                      "init": {
-                        "type": "Literal",
-                        "start": 13,
-                        "end": 14,
-                        "value": 0,
-                        "raw": "0"
-                      }
+                      "value": 0,
+                      "raw": "0"
                     }
-                  ],
-                  "kind": "let"
-                },
-                "test": {
-                  "type": "BinaryExpression",
-                  "start": 16,
-                  "end": 22,
-                  "left": {
-                    "type": "Identifier",
-                    "start": 16,
-                    "end": 17,
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "right": {
-                    "type": "Literal",
-                    "start": 20,
-                    "end": 22,
-                    "value": 10,
-                    "raw": "10"
                   }
+                ],
+                "kind": "let"
+              },
+              "test": {
+                "type": "BinaryExpression",
+                "start": 16,
+                "end": 22,
+                "left": {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 17,
+                  "name": "x"
                 },
-                "update": null,
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 25,
-                  "end": 171,
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 39,
-                      "end": 43,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 39,
-                        "end": 42,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 39,
-                          "end": 40,
-                          "name": "x"
-                        }
-                      }
-                    },
-                    {
-                      "type": "ForStatement",
-                      "start": 56,
-                      "end": 137,
-                      "init": {
-                        "type": "VariableDeclaration",
-                        "start": 61,
-                        "end": 70,
-                        "declarations": [
-                          {
-                            "type": "VariableDeclarator",
-                            "start": 65,
-                            "end": 70,
-                            "id": {
-                              "type": "Identifier",
-                              "start": 65,
-                              "end": 66,
-                              "name": "y"
-                            },
-                            "init": {
-                              "type": "Literal",
-                              "start": 69,
-                              "end": 70,
-                              "value": 0,
-                              "raw": "0"
-                            }
-                          }
-                        ],
-                        "kind": "let"
-                      },
-                      "test": {
-                        "type": "BinaryExpression",
-                        "start": 72,
-                        "end": 77,
-                        "left": {
-                          "type": "Identifier",
-                          "start": 72,
-                          "end": 73,
-                          "name": "y"
-                        },
-                        "operator": "<",
-                        "right": {
-                          "type": "Literal",
-                          "start": 76,
-                          "end": 77,
-                          "value": 2,
-                          "raw": "2"
-                        }
-                      },
-                      "update": null,
-                      "body": {
-                        "type": "BlockStatement",
-                        "start": 80,
-                        "end": 137,
-                        "body": [
-                          {
-                            "type": "ExpressionStatement",
-                            "start": 96,
-                            "end": 100,
-                            "expression": {
-                              "type": "UpdateExpression",
-                              "start": 96,
-                              "end": 99,
-                              "operator": "++",
-                              "prefix": false,
-                              "argument": {
-                                "type": "Identifier",
-                                "start": 96,
-                                "end": 97,
-                                "name": "y"
-                              }
-                            }
-                          },
-                          {
-                            "type": "ExpressionStatement",
-                            "start": 115,
-                            "end": 123,
-                            "expression": {
-                              "type": "UpdateExpression",
-                              "start": 115,
-                              "end": 122,
-                              "operator": "++",
-                              "prefix": false,
-                              "argument": {
-                                "type": "Identifier",
-                                "start": 115,
-                                "end": 120,
-                                "name": "count"
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "ContinueStatement",
-                      "start": 150,
-                      "end": 159,
-                      "label": null
-                    }
-                  ]
+                "operator": "<",
+                "right": {
+                  "type": "Literal",
+                  "start": 20,
+                  "end": 22,
+                  "value": 10,
+                  "raw": "10"
                 }
+              },
+              "update": null,
+              "body": {
+                "type": "BlockStatement",
+                "start": 25,
+                "end": 148,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 39,
+                    "end": 43,
+                    "expression": {
+                      "type": "UpdateExpression",
+                      "start": 39,
+                      "end": 42,
+                      "operator": "++",
+                      "prefix": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 39,
+                        "end": 40,
+                        "name": "x"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ForStatement",
+                    "start": 56,
+                    "end": 114,
+                    "init": {
+                      "type": "VariableDeclaration",
+                      "start": 61,
+                      "end": 70,
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start": 65,
+                          "end": 70,
+                          "id": {
+                            "type": "Identifier",
+                            "start": 65,
+                            "end": 66,
+                            "name": "y"
+                          },
+                          "init": {
+                            "type": "Literal",
+                            "start": 69,
+                            "end": 70,
+                            "value": 0,
+                            "raw": "0"
+                          }
+                        }
+                      ],
+                      "kind": "let"
+                    },
+                    "test": {
+                      "type": "BinaryExpression",
+                      "start": 72,
+                      "end": 77,
+                      "left": {
+                        "type": "Identifier",
+                        "start": 72,
+                        "end": 73,
+                        "name": "y"
+                      },
+                      "operator": "<",
+                      "right": {
+                        "type": "Literal",
+                        "start": 76,
+                        "end": 77,
+                        "value": 2,
+                        "raw": "2"
+                      }
+                    },
+                    "update": null,
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 80,
+                      "end": 114,
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 96,
+                          "end": 100,
+                          "expression": {
+                            "type": "UpdateExpression",
+                            "start": 96,
+                            "end": 99,
+                            "operator": "++",
+                            "prefix": false,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 96,
+                              "end": 97,
+                              "name": "y"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "ContinueStatement",
+                    "start": 127,
+                    "end": 136,
+                    "label": null
+                  }
+                ]
               }
-            ],
-            "sourceType": "script"
-          });
+            }
+          ],
+          "sourceType": "script"
+        });
     });
 
     it('should parse no label continue', () => {
         expect(parseScript(`for (let x = 0; x < 10;) {
             x++;
-            count++;
             continue;
           }`, {
             ranges: true,
             raw: true
         })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 98,
-            "body": [
-              {
-                "type": "ForStatement",
-                "start": 0,
-                "end": 98,
-                "init": {
-                  "type": "VariableDeclaration",
-                  "start": 5,
-                  "end": 14,
-                  "declarations": [
-                    {
-                      "type": "VariableDeclarator",
+          "type": "Program",
+          "start": 0,
+          "end": 77,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 77,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 5,
+                "end": 14,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 9,
+                    "end": 14,
+                    "id": {
+                      "type": "Identifier",
                       "start": 9,
+                      "end": 10,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 13,
                       "end": 14,
-                      "id": {
-                        "type": "Identifier",
-                        "start": 9,
-                        "end": 10,
-                        "name": "x"
-                      },
-                      "init": {
-                        "type": "Literal",
-                        "start": 13,
-                        "end": 14,
-                        "value": 0,
-                        "raw": "0"
-                      }
+                      "value": 0,
+                      "raw": "0"
                     }
-                  ],
-                  "kind": "let"
-                },
-                "test": {
-                  "type": "BinaryExpression",
-                  "start": 16,
-                  "end": 22,
-                  "left": {
-                    "type": "Identifier",
-                    "start": 16,
-                    "end": 17,
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "right": {
-                    "type": "Literal",
-                    "start": 20,
-                    "end": 22,
-                    "value": 10,
-                    "raw": "10"
                   }
+                ],
+                "kind": "let"
+              },
+              "test": {
+                "type": "BinaryExpression",
+                "start": 16,
+                "end": 22,
+                "left": {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 17,
+                  "name": "x"
                 },
-                "update": null,
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 25,
-                  "end": 98,
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 39,
-                      "end": 43,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 39,
-                        "end": 42,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 39,
-                          "end": 40,
-                          "name": "x"
-                        }
-                      }
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 56,
-                      "end": 64,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 56,
-                        "end": 63,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 56,
-                          "end": 61,
-                          "name": "count"
-                        }
-                      }
-                    },
-                    {
-                      "type": "ContinueStatement",
-                      "start": 77,
-                      "end": 86,
-                      "label": null
-                    }
-                  ]
+                "operator": "<",
+                "right": {
+                  "type": "Literal",
+                  "start": 20,
+                  "end": 22,
+                  "value": 10,
+                  "raw": "10"
                 }
+              },
+              "update": null,
+              "body": {
+                "type": "BlockStatement",
+                "start": 25,
+                "end": 77,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 39,
+                    "end": 43,
+                    "expression": {
+                      "type": "UpdateExpression",
+                      "start": 39,
+                      "end": 42,
+                      "operator": "++",
+                      "prefix": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 39,
+                        "end": 40,
+                        "name": "x"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ContinueStatement",
+                    "start": 56,
+                    "end": 65,
+                    "label": null
+                  }
+                ]
               }
-            ],
-            "sourceType": "script"
-          });
+            }
+          ],
+          "sourceType": "script"
+        });
     });
 
     it('should shadowing loop variable in same scope as continue', () => {
         expect(parseScript(`for (let x = 0; x < 10;) {
             x++;
-            count++;
             {
               let x = "hello";
               continue;
@@ -698,146 +615,128 @@ describe('Statement - Continue', () => {
             ranges: true,
             raw: true
         })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 159,
-            "body": [
-              {
-                "type": "ForStatement",
-                "start": 0,
-                "end": 159,
-                "init": {
-                  "type": "VariableDeclaration",
-                  "start": 5,
-                  "end": 14,
-                  "declarations": [
-                    {
-                      "type": "VariableDeclarator",
+          "type": "Program",
+          "start": 0,
+          "end": 138,
+          "body": [
+            {
+              "type": "ForStatement",
+              "start": 0,
+              "end": 138,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 5,
+                "end": 14,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 9,
+                    "end": 14,
+                    "id": {
+                      "type": "Identifier",
                       "start": 9,
+                      "end": 10,
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 13,
                       "end": 14,
-                      "id": {
-                        "type": "Identifier",
-                        "start": 9,
-                        "end": 10,
-                        "name": "x"
-                      },
-                      "init": {
-                        "type": "Literal",
-                        "start": 13,
-                        "end": 14,
-                        "value": 0,
-                        "raw": "0"
-                      }
+                      "value": 0,
+                      "raw": "0"
                     }
-                  ],
-                  "kind": "let"
-                },
-                "test": {
-                  "type": "BinaryExpression",
-                  "start": 16,
-                  "end": 22,
-                  "left": {
-                    "type": "Identifier",
-                    "start": 16,
-                    "end": 17,
-                    "name": "x"
-                  },
-                  "operator": "<",
-                  "right": {
-                    "type": "Literal",
-                    "start": 20,
-                    "end": 22,
-                    "value": 10,
-                    "raw": "10"
                   }
+                ],
+                "kind": "let"
+              },
+              "test": {
+                "type": "BinaryExpression",
+                "start": 16,
+                "end": 22,
+                "left": {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 17,
+                  "name": "x"
                 },
-                "update": null,
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 25,
-                  "end": 159,
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 39,
-                      "end": 43,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 39,
-                        "end": 42,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 39,
-                          "end": 40,
-                          "name": "x"
-                        }
-                      }
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 56,
-                      "end": 64,
-                      "expression": {
-                        "type": "UpdateExpression",
-                        "start": 56,
-                        "end": 63,
-                        "operator": "++",
-                        "prefix": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 56,
-                          "end": 61,
-                          "name": "count"
-                        }
-                      }
-                    },
-                    {
-                      "type": "BlockStatement",
-                      "start": 77,
-                      "end": 147,
-                      "body": [
-                        {
-                          "type": "VariableDeclaration",
-                          "start": 93,
-                          "end": 109,
-                          "declarations": [
-                            {
-                              "type": "VariableDeclarator",
-                              "start": 97,
-                              "end": 108,
-                              "id": {
-                                "type": "Identifier",
-                                "start": 97,
-                                "end": 98,
-                                "name": "x"
-                              },
-                              "init": {
-                                "type": "Literal",
-                                "start": 101,
-                                "end": 108,
-                                "value": "hello",
-                                "raw": "\"hello\""
-                              }
-                            }
-                          ],
-                          "kind": "let"
-                        },
-                        {
-                          "type": "ContinueStatement",
-                          "start": 124,
-                          "end": 133,
-                          "label": null
-                        }
-                      ]
-                    }
-                  ]
+                "operator": "<",
+                "right": {
+                  "type": "Literal",
+                  "start": 20,
+                  "end": 22,
+                  "value": 10,
+                  "raw": "10"
                 }
+              },
+              "update": null,
+              "body": {
+                "type": "BlockStatement",
+                "start": 25,
+                "end": 138,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 39,
+                    "end": 43,
+                    "expression": {
+                      "type": "UpdateExpression",
+                      "start": 39,
+                      "end": 42,
+                      "operator": "++",
+                      "prefix": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 39,
+                        "end": 40,
+                        "name": "x"
+                      }
+                    }
+                  },
+                  {
+                    "type": "BlockStatement",
+                    "start": 56,
+                    "end": 126,
+                    "body": [
+                      {
+                        "type": "VariableDeclaration",
+                        "start": 72,
+                        "end": 88,
+                        "declarations": [
+                          {
+                            "type": "VariableDeclarator",
+                            "start": 76,
+                            "end": 87,
+                            "id": {
+                              "type": "Identifier",
+                              "start": 76,
+                              "end": 77,
+                              "name": "x"
+                            },
+                            "init": {
+                              "type": "Literal",
+                              "start": 80,
+                              "end": 87,
+                              "value": "hello",
+                              "raw": "\"hello\""
+                            }
+                          }
+                        ],
+                        "kind": "let"
+                      },
+                      {
+                        "type": "ContinueStatement",
+                        "start": 103,
+                        "end": 112,
+                        "label": null
+                      }
+                    ]
+                  }
+                ]
               }
-            ],
-            "sourceType": "script"
-          });
+            }
+          ],
+          "sourceType": "script"
+        });
     });
 
     it('should parse while (true) { continue; }', () => {
@@ -848,35 +747,31 @@ describe('Statement - Continue', () => {
             "type": "Program",
             "start": 0,
             "end": 26,
-            "body": [
-              {
+            "body": [{
                 "type": "WhileStatement",
                 "start": 0,
                 "end": 26,
                 "test": {
-                  "type": "Literal",
-                  "start": 7,
-                  "end": 11,
-                  "value": true,
-                  "raw": "true"
+                    "type": "Literal",
+                    "start": 7,
+                    "end": 11,
+                    "value": true,
+                    "raw": "true"
                 },
                 "body": {
-                  "type": "BlockStatement",
-                  "start": 13,
-                  "end": 26,
-                  "body": [
-                    {
-                      "type": "ContinueStatement",
-                      "start": 15,
-                      "end": 24,
-                      "label": null
-                    }
-                  ]
+                    "type": "BlockStatement",
+                    "start": 13,
+                    "end": 26,
+                    "body": [{
+                        "type": "ContinueStatement",
+                        "start": 15,
+                        "end": 24,
+                        "label": null
+                    }]
                 }
-              }
-            ],
+            }],
             "sourceType": "script"
-          });
+        });
     });
 
     it('should parse done: while (true) { continue done }', () => {
@@ -887,51 +782,279 @@ describe('Statement - Continue', () => {
             "type": "Program",
             "start": 0,
             "end": 36,
-            "body": [
-              {
+            "body": [{
                 "type": "LabeledStatement",
                 "start": 0,
                 "end": 36,
                 "body": {
-                  "type": "WhileStatement",
-                  "start": 6,
-                  "end": 36,
-                  "test": {
-                    "type": "Literal",
-                    "start": 13,
-                    "end": 17,
-                    "value": true,
-                    "raw": "true"
-                  },
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 19,
+                    "type": "WhileStatement",
+                    "start": 6,
                     "end": 36,
-                    "body": [
-                      {
-                        "type": "ContinueStatement",
-                        "start": 21,
-                        "end": 34,
-                        "label": {
-                          "type": "Identifier",
-                          "start": 30,
-                          "end": 34,
-                          "name": "done"
-                        }
-                      }
-                    ]
-                  }
+                    "test": {
+                        "type": "Literal",
+                        "start": 13,
+                        "end": 17,
+                        "value": true,
+                        "raw": "true"
+                    },
+                    "body": {
+                        "type": "BlockStatement",
+                        "start": 19,
+                        "end": 36,
+                        "body": [{
+                            "type": "ContinueStatement",
+                            "start": 21,
+                            "end": 34,
+                            "label": {
+                                "type": "Identifier",
+                                "start": 30,
+                                "end": 34,
+                                "name": "done"
+                            }
+                        }]
+                    }
                 },
                 "label": {
-                  "type": "Identifier",
-                  "start": 0,
-                  "end": 4,
-                  "name": "done"
+                    "type": "Identifier",
+                    "start": 0,
+                    "end": 4,
+                    "name": "done"
                 }
-              }
-            ],
+            }],
             "sourceType": "script"
-          });
+        });
+    });
+
+
+    it('should parse "a: do continue a; while(1);"', () => {
+      expect(parseScript('a: do continue a; while(1);', {
+          ranges: true,
+          raw: true
+      })).to.eql({
+        "type": "Program",
+        "start": 0,
+        "end": 27,
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start": 0,
+            "end": 27,
+            "body": {
+              "type": "DoWhileStatement",
+              "start": 3,
+              "end": 27,
+              "body": {
+                "type": "ContinueStatement",
+                "start": 6,
+                "end": 17,
+                "label": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 16,
+                  "name": "a"
+                }
+              },
+              "test": {
+                "type": "Literal",
+                "start": 24,
+                "end": 25,
+                "value": 1,
+                "raw": "1"
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start": 0,
+              "end": 1,
+              "name": "a"
+            }
+          }
+        ],
+        "sourceType": "script"
+      });
+    });
+
+    it('should parse "a: while (0) { continue \r b; }"', () => {
+      expect(parseScript('a: while (0) { continue \r b; }', {
+          ranges: true,
+          raw: true
+      })).to.eql({
+          "body": [
+            {
+              "body": {
+               "body": {
+                  "body": [
+                    {
+                     "end": 23,
+                      "label": null,
+                     "start": 15,
+                      "type": "ContinueStatement"
+                    },
+                    {
+                      "end": 28,
+                      "expression": {
+                        "end": 27,
+                        "name": "b",
+                        "start": 26,
+                        "type": "Identifier"
+                      },
+                      "start": 26,
+                      "type": "ExpressionStatement"
+                    }
+                  ],
+                  "end": 30,
+                  "start": 13,
+                 "type": "BlockStatement"
+                },
+               "end": 30,
+                "start": 3,
+                "test": {
+                  "end": 11,
+                  "raw": "0",
+                  "start": 10,
+                  "type": "Literal",
+                  "value": 0,
+                },
+                "type": "WhileStatement"
+              },
+              "end": 30,
+             "label": {
+                "end": 1,
+                "name": "a",
+                "start": 0,
+                "type": "Identifier"
+              },
+              "start": 0,
+              "type": "LabeledStatement"
+            },
+         ],
+         "end": 30,
+          "sourceType": "script",
+          "start": 0,
+          "type": "Program",
+        });
+    });
+
+    it('should parse "a: while (0) { continue /*\r*/ b; }"', () => {
+      expect(parseScript('a: while (0) { continue /*\r*/ b; }', {
+          ranges: true,
+          raw: true
+      })).to.eql({
+          "body": [
+            {
+              "body": {
+                "body": {
+                  "body": [
+                    {
+                      "end": 23,
+                      "label": null,
+                      "start": 15,
+                      "type": "ContinueStatement"
+                    },
+                    {
+                      "end": 32,
+                      "expression": {
+                        "end": 31,
+                        "name": "b",
+                        "start": 30,
+                        "type": "Identifier"
+                      },
+                      "start": 30,
+                     "type": "ExpressionStatement"
+                    }
+                  ],
+                  "end": 34,
+                  "start": 13,
+                  "type": "BlockStatement"
+                },
+                "end": 34,
+                "start": 3,
+                "test": {
+                  "end": 11,
+                  "raw": "0",
+                  "start": 10,
+                  "type": "Literal",
+                  "value": 0,
+                },
+                "type": "WhileStatement"
+              },
+              "end": 34,
+              "label": {
+                "end": 1,
+                "name": "a",
+                "start": 0,
+                "type": "Identifier"
+              },
+              "start": 0,
+              "type": "LabeledStatement"
+            }
+          ],
+          "end": 34,
+         "sourceType": "script",
+          "start": 0,
+          "type": "Program"
+        });
+    });
+
+    it('should parse "a: while (0) { continue /*\u2028*/ b; }"', () => {
+      expect(parseScript('a: while (0) { continue /*\u2028*/ b; }', {
+          ranges: true,
+          raw: true
+      })).to.eql({
+          "body": [
+            {
+              "body": {
+                "body": {
+                  "body": [
+                   {
+                      "end": 23,
+                      "label": null,
+                      "start": 15,
+                      "type": "ContinueStatement"
+                    },
+                    {
+                      "end": 32,
+                      "expression": {
+                        "end": 31,
+                        "name": "b",
+                        "start": 30,
+                        "type": "Identifier"
+                      },
+                      "start": 30,
+                     "type": "ExpressionStatement"
+                    }
+                  ],
+                  "end": 34,
+                  "start": 13,
+                  "type": "BlockStatement"
+               },
+                "end": 34,
+                "start": 3,
+                "test": {
+                  "end": 11,
+                  "raw": "0",
+                  "start": 10,
+                  "type": "Literal",
+                  "value": 0,
+                },
+                "type": "WhileStatement"
+              },
+             "end": 34,
+              "label": {
+                "end": 1,
+                "name": "a",
+                "start": 0,
+                "type": "Identifier"
+              },
+              "start": 0,
+              "type": "LabeledStatement"
+            }
+          ],
+          "end": 34,
+         "sourceType": "script",
+          "start": 0,
+          "type": "Program"
+        });
     });
 
     it('should parse __proto__: while (true) { continue __proto__; }', () => {
@@ -942,50 +1065,46 @@ describe('Statement - Continue', () => {
             "type": "Program",
             "start": 0,
             "end": 47,
-            "body": [
-              {
+            "body": [{
                 "type": "LabeledStatement",
                 "start": 0,
                 "end": 47,
                 "body": {
-                  "type": "WhileStatement",
-                  "start": 11,
-                  "end": 47,
-                  "test": {
-                    "type": "Literal",
-                    "start": 18,
-                    "end": 22,
-                    "value": true,
-                    "raw": "true"
-                  },
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 24,
+                    "type": "WhileStatement",
+                    "start": 11,
                     "end": 47,
-                    "body": [
-                      {
-                        "type": "ContinueStatement",
-                        "start": 26,
-                        "end": 45,
-                        "label": {
-                          "type": "Identifier",
-                          "start": 35,
-                          "end": 44,
-                          "name": "__proto__"
-                        }
-                      }
-                    ]
-                  }
+                    "test": {
+                        "type": "Literal",
+                        "start": 18,
+                        "end": 22,
+                        "value": true,
+                        "raw": "true"
+                    },
+                    "body": {
+                        "type": "BlockStatement",
+                        "start": 24,
+                        "end": 47,
+                        "body": [{
+                            "type": "ContinueStatement",
+                            "start": 26,
+                            "end": 45,
+                            "label": {
+                                "type": "Identifier",
+                                "start": 35,
+                                "end": 44,
+                                "name": "__proto__"
+                            }
+                        }]
+                    }
                 },
                 "label": {
-                  "type": "Identifier",
-                  "start": 0,
-                  "end": 9,
-                  "name": "__proto__"
+                    "type": "Identifier",
+                    "start": 0,
+                    "end": 9,
+                    "name": "__proto__"
                 }
-              }
-            ],
+            }],
             "sourceType": "script"
-          });
+        });
     });
 });

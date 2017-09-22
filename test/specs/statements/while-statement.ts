@@ -54,12 +54,6 @@ describe('Statements - While statement', () => {
                 parseScript(`while (false) const x = null;`)
             }).to.throw();
         });
-        
-        it('should fail if IsLabelledFunction(Statement) is true', () => {
-            expect(() => {
-                parseScript(`while (false) label1: label2: function f() {}`)
-            }).to.not.throw();
-        });
 
         it('should fail if Generator declaration in statement position', () => {
             expect(() => {
@@ -67,8 +61,6 @@ describe('Statements - While statement', () => {
             }).to.throw();
         });
 
-       
-    
         it('should fail on Lexical declaration (const) used in statement position', () => {
             expect(() => {
                 parseScript(`while (false) const x = null;`)
@@ -81,19 +73,6 @@ describe('Statements - While statement', () => {
             }).to.throw();
         });
 
-        it('should fail on generator declaration in statement position', () => {
-            expect(() => {
-                parseScript(`while (false) label1: label2: function f() {}`)
-            }).to.not.throw();
-        });
-    
-        // TODO! Annex B allow functions here
-        it('should fail if IsLabelledFunction(Statement) is true', () => {
-            expect(() => {
-                parseScript(`while (false) label1: label2: function f() {}`)
-            }).to.not.throw();
-        });
-    
         it('should throw if execution of "while 1 break" fails', () => {
             expect(() => {
                 parseScript(`while 1 break;`)
@@ -204,25 +183,25 @@ describe('Statements - While statement', () => {
     
         it('should fail on "while(true) function a(){}"', () => {
             expect(() => {
-                parseModule(`while(true) function a(){}`)
+                parseModule(`while(true) function a(){}`);
             }).to.throw();
         });
     
         it('should throw on function declarations in statement position in strict mode', () => {
             expect(() => {
-                parseModule('while (false) function g() {}')
+                parseModule('while (false) function g() {}');
             }).to.throw();
         });
     
         it('should throw on function declarations in statement position in strict mode - "if (true) {} else function g() {}"', () => {
             expect(() => {
-                parseScript('"use strict";  if (true) {} else function g() {}')
+                parseScript('"use strict";  if (true) {} else function g() {}');
             }).to.throw();
         });
     
         it('should throw on function declarations in statement position in strict mode - "if (true) {} else function g() {}"', () => {
             expect(() => {
-                parseScript('"use strict"; if (true) {} else function g() {}')
+                parseScript('"use strict"; if (true) {} else function g() {}');
             }).to.throw();
         });
     

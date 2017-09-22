@@ -83,7 +83,7 @@ describe('Statements - do-while', () => {
         }).to.throw();
     });
 
-    it('should fail on AsyncGeneratorDeclaration in statement position', () => {
+    it('should fail on async generator declaration in statement position', () => {
         expect(() => {
             parseScript(`do async function* g() {} while (false)`);
         }).to.throw();

@@ -5,6 +5,124 @@ const expect = chai.expect;
 
 describe('Statements - For in', () => {
 
+    it('should fail on invalid use of eval', () => {
+        expect(() => {
+            parseScript('"use strict"; for ({ eval } in [{}]) ;');
+        }).to.throw();
+    });
+
+    it('should fail on ""use strict"; for ({ x: [x = yield] } in [{ x: [] }]) ;"', () => {
+        expect(() => {
+            parseScript('"use strict"; for ({ x: [x = yield] } in [{ x: [] }]) ;');
+        }).to.throw();
+    });
+
+    it('should fail on yield nested destructuring assignment', () => {
+        expect(() => {
+            parseScript('for ([...{ x = yield }] in [[{}]]) ;');
+        }).to.not.throw();
+    });
+
+    it('should fail on invalid use of eval in assignment target', () => {
+        expect(() => {
+            parseScript('"use strict"; for ({ eval = 0 } in [{}]) ;');
+        }).to.not.throw();
+    });
+
+    it('should fail "for ([...x, ...y] in [[]]) ;"', () => {
+        expect(() => {
+            parseScript('for ([...x, ...y] in [[]]) ;');
+        }).to.not.throw();
+    });
+
+    it('should fail on assignment rest element with an initializer', () => {
+        expect(() => {
+            parseScript('for ([...x = 1] in [[]]) ;');
+        }).to.not.throw();
+    });
+    
+    it('should fail on ""use strict"; for ([[x[yield]]] in [[[]]]) ;"', () => {
+        expect(() => {
+            parseScript('"use strict"; for ([[x[yield]]] in [[[]]]) ;');
+        }).to.throw();
+    });
+
+
+    it.skip('should fail on array rest before elison', () => {
+        expect(() => {
+            parseScript('for ([...x,] in [[]]) ;');
+        }).to.throw();
+    });
+
+    it('should fail on invalid use of yield in destructuring assignment', () => {
+        expect(() => {
+            parseScript('"use strict"; for ([ x[yield] ] in [[]]) ;');
+        }).to.throw();
+    });
+
+    it('should fail on invalid use of yield in destructuring assignment of nested destructuruing assignment', () => {
+        expect(() => {
+            parseScript('"use strict"; for ([[x[yield]]] in [[[]]]) ;');
+        }).to.throw();
+    });
+
+    it('should fail on "for ([[(x, y)]] in [[[]]]) ;"', () => {
+        expect(() => {
+            parseScript('for ([[(x, y)]] in [[[]]]) ;');
+        }).to.throw('');
+    });
+
+    it('should fail on lexical declaration (let) in statement position', () => {
+        expect(() => {
+            parseScript('for (var x in {}) let y;');
+        }).to.throw('');
+    });
+
+    it('should fail on async generator declaration in statement position', () => {
+        expect(() => {
+            parseScript('for (var x in {}) async function* g() {}', { next: true});
+        }).to.throw('');
+    });
+
+    it('should fail if the head declaration contain duplicate entries', () => {
+        expect(() => {
+            parseScript('for (const [x, x] in {}) {}');
+        }).to.throw('');
+    });
+
+    it('should fail if the head declaration contain duplicate entries', () => {
+        expect(() => {
+            parseScript('for (let [x, x] in {}) {}');
+        }).to.throw('');
+    });
+
+    it('should fail on "for (const x in {}) label1: label2: function f() {}"', () => {
+        expect(() => {
+            parseScript('for (const x in {}) label1: label2: function f() {}');
+        }).to.throw('');
+    });
+
+    it('should fail on "for (let x in {}) label1: label2: function f() {}"', () => {
+        expect(() => {
+            parseScript('for (let x in {}) label1: label2: function f() {}');
+        }).to.throw('');
+    });
+
+    it('should fail on new line"', () => {
+        expect(() => {
+            parseScript(`for (var x in null) let
+            [a] = 0;`);
+        }).to.not.throw('');
+    });
+
+    it('should fail on "for (var x in {}) label1: label2: function f() {}"', () => {
+        expect(() => {
+            parseScript('for (var x in {}) label1: label2: function f() {}');
+        }).to.throw('');
+    });
+
+
+
     it('should fail on unexpected number"', () => {
         expect(() => {
             parseScript('for (const of 42);');
@@ -58,15 +176,15 @@ describe('Statements - For in', () => {
         }).to.throw();
     });
 
-    it('should fail on "for ({ x: x[yield] } in [{}]) ;"', () => {
+    it('should fail on ""use strict"; for ({ x: x[yield] } in [{}]);"', () => {
         expect(() => {
-            parseScript('for ({ x: x[yield] } in [{}]) ;');
-        }).to.not.throw();
+            parseScript('"use strict"; for ({ x: x[yield] } in [{}]);');
+        }).to.throw();
     });
     it('should fail on invalid array yield identifier', () => {
         expect(() => {
-            parseScript('for ({ x: [x = yield] } in [{ x: [] }]) ;');
-        }).to.not.throw();
+            parseScript('"use strict"; for ({ x: [x = yield] } in [{ x: [] }]) ;');
+        }).to.throw();
     });
 
     it('should fail on invalid array rest', () => {
@@ -74,12 +192,7 @@ describe('Statements - For in', () => {
             parseScript('for ([...x = 1] in [[]]) ;');
         }).to.not.throw();
     });
-    it('should fail on invalid array yield identifier', () => {
-        expect(() => {
-            parseScript('for ([...x = 1] in [[]]) ;');
-        }).to.not.throw();
-    });
-
+  
     it('should fail on invalid rest before ellison', () => {
         expect(() => {
             parseScript('for ([...x,] in [[]]) ;');
@@ -93,10 +206,9 @@ describe('Statements - For in', () => {
 
     it('should fail on invalid array element nested array yield identifier', () => {
         expect(() => {
-            parseScript('for ([[x[yield]]] in [[[]]]) ;');
-        }).to.not.throw();
+            parseScript('"use strict"; for ([[x[yield]]] in [[[]]]) ;');
+        }).to.throw();
     });
-
 
     it('should fail on "for(let a = 0 in b);"', () => {
         expect(() => {
@@ -113,15 +225,22 @@ describe('Statements - For in', () => {
             parseScript('for(let ? b : c in 0);');
         }).to.throw();
     });
+
+    it('should fail on "for(([{}]) in 0);"', () => {
+        expect(() => {
+            parseScript('for(([{}]) in 0);');
+        }).to.throw();
+    });
+
     it('should fail on "for(({a}) in 0);"', () => {
         expect(() => {
             parseScript('for(({a}) in 0);');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on "for(([a]) in 0);"', () => {
         expect(() => {
             parseScript('for(([a]) in 0);');
-        }).to.not.throw();
+        }).to.throw();
     });
 
 
@@ -333,7 +452,6 @@ describe('Statements - For in', () => {
             "sourceType": "script"
         });
     });
-
 
     it('should parse "for(var a in b, c);"', () => {
         expect(parseScript(`for(var a in b, c);`, {
@@ -1000,5 +1118,449 @@ describe('Statements - For in', () => {
             ],
             "sourceType": "script"
         });
+    });
+
+    it('should parse expression in head', () => {
+        expect(parseScript(`for (x in null, { key: 0 }) {}`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 30,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 30,
+                "left": {
+                  "type": "Identifier",
+                  "start": 5,
+                  "end": 6,
+                  "name": "x"
+                },
+                "right": {
+                  "type": "SequenceExpression",
+                  "start": 10,
+                  "end": 26,
+                  "expressions": [
+                    {
+                      "type": "Literal",
+                      "start": 10,
+                      "end": 14,
+                      "value": null,
+                      "raw": "null"
+                    },
+                    {
+                      "type": "ObjectExpression",
+                      "start": 16,
+                      "end": 26,
+                      "properties": [
+                        {
+                          "type": "Property",
+                          "start": 18,
+                          "end": 24,
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 18,
+                            "end": 21,
+                            "name": "key"
+                          },
+                          "value": {
+                            "type": "Literal",
+                            "start": 23,
+                            "end": 24,
+                            "value": 0,
+                            "raw": "0"
+                          },
+                          "kind": "init"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 28,
+                  "end": 30,
+                  "body": []
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse "for (x.y in { attr: null }) {}"', () => {
+        expect(parseScript(`for (x.y in { attr: null }) {}`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ForInStatement",
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [],
+                        "start": 28,
+                        "end": 30
+                    },
+                    "left": {
+                        "type": "MemberExpression",
+                        "object": {
+                            "type": "Identifier",
+                            "name": "x",
+                            "start": 5,
+                            "end": 6
+                        },
+                        "computed": false,
+                        "property": {
+                            "type": "Identifier",
+                            "name": "y",
+                            "start": 7,
+                            "end": 8
+                        },
+                        "start": 5,
+                        "end": 8
+                    },
+                    "right": {
+                        "type": "ObjectExpression",
+                        "properties": [
+                            {
+                                "type": "Property",
+                                "computed": false,
+                                "key": {
+                                    "type": "Identifier",
+                                    "name": "attr",
+                                    "start": 14,
+                                    "end": 18
+                                },
+                                "kind": "init",
+                                "method": false,
+                                "shorthand": false,
+                                "value": {
+                                    "type": "Literal",
+                                    "value": null,
+                                    "start": 20,
+                                    "end": 24,
+                                    "raw": "null"
+                                },
+                                "start": 14,
+                                "end": 24
+                            }
+                        ],
+                        "start": 12,
+                        "end": 26
+                    },
+                    "start": 0,
+                    "end": 30
+                }
+            ],
+            "sourceType": "script",
+            "start": 0,
+            "end": 30
+        });
+    });
+
+    it('should parse "for(let [a=b in c] in null);"', () => {
+        expect(parseScript(`for (
+            let [_ = probeDecl = function() { return x; }]
+            in
+            { '': probeExpr = function() { return x; }}
+          )
+          var x = 2, __ = probeBody = function() { return x; };`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 211,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 211,
+                "left": {
+                  "type": "VariableDeclaration",
+                  "start": 18,
+                  "end": 64,
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 22,
+                      "end": 64,
+                      "id": {
+                        "type": "ArrayPattern",
+                        "start": 22,
+                        "end": 64,
+                        "elements": [
+                          {
+                            "type": "AssignmentPattern",
+                            "start": 23,
+                            "end": 63,
+                            "left": {
+                              "type": "Identifier",
+                              "start": 23,
+                              "end": 24,
+                              "name": "_"
+                            },
+                            "right": {
+                              "type": "AssignmentExpression",
+                              "start": 27,
+                              "end": 63,
+                              "operator": "=",
+                              "left": {
+                                "type": "Identifier",
+                                "start": 27,
+                                "end": 36,
+                                "name": "probeDecl"
+                              },
+                              "right": {
+                                "type": "FunctionExpression",
+                                "start": 39,
+                                "end": 63,
+                                "id": null,
+                                "generator": false,
+                                "expression": false,
+                                "async": false,
+                                "params": [],
+                                "body": {
+                                  "type": "BlockStatement",
+                                  "start": 50,
+                                  "end": 63,
+                                  "body": [
+                                    {
+                                      "type": "ReturnStatement",
+                                      "start": 52,
+                                      "end": 61,
+                                      "argument": {
+                                        "type": "Identifier",
+                                        "start": 59,
+                                        "end": 60,
+                                        "name": "x"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                },
+                "right": {
+                  "type": "ObjectExpression",
+                  "start": 92,
+                  "end": 135,
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 94,
+                      "end": 134,
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Literal",
+                        "start": 94,
+                        "end": 96,
+                        "value": "",
+                        "raw": "''"
+                      },
+                      "value": {
+                        "type": "AssignmentExpression",
+                        "start": 98,
+                        "end": 134,
+                        "operator": "=",
+                        "left": {
+                          "type": "Identifier",
+                          "start": 98,
+                          "end": 107,
+                          "name": "probeExpr"
+                        },
+                        "right": {
+                          "type": "FunctionExpression",
+                          "start": 110,
+                          "end": 134,
+                          "id": null,
+                          "generator": false,
+                          "expression": false,
+                          "async": false,
+                          "params": [],
+                          "body": {
+                            "type": "BlockStatement",
+                            "start": 121,
+                            "end": 134,
+                            "body": [
+                              {
+                                "type": "ReturnStatement",
+                                "start": 123,
+                                "end": 132,
+                                "argument": {
+                                  "type": "Identifier",
+                                  "start": 130,
+                                  "end": 131,
+                                  "name": "x"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                },
+                "body": {
+                  "type": "VariableDeclaration",
+                  "start": 158,
+                  "end": 211,
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 162,
+                      "end": 167,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 162,
+                        "end": 163,
+                        "name": "x"
+                      },
+                      "init": {
+                        "type": "Literal",
+                        "start": 166,
+                        "end": 167,
+                        "value": 2,
+                        "raw": "2"
+                      }
+                    },
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 169,
+                      "end": 210,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 169,
+                        "end": 171,
+                        "name": "__"
+                      },
+                      "init": {
+                        "type": "AssignmentExpression",
+                        "start": 174,
+                        "end": 210,
+                        "operator": "=",
+                        "left": {
+                          "type": "Identifier",
+                          "start": 174,
+                          "end": 183,
+                          "name": "probeBody"
+                        },
+                        "right": {
+                          "type": "FunctionExpression",
+                          "start": 186,
+                          "end": 210,
+                          "id": null,
+                          "generator": false,
+                          "expression": false,
+                          "async": false,
+                          "params": [],
+                          "body": {
+                            "type": "BlockStatement",
+                            "start": 197,
+                            "end": 210,
+                            "body": [
+                              {
+                                "type": "ReturnStatement",
+                                "start": 199,
+                                "end": 208,
+                                "argument": {
+                                  "type": "Identifier",
+                                  "start": 206,
+                                  "end": 207,
+                                  "name": "x"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "kind": "var"
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse let destructuring', () => {
+        expect(parseScript(`for ( let[x] in obj ) {}`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 24,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 24,
+                "left": {
+                  "type": "VariableDeclaration",
+                  "start": 6,
+                  "end": 12,
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 9,
+                      "end": 12,
+                      "id": {
+                        "type": "ArrayPattern",
+                        "start": 9,
+                        "end": 12,
+                        "elements": [
+                          {
+                            "type": "Identifier",
+                            "start": 10,
+                            "end": 11,
+                            "name": "x"
+                          }
+                        ]
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 19,
+                  "name": "obj"
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 22,
+                  "end": 24,
+                  "body": []
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
     });
 });

@@ -44,7 +44,7 @@ describe('Statements - With statement', () => {
     it('should throw if Function declaration are used in statement position', () => {
         expect(() => {
             parseScript(`with(true) class a {}`)
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it('should throw if Generator declaration are used in statement position', () => {

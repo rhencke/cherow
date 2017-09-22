@@ -9,13 +9,13 @@ describe('Statement - Break', () => {
         expect(() => { parseScript(`var x=1; break; var y=2;`)}).to.throw();
     });
 
-    it('should fail if break appear without  within "try/catch"', () => {
+    it('should fail if break appear within "try/catch"', () => {
         expect(() => { parseScript(`try{} catch(e){ break; }`)}).to.throw();
     });
 
-    it('should fail if break appear without  within "try/catch"', () => {
-        expect(() => { parseScript(`try{} catch(e){ break; }`)}).to.throw();
-    });
+    it('should fail if break appear within a block"', () => {
+      expect(() => { parseScript(`var x=1; break; var y=2;`)}).to.throw();
+  });
 
     it('should parse semicolon newline', () => {
         expect(parseScript(`while (true) {
@@ -101,6 +101,61 @@ describe('Statement - Break', () => {
             }],
             "sourceType": "script"
         });
+    });
+
+    it('should parse "done: while (true) { break done; }"', () => {
+      expect(parseScript('done: while (true) { break done; }', {
+          ranges: true,
+          raw: true
+      })).to.eql({
+        "type": "Program",
+        "start": 0,
+        "end": 34,
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start": 0,
+            "end": 34,
+            "body": {
+              "type": "WhileStatement",
+              "start": 6,
+              "end": 34,
+              "test": {
+                "type": "Literal",
+                "start": 13,
+                "end": 17,
+                "value": true,
+                "raw": "true"
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start": 19,
+                "end": 34,
+                "body": [
+                  {
+                    "type": "BreakStatement",
+                    "start": 21,
+                    "end": 32,
+                    "label": {
+                      "type": "Identifier",
+                      "start": 27,
+                      "end": 31,
+                      "name": "done"
+                    }
+                  }
+                ]
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start": 0,
+              "end": 4,
+              "name": "done"
+            }
+          }
+        ],
+        "sourceType": "script"
+      });
     });
 
     it('should parse done: while (true) { break done }', () => {

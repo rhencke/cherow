@@ -119,7 +119,8 @@ export const enum Errors {
     UnNamedFunctionStmt,
     InvalidStrictExpPostion,
     InvalidStrictLexical,
-    MissingInitializer
+    MissingInitializer,
+    InvalidLabeledForOf
 }
 
 export const ErrorMessages: {
@@ -243,7 +244,8 @@ export const ErrorMessages: {
     [Errors.UnNamedFunctionStmt]: 'Function statement requires a name',
     [Errors.InvalidStrictExpPostion]: 'The identifier \'%0\' must not be in expression position in strict mode',
     [Errors.InvalidStrictLexical]: 'Lexical declarations must not have a binding named "let"',
-    [Errors.MissingInitializer]: 'Missing initializer'
+    [Errors.MissingInitializer]: 'Missing initializer',
+    [Errors.InvalidLabeledForOf]: 'The body of a for-of statement must not be a labeled function declaration',
 };
 
 function constructError(msg: string, column: number): Error {
