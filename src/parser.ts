@@ -12,6 +12,7 @@ export const enum IterationState {
         Var = 1 << 0,
         Let = 1 << 1,
         Const = 1 << 2,
+        Await = 1 << 3,
         Variable = Var | Let | Const
 }
 
@@ -2127,13 +2128,21 @@ export class Parser {
 
         this.expect(context, Token.ForKeyword);
 
-        const asyncIteration = this.flags & Flags.OptionsNext && this.parseOptional(context, Token.AwaitKeyword);
-        let init: any = null;
+        let state = IterationState.None;
+        let init = null;
         let declarations = null;
         let kind = '';
         let body;
         let test = null;
-        let state = IterationState.None;
+        const token = this.token;
+
+        // Asynchronous Iteration - Stage 3 proposal
+        if (context & Context.Await && this.parseOptional(context, Token.AwaitKeyword)) {
+            // Throw " Unexpected token 'await'" if the option 'next' flag isn't set
+            if (!(this.flags & Flags.OptionsNext)) this.error(Errors.UnexpectedToken, tokenDesc(token));
+            state |= IterationState.Await;
+        }
+
         const savedFlag = this.flags;
 
         this.setGlobalFlag(Flags.BlockStatement, true);
@@ -2197,7 +2206,7 @@ export class Parser {
                 // Only a single variable declaration is allowed in a for of statement
                 if (declarations && declarations[0].init != null) this.error(Errors.InvalidVarInitForOf);
             } else {
-                this.reinterpretExpressionAsPattern(context, init);
+                this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
                 if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForLoop);
             }
 
@@ -2217,12 +2226,12 @@ export class Parser {
                 body,
                 left: init,
                 right,
-                await: !!asyncIteration
+                await: !!(state & IterationState.Await)
             });
 
         } else if (this.token === Token.InKeyword) {
 
-            if (this.flags & Flags.OptionsNext && context & Context.Await) this.error(Errors.ForAwaitNotOf);
+            if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
 
             // Invalid:  'for (a=12 in e) break;'
             if (!(state & IterationState.Variable) && init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForIn);
@@ -2232,7 +2241,7 @@ export class Parser {
             if (state & IterationState.Variable) {
                 if (declarations && declarations.length !== 1) this.error(Errors.Unexpected);
             } else {
-                this.reinterpretExpressionAsPattern(context, init);
+                this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
                 if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForLoop);
             }
 
@@ -2255,7 +2264,7 @@ export class Parser {
             });
         } else {
 
-            if (context & Context.Await && this.flags & Flags.OptionsNext) this.error(Errors.ForAwaitNotOf);
+            if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
 
             let update = null;
 
@@ -2509,7 +2518,7 @@ export class Parser {
 
         if (this.parseOptional(context, Token.Colon) && expr.type === 'Identifier') {
             // Invalid: `for (const x of []) label1: label2: function f() {}`
-            if (context & Context.ForStatement) this.error(Errors.InvalidLabeledForOf);
+            if (context & Context.ForStatement && this.token === Token.Identifier) this.error(Errors.InvalidLabeledForOf);
             // Invalid: `\await: ;`
             if (expr.name === 'await' || expr.name === 'enum') this.error(Errors.UnexpectedToken, expr.name);
             if (context & Context.Strict &&
@@ -3610,6 +3619,12 @@ export class Parser {
                 return;
 
             case 'SpreadElement':
+                // Invalid '[a, ...(b = c)] = 0'
+                // Invalid 'for ([...x = 1] in [[]]);'
+                if (params.argument.type === 'AssignmentExpression') {
+                    if (context & Context.ForStatement) this.error(Errors.InvalidLHSInForIn);
+                    this.error(Errors.InvalidLHSInAssignment);
+                }
                 params.type = 'RestElement';
                 this.reinterpretExpressionAsPattern(context, params.argument);
                 return;

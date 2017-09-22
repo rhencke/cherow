@@ -2499,13 +2499,20 @@ Parser.prototype.parseStatement = function parseStatement (context) {
 Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrForOfStatement (context) {
     var pos = this.startNode();
     this.expect(context, 8278 /* ForKeyword */);
-    var asyncIteration = this.flags & 33554432 /* OptionsNext */ && this.parseOptional(context, 4205 /* AwaitKeyword */);
+    var state = 0;
     var init = null;
     var declarations = null;
     var kind = '';
     var body;
     var test = null;
-    var state = 0;
+    var token = this.token;
+    // Asynchronous Iteration - Stage 3 proposal
+    if (context & 8192 /* Await */ && this.parseOptional(context, 4205 /* AwaitKeyword */)) {
+        // Throw " Unexpected token 'await'" if the option 'next' flag isn't set
+        if (!(this.flags & 33554432 /* OptionsNext */))
+            { this.error(1 /* UnexpectedToken */, tokenDesc(token)); }
+        state |= 8 /* Await */;
+    }
     var savedFlag = this.flags;
     this.setGlobalFlag(4096 /* BlockStatement */, true);
     this.expect(context, 11 /* LeftParen */);
@@ -2555,7 +2562,7 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
                 { this.error(35 /* InvalidVarInitForOf */); }
         }
         else {
-            this.reinterpretExpressionAsPattern(context, init);
+            this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
             if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression')
                 { this.error(36 /* InvalidLHSInForLoop */); }
         }
@@ -2570,11 +2577,11 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
             body: body,
             left: init,
             right: right,
-            await: !!asyncIteration
+            await: !!(state & 8 /* Await */)
         });
     }
     else if (this.token === 10033 /* InKeyword */) {
-        if (this.flags & 33554432 /* OptionsNext */ && context & 8192 /* Await */)
+        if (state & 8 /* Await */)
             { this.error(64 /* ForAwaitNotOf */); }
         // Invalid:  'for (a=12 in e) break;'
         if (!(state & 7 /* Variable */) && init.type === 'AssignmentExpression')
@@ -2585,7 +2592,7 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
                 { this.error(0 /* Unexpected */); }
         }
         else {
-            this.reinterpretExpressionAsPattern(context, init);
+            this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
             if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression')
                 { this.error(36 /* InvalidLHSInForLoop */); }
         }
@@ -2603,7 +2610,7 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
         });
     }
     else {
-        if (context & 8192 /* Await */ && this.flags & 33554432 /* OptionsNext */)
+        if (state & 8 /* Await */)
             { this.error(64 /* ForAwaitNotOf */); }
         var update = null;
         this.expect(context, 17 /* Semicolon */);
@@ -2805,7 +2812,7 @@ Parser.prototype.parseLabelledStatement = function parseLabelledStatement (conte
     var expr = this.parseExpression(context | 32768 /* AllowIn */);
     if (this.parseOptional(context, 21 /* Colon */) && expr.type === 'Identifier') {
         // Invalid: `for (const x of []) label1: label2: function f() {}`
-        if (context & 65536 /* ForStatement */)
+        if (context & 65536 /* ForStatement */ && this.token === 65537 /* Identifier */)
             { this.error(121 /* InvalidLabeledForOf */); }
         // Invalid: `\await: ;`
         if (expr.name === 'await' || expr.name === 'enum')
@@ -3818,6 +3825,13 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
         case 'RestElement':
             return;
         case 'SpreadElement':
+            // Invalid '[a, ...(b = c)] = 0'
+            // Invalid 'for ([...x = 1] in [[]]);'
+            if (params.argument.type === 'AssignmentExpression') {
+                if (context & 65536 /* ForStatement */)
+                    { this.error(38 /* InvalidLHSInForIn */); }
+                this.error(40 /* InvalidLHSInAssignment */);
+            }
             params.type = 'RestElement';
             this.reinterpretExpressionAsPattern(context, params.argument);
             return;

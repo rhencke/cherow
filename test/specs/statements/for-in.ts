@@ -38,7 +38,7 @@ describe('Statements - For in', () => {
     it('should fail on assignment rest element with an initializer', () => {
         expect(() => {
             parseScript('for ([...x = 1] in [[]]) ;');
-        }).to.not.throw();
+        }).to.throw();
     });
     
     it('should fail on ""use strict"; for ([[x[yield]]] in [[[]]]) ;"', () => {
@@ -190,7 +190,7 @@ describe('Statements - For in', () => {
     it('should fail on invalid array rest', () => {
         expect(() => {
             parseScript('for ([...x = 1] in [[]]) ;');
-        }).to.not.throw();
+        }).to.throw();
     });
   
     it('should fail on invalid rest before ellison', () => {
@@ -242,7 +242,6 @@ describe('Statements - For in', () => {
             parseScript('for(([a]) in 0);');
         }).to.throw();
     });
-
 
     it('should parse head declaration expression', () => {
         expect(parseScript(`for (let x in null, { key: 0 }) {}`, {
@@ -1557,6 +1556,202 @@ describe('Statements - For in', () => {
                   "start": 22,
                   "end": 24,
                   "body": []
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse "for(x in list) process(x);"', () => {
+        expect(parseScript(`for(x in list) process(x);`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 26,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 26,
+                "left": {
+                  "type": "Identifier",
+                  "start": 4,
+                  "end": 5,
+                  "name": "x"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 13,
+                  "name": "list"
+                },
+                "body": {
+                  "type": "ExpressionStatement",
+                  "start": 15,
+                  "end": 26,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 15,
+                    "end": 25,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 15,
+                      "end": 22,
+                      "name": "process"
+                    },
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "start": 23,
+                        "end": 24,
+                        "name": "x"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse "for (var x in list) process(x);"', () => {
+        expect(parseScript(`for (var x in list) process(x);`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 31,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 31,
+                "left": {
+                  "type": "VariableDeclaration",
+                  "start": 5,
+                  "end": 10,
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 9,
+                      "end": 10,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 9,
+                        "end": 10,
+                        "name": "x"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "var"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start": 14,
+                  "end": 18,
+                  "name": "list"
+                },
+                "body": {
+                  "type": "ExpressionStatement",
+                  "start": 20,
+                  "end": 31,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 20,
+                    "end": 30,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 20,
+                      "end": 27,
+                      "name": "process"
+                    },
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "start": 28,
+                        "end": 29,
+                        "name": "x"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse "for (let x in list) process(x);"', () => {
+        expect(parseScript(`for (let x in list) process(x);`, {
+            ranges: true,
+            raw: true,
+            next: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 31,
+            "body": [
+              {
+                "type": "ForInStatement",
+                "start": 0,
+                "end": 31,
+                "left": {
+                  "type": "VariableDeclaration",
+                  "start": 5,
+                  "end": 10,
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 9,
+                      "end": 10,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 9,
+                        "end": 10,
+                        "name": "x"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start": 14,
+                  "end": 18,
+                  "name": "list"
+                },
+                "body": {
+                  "type": "ExpressionStatement",
+                  "start": 20,
+                  "end": 31,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 20,
+                    "end": 30,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 20,
+                      "end": 27,
+                      "name": "process"
+                    },
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "start": 28,
+                        "end": 29,
+                        "name": "x"
+                      }
+                    ]
+                  }
                 }
               }
             ],

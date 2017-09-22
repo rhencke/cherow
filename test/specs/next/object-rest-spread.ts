@@ -71,7 +71,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({...x = 1} = {})', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "var {...x = 1} = {}" to throw', () => {
