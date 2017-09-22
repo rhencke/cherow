@@ -10,13 +10,7 @@ describe('Destructuring - Default params', () => {
             parseScript('function h({ a, { b } }, { c }, { { d } }) { return a + b + c + d; }')
         }).to.throw()
     });
-
-    it('should fail on duplicate params', () => {
-        expect(() => {
-            parseScript('function g(a, { a }) { return a; }')
-        }).to.not.throw()
-    });
-    
+     
     it('should parse not strict eval', () => {
         expect(parseScript('(eval = 10) => 42;', {
             ranges: true,

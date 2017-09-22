@@ -28,17 +28,17 @@ describe('Trailing comma', () => {
     it('should fail on invalid empty constructor', () => {
         expect(() => {
             parseScript('class A { constructor(,) {} }');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on invalid empty method', () => {
         expect(() => {
             parseScript('class A { f(,){} }');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on invalid empty parameter', () => {
         expect(() => {
             parseScript('function f(,){}');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on invalid rest', () => {
         expect(() => {
@@ -63,12 +63,12 @@ describe('Trailing comma', () => {
     it('should fail on invalid export', () => {
         expect(() => {
             parseModule('export default function foo(,) { }');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on invalid export default', () => {
         expect(() => {
             parseModule('export default (function foo(,) { })');
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it('should parse trailing comma object expression', () => {

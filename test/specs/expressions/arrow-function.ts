@@ -170,7 +170,7 @@ describe('Expressions - Arrow function', () => {
     it('should fail if a FunctionRestParameter is followed by a trailing comma', () => {
         expect(() => {
             parseScript('(...[ 5 ]) => {}');
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it('should fail if arrow parameters contain yield expressions', () => {

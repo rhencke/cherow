@@ -207,7 +207,7 @@ describe('Import', () => {
       it("should fail on \"import {b,,} from from  bar\"", () => {
           expect(() => {
               parseModule('import {a as 12} from \'12\'');
-          }).to.not.throw();
+          }).to.throw();
       });
   
       it('should fail on escaped "as" keyword', () => {

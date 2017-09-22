@@ -11,6 +11,13 @@ describe('TC39 - Parenthesized', () => {
         }).to.not.throw('');
     });
 
+
+    it('should fail on invalid lefthand side value', () => {
+        expect(() => {
+            parseScript('(a = b) = {};')
+        }).to.not.throw('');
+    });
+
     it('should fail on invalid lefthand side value', () => {
         expect(() => {
             parseScript('((a)) => 42')

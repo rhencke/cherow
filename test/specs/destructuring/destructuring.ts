@@ -19,7 +19,7 @@ describe('Destructuring - Destructuring', () => {
         it('should fail on "({a} += 0);"', () => {
             expect(() => {
                 parseScript('({a} += 0);')
-            }).to.not.throw()
+            }).to.throw()
         });
 
         it('should fail on "0, [...x,] = [];"', () => {
@@ -45,8 +45,6 @@ describe('Destructuring - Destructuring', () => {
                 parseScript('[...0,a]=0')
             }).to.throw()
         });
-    
-    
         it('should fail on "[{a=0},...0]"', () => {
             expect(() => {
                 parseScript('[{a=0},...0]')
@@ -58,13 +56,7 @@ describe('Destructuring - Destructuring', () => {
                 parseScript('[...0,a]=0')
             }).to.throw()
         });
-    
-        it('should fail on "[{a=0},...0]"', () => {
-            expect(() => {
-                parseScript('[{a=0},...0]')
-            }).to.not.throw()
-        });
-    
+        
         it('should fail on "[{a=0},{b=0},0] = 0"', () => {
             expect(() => {
                 parseScript('[{a=0},{b=0},0] = 0')
@@ -100,7 +92,7 @@ describe('Destructuring - Destructuring', () => {
                 parseScript('[...{a=0},]=0')
             }).to.not.throw()
         });
-    
+
         it('should fail on "[a, ...b, {c=0}]"', () => {
             expect(() => {
                 parseScript('[a, ...b, {c=0}]')
@@ -122,32 +114,13 @@ describe('Destructuring - Destructuring', () => {
         it('should fail on "({a} += 0);"', () => {
             expect(() => {
                 parseScript('({a} += 0);')
-            }).to.not.throw()
+            }).to.throw()
         });
     
         it('should fail on "({a} += 0);"', () => {
             expect(() => {
                 parseScript('({a} += 0);')
-            }).to.not.throw()
-        });
-    
-        it('should fail on "({a} += 0);"', () => {
-            expect(() => {
-                parseScript('({a} += 0);')
-            }).to.not.throw()
-        });
-    
-        it('should fail on "({a} += 0);"', () => {
-            expect(() => {
-                parseScript('({a} += 0);')
-            }).to.not.throw()
-        });
-    
-    
-        it('should fail on "({a} += 0);"', () => {
-            expect(() => {
-                parseScript('({a} += 0);')
-            }).to.not.throw()
+            }).to.throw()
         });
     
         it('should fail on "({,a,} = 0)"', () => {

@@ -2963,6 +2963,8 @@ export class Parser {
         // Fast path for assignment operators
         if (isAssignmentOperator(this.token)) {
             if (this.isEvalOrArgumentInStrictMode(context, expr)) this.error(Errors.StrictLHSAssignment);
+            // Invalid '({a} += 0);'
+            if (context & Context.Parenthesis && context & Context.DisallowDestructuring) this.error(Errors.InvalidLHSInAssignment);
             this.nextToken(context);
             return this.finishNode(pos, {
                 type: 'AssignmentExpression',
@@ -2973,7 +2975,6 @@ export class Parser {
 
         } else if (this.parseOptional(context, Token.Assign)) {
             if (this.isEvalOrArgumentInStrictMode(context, expr)) this.error(Errors.StrictLHSAssignment);
-
             // Reinterpret expression as pattern
             this.reinterpretExpressionAsPattern(context | Context.Assignment, expr);
 
@@ -3252,6 +3253,9 @@ export class Parser {
         if (context & Context.ForStatement && this.isBindingPattern(this.token)) {
             this.error(Errors.InvalidLHSInForLoop);
         }
+
+        if (this.token === Token.LeftBrace) context |= Context.DisallowDestructuring;
+
         if (this.parseOptional(context, Token.RightParen)) {
             if (this.token === Token.Arrow) return this.parseArrowExpression(context & ~Context.ForStatement, pos, []);
             this.error(Errors.MissingArrowAfterParentheses);
@@ -3375,8 +3379,14 @@ export class Parser {
 
     private parseBindingIdentifier(context: Context): ESTree.Identifier {
 
+        // Invalid: '(...[ 5 ]) => {}'
+        // Invalid: 'class A { f(,){} }'
+        // Invalid: 'class A { constructor(,) {} }'
+        // Invalid: 'var'
+        if (context & Context.Binding && !this.isIdentifier(context, this.token)) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
+
         // Let is disallowed as a lexically bound name
-        if (this.token === Token.LetKeyword && (context & Context.Lexical)) this.error(Errors.LetInLexicalBinding);
+        if (context & Context.Lexical && this.token === Token.LetKeyword) this.error(Errors.LetInLexicalBinding);
 
         const name = this.tokenValue;
 

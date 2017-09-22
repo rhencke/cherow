@@ -68,13 +68,13 @@ describe('Statements - Variable', () => {
         it('should fail on "var"', () => {
             expect(() => {
                 parseScript(`var`);
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on "var;"', () => {
             expect(() => {
                 parseScript(`var;`);
-            }).to.not.throw();
+            }).to.throw();
         });
        
         it('should fail on "var obj = { *test** }" to throw', () => {
