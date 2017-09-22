@@ -6,7 +6,7 @@ It strictly follows the ECMAScript® 2018 Language Specification and should pars
 
 It's safe to use in production.
 
-Please note that I'm not done with this parser. The development are done in the the*dev branch*.
+Please note that I'm not done with this parser. The development are done in the the *dev branch*.
 
 ## Features 
 
