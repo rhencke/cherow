@@ -122,10 +122,10 @@ describe('Statements - For of', () => {
             }).to.throw();
         });
     
-        it.skip('should fail on "for (let x of []) { var x; }"', () => {
+        it('should fail on "for (let x of []) { var x; }"', () => {
             expect(() => {
                 parseScript('for (let x of []) { var x; }');
-            }).to.throw();
+            }).to.not.throw();
         });
     
         it('should fail on "for (const let of []) {}"', () => {
@@ -635,6 +635,56 @@ describe('Statements - For of', () => {
             });
         });
     
+
+    it('should handle for of with var and braces', () => {
+        expect(parseScript(`for (var x of foo) {
+    doSomething();
+}`)).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ForOfStatement",
+                    "await": false,
+                    "right": {
+                        "type": "Identifier",
+                        "name": "foo"
+                    },
+                    "left": {
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "x"
+                                },
+                                "init": null
+                            }
+                        ],
+                        "type": "VariableDeclaration",
+                        "kind": "var"
+                    },
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "CallExpression",
+                                    "callee": {
+                                        "type": "Identifier",
+                                        "name": "doSomething"
+                                    },
+                                    "arguments": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "sourceType": "script"
+        });
+    });
+
         it('should parse object pattern var', () => {
             expect(parseScript(`for (var {x, y} of z);`, {
                 ranges: true,
@@ -1267,7 +1317,7 @@ describe('Statements - For of', () => {
                 "end": 16
             });
         });
-    
+
         it('should parse "for (var x of list) process(x);"', () => {
             expect(parseScript(`for (var x of list) process(x);`, {
                 ranges: true,
@@ -4244,4 +4294,460 @@ describe('Statements - For of', () => {
                 "sourceType": "script"
             });
         });
+
+        it('should parse "for(a of b);"', () => {
+            expect(parseScript(`for(a of b);`)).to.eql({
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "ForOfStatement",
+                        "await": false,
+                        "left": {
+                            "type": "Identifier",
+                            "name": "a"
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "b"
+                        },
+                        "body": {
+                            "type": "EmptyStatement"
+                        }
+                    }
+                ],
+                "sourceType": "script"
+            });
+        });
+
+        it('should parse "for(let [a] of b);"', () => {
+            expect(parseScript(`for(let [a] of b);`)).to.eql({
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "ForOfStatement",
+                        "await": false,
+                        "left": {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "ArrayPattern",
+                                        "elements": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            }
+                                        ]
+                                    },
+                                    "init": null
+                                }
+                            ],
+                            "kind": "let"
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "b"
+                        },
+                        "body": {
+                            "type": "EmptyStatement"
+                        }
+                    }
+                ],
+                "sourceType": "script"
+            });
+        });
+    
+        it('should handle for of object pattern const', () => {
+            expect(parseScript(`for (const {x, y} of z);`)).to.eql({
+        "type": "Program",
+        "body": [
+            {
+                "type": "ForOfStatement",
+                "await": false,
+                "left": {
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "type": "VariableDeclarator",
+                            "id": {
+                                "type": "ObjectPattern",
+                                "properties": [
+                                    {
+                                        "type": "Property",
+                                        "key": {
+                                            "type": "Identifier",
+                                            "name": "x"
+                                        },
+                                        "computed": false,
+                                        "value": {
+                                            "type": "Identifier",
+                                            "name": "x"
+                                        },
+                                        "kind": "init",
+                                        "method": false,
+                                        "shorthand": true
+                                    },
+                                    {
+                                        "type": "Property",
+                                        "key": {
+                                            "type": "Identifier",
+                                            "name": "y"
+                                        },
+                                        "computed": false,
+                                        "value": {
+                                            "type": "Identifier",
+                                            "name": "y"
+                                        },
+                                        "kind": "init",
+                                        "method": false,
+                                        "shorthand": true
+                                    }
+                                ]
+                            },
+                            "init": null
+                        }
+                    ],
+                    "kind": "const"
+                },
+                "right": {
+                    "type": "Identifier",
+                    "name": "z"
+                },
+                "body": {
+                    "type": "EmptyStatement"
+                }
+            }
+        ],
+        "sourceType": "script"
+    });
+        });
+    
+
+        it('should handle for of object pattern', () => {
+            expect(parseScript(`for ({x, y} of z);`)).to.eql({
+        "type": "Program",
+        "body": [
+            {
+                "type": "ForOfStatement",
+                "await": false,
+                "left": {
+                    "type": "ObjectPattern",
+                    "properties": [
+                        {
+                            "type": "Property",
+                            "key": {
+                                "type": "Identifier",
+                                "name": "x"
+                            },
+                            "computed": false,
+                            "value": {
+                                "type": "Identifier",
+                                "name": "x"
+                            },
+                            "kind": "init",
+                            "method": false,
+                            "shorthand": true
+                        },
+                        {
+                            "type": "Property",
+                            "key": {
+                                "type": "Identifier",
+                                "name": "y"
+                            },
+                            "computed": false,
+                            "value": {
+                                "type": "Identifier",
+                                "name": "y"
+                            },
+                            "kind": "init",
+                            "method": false,
+                            "shorthand": true
+                        }
+                    ]
+                },
+                "right": {
+                    "type": "Identifier",
+                    "name": "z"
+                },
+                "body": {
+                    "type": "EmptyStatement"
+                }
+            }
+        ],
+        "sourceType": "script"
+    });
+        });
+    
+
+        it('should handle complex #1', () => {
+            
+                    expect(parseScript(`for (let v of []) {
+                v;
+                for (let v of []) {
+                    var x = v;
+                    v++;
+                }
+            }`, {
+                raw: true
+            })).to.eql({
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "ForOfStatement",
+                        "await": false,
+                        "left": {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "v"
+                                    },
+                                    "init": null
+                                }
+                            ],
+                            "kind": "let"
+                        },
+                        "right": {
+                            "type": "ArrayExpression",
+                            "elements": []
+                        },
+                        "body": {
+                            "type": "BlockStatement",
+                            "body": [
+                                {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "v"
+                                    }
+                                },
+                                {
+                                    "type": "ForOfStatement",
+                                    "await": false,
+                                    "left": {
+                                        "type": "VariableDeclaration",
+                                        "declarations": [
+                                            {
+                                                "type": "VariableDeclarator",
+                                                "id": {
+                                                    "type": "Identifier",
+                                                    "name": "v"
+                                                },
+                                                "init": null
+                                            }
+                                        ],
+                                        "kind": "let"
+                                    },
+                                    "right": {
+                                        "type": "ArrayExpression",
+                                        "elements": []
+                                    },
+                                    "body": {
+                                        "type": "BlockStatement",
+                                        "body": [
+                                            {
+                                                "type": "VariableDeclaration",
+                                                "declarations": [
+                                                    {
+                                                        "type": "VariableDeclarator",
+                                                        "id": {
+                                                            "type": "Identifier",
+                                                            "name": "x"
+                                                        },
+                                                        "init": {
+                                                            "type": "Identifier",
+                                                            "name": "v"
+                                                        }
+                                                    }
+                                                ],
+                                                "kind": "var"
+                                            },
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "UpdateExpression",
+                                                    "operator": "++",
+                                                    "argument": {
+                                                        "type": "Identifier",
+                                                        "name": "v"
+                                                    },
+                                                    "prefix": false
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "sourceType": "script"
+            });
+        });            
+       
+        it('should handle complex #2', () => {
+            expect(parseScript(`for (var v of ['a', 'b', 'c'])
+            var x = v;`, {
+                raw: true
+            })).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ForOfStatement",
+                    "await": false,
+                    "left": {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "v"
+                                },
+                                "init": null
+                            }
+                        ],
+                        "kind": "var"
+                    },
+                    "right": {
+                        "type": "ArrayExpression",
+                        "elements": [
+                            {
+                                "type": "Literal",
+                                "value": "a",
+                                "raw": "'a'"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": "b",
+                                "raw": "'b'"
+                            },
+                            {
+                                "type": "Literal",
+                                "value": "c",
+                                "raw": "'c'"
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "x"
+                                },
+                                "init": {
+                                    "type": "Identifier",
+                                    "name": "v"
+                                }
+                            }
+                        ],
+                        "kind": "var"
+                    }
+                }
+            ],
+            "sourceType": "script"
+        });
+        
+
+        });
+       
+        it('should handle complex #3', () => {
+            expect(parseScript(`for (let v of []) {
+                v;
+                for (const v of []) {
+                    var x = v;
+                }
+            }`)).to.eql({
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "ForOfStatement",
+                        "await": false,
+                        "left": {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "v"
+                                    },
+                                    "init": null
+                                }
+                            ],
+                            "kind": "let"
+                        },
+                        "right": {
+                            "type": "ArrayExpression",
+                            "elements": []
+                        },
+                        "body": {
+                            "type": "BlockStatement",
+                            "body": [
+                                {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "v"
+                                    }
+                                },
+                                {
+                                    "type": "ForOfStatement",
+                                    "await": false,
+                                    "left": {
+                                        "type": "VariableDeclaration",
+                                        "declarations": [
+                                            {
+                                                "type": "VariableDeclarator",
+                                                "id": {
+                                                    "type": "Identifier",
+                                                    "name": "v"
+                                                },
+                                                "init": null
+                                            }
+                                        ],
+                                        "kind": "const"
+                                    },
+                                    "right": {
+                                        "type": "ArrayExpression",
+                                        "elements": []
+                                    },
+                                    "body": {
+                                        "type": "BlockStatement",
+                                        "body": [
+                                            {
+                                                "type": "VariableDeclaration",
+                                                "declarations": [
+                                                    {
+                                                        "type": "VariableDeclarator",
+                                                        "id": {
+                                                            "type": "Identifier",
+                                                            "name": "x"
+                                                        },
+                                                        "init": {
+                                                            "type": "Identifier",
+                                                            "name": "v"
+                                                        }
+                                                    }
+                                                ],
+                                                "kind": "var"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "sourceType": "script"
+            });
+            
+        });
+
     });

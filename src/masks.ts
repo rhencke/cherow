@@ -73,6 +73,15 @@ export const enum Flags {
     OptionsV8                    = 1 << 28
 }
 
+export const enum IterationState {
+    None                = 0,
+    Var                 = 1 << 0,  // Variable declaration
+    Let                 = 1 << 1,  // Variable declaration
+    Const               = 1 << 2,  // Variable declaration
+    Await               = 1 << 3,  // If node was parsed in the 'await' context (Asynchronous Iteration)
+    Variable = Var | Let | Const
+}
+
 // Shared bitmasks used by both object expression and class declaration / expression
 export const enum ObjectFlags {
     None            = 0,

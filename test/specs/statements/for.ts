@@ -5,12 +5,6 @@ const expect = chai.expect;
 
 describe('Statements - For', () => {
 
-    it('should fail on "for({a=0};;);"', () => {
-        expect(() => {
-            parseScript('for({a=0};;);');
-        }).to.not.throw();
-    });
-
     it('should fail on "for ( ; false; ) const x = null;"', () => {
         expect(() => {
             parseScript('for ( ; false; ) const x = null;');
@@ -29,6 +23,10 @@ describe('Statements - For', () => {
         }).to.throw();
     });
 
+    it('should throw on "for({a=0};;);"', () => {
+        expect(() => { parseScript('for({a=0};;);')}).to.not.throw();
+    });
+
     it('should fail on "for (let x; false; ) { var x; }"', () => {
         expect(() => {
             parseScript('for (let x; false; ) { var x; }');
@@ -44,6 +42,7 @@ describe('Statements - For', () => {
             parseScript('for ( ; false; ) label1: label2: function f() {}');
         }).to.throw();
     });
+
     it('should fail on "for (let x; false; ) { var x; }"', () => {
         expect(() => {
             parseScript('for (let x; false; ) { var x; }');
@@ -2102,6 +2101,42 @@ describe('Statements - For', () => {
         });
     });
 
+    it('should parse "for(var a;b;c);"', function () {
+        expect(parseScript(`for(var a;b;c);`)).to.eql({
+    "type": "Program",
+    "body": [
+        {
+            "type": "ForStatement",
+            "init": {
+                "type": "VariableDeclaration",
+                "declarations": [
+                    {
+                        "type": "VariableDeclarator",
+                        "id": {
+                            "type": "Identifier",
+                            "name": "a"
+                        },
+                        "init": null
+                    }
+                ],
+                "kind": "var"
+            },
+            "test": {
+                "type": "Identifier",
+                "name": "b"
+            },
+            "update": {
+                "type": "Identifier",
+                "name": "c"
+            },
+            "body": {
+                "type": "EmptyStatement"
+            }
+        }
+    ],
+    "sourceType": "script"
+});
+    });
 
     it('should parse "for(a;b;c);"', () => {
         expect(parseScript(`for(a;b;c);`, {

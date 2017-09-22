@@ -332,7 +332,7 @@ ErrorMessages[34 /* DeclarationMissingInitializer */] = 'Missing initializer in 
 ErrorMessages[36 /* InvalidLHSInForLoop */] = 'Invalid left-hand side in for-loop';
 ErrorMessages[35 /* InvalidVarInitForOf */] = 'Invalid variable declaration in for-of statement';
 ErrorMessages[37 /* UninitalizedBindingPatternForInit */] = 'Binding pattern appears without initializer in for statement init';
-ErrorMessages[38 /* InvalidLHSInForIn */] = 'InvalidLHSInForIn';
+ErrorMessages[38 /* InvalidLHSInForIn */] = 'Invalid left-hand side in for-in';
 ErrorMessages[24 /* PropertyAfterRestProperty */] = 'Unexpected token';
 ErrorMessages[39 /* StrictLHSAssignment */] = 'Eval or arguments can\'t be assigned to in strict mode code';
 ErrorMessages[40 /* InvalidLHSInAssignment */] = 'Invalid left-hand side in assignment';
@@ -414,6 +414,7 @@ ErrorMessages[118 /* InvalidStrictExpPostion */] = 'The identifier \'%0\' must n
 ErrorMessages[119 /* InvalidStrictLexical */] = 'Lexical declarations must not have a binding named "let"';
 ErrorMessages[120 /* MissingInitializer */] = 'Missing initializer';
 ErrorMessages[121 /* InvalidLabeledForOf */] = 'The body of a for-of statement must not be a labeled function declaration';
+ErrorMessages[122 /* InvalidVarDeclInForIn */] = 'Invalid variable declaration in for-in statement';
 function constructError(msg, column) {
     var error = new Error(msg);
     try {
@@ -2493,7 +2494,7 @@ Parser.prototype.parseStatement = function parseStatement (context) {
                 return this.parseFunctionDeclaration(context);
             }
         default:
-            return this.parseLabelledStatement(context);
+            return this.parseLabelledStatement(context | 32768 /* AllowIn */);
     }
 };
 Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrForOfStatement (context) {
@@ -2527,18 +2528,20 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
             case 8265 /* ConstKeyword */:
                 state |= 4 /* Const */;
                 break;
-            default:
+            default: // ignore
         }
         if (state & 7 /* Variable */) {
             var startPos = this.startNode();
             kind = tokenDesc(this.token);
-            if (state & 1 /* Var */) {
-                this.expect(context, 8263 /* VarKeyword */);
-            }
+            // 'var'
+            if (state & 1 /* Var */)
+                { this.expect(context, 8263 /* VarKeyword */); }
+            // 'let'
             if (state & 2 /* Let */) {
                 this.expect(context, 16456 /* LetKeyword */);
                 context |= 268435456 /* Let */;
             }
+            // 'const'
             if (state & 4 /* Const */) {
                 this.expect(context, 8265 /* ConstKeyword */);
                 context |= 134217728 /* Const */;
@@ -2555,82 +2558,83 @@ Parser.prototype.parseForOrForInOrForOfStatement = function parseForOrForInOrFor
         }
     }
     this.flags = savedFlag;
-    if (this.parseOptional(context, 4210 /* OfKeyword */)) {
-        if (state & 7 /* Variable */) {
-            // Only a single variable declaration is allowed in a for of statement
-            if (declarations && declarations[0].init != null)
-                { this.error(35 /* InvalidVarInitForOf */); }
-        }
-        else {
-            this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
-            if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression')
-                { this.error(36 /* InvalidLHSInForLoop */); }
-        }
-        var right = this.parseAssignmentExpression(context | 32768 /* AllowIn */);
-        this.expect(context, 16 /* RightParen */);
-        this.setGlobalFlag(4096 /* BlockStatement */, false);
-        this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
-        body = this.parseStatement(context | 65536 /* ForStatement */);
-        this.flags = savedFlag;
-        return this.finishNode(pos, {
-            type: 'ForOfStatement',
-            body: body,
-            left: init,
-            right: right,
-            await: !!(state & 8 /* Await */)
-        });
-    }
-    else if (this.token === 10033 /* InKeyword */) {
-        if (state & 8 /* Await */)
-            { this.error(64 /* ForAwaitNotOf */); }
-        // Invalid:  'for (a=12 in e) break;'
-        if (!(state & 7 /* Variable */) && init.type === 'AssignmentExpression')
-            { this.error(38 /* InvalidLHSInForIn */); }
-        this.expect(context, 10033 /* InKeyword */);
-        if (state & 7 /* Variable */) {
-            if (declarations && declarations.length !== 1)
-                { this.error(0 /* Unexpected */); }
-        }
-        else {
-            this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
-            if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression')
-                { this.error(36 /* InvalidLHSInForLoop */); }
-        }
-        test = this.parseExpression(context | 32768 /* AllowIn */);
-        this.expect(context, 16 /* RightParen */);
-        this.setGlobalFlag(4096 /* BlockStatement */, false);
-        this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
-        body = this.parseStatement(context | 65536 /* ForStatement */);
-        this.flags = savedFlag;
-        return this.finishNode(pos, {
-            type: 'ForInStatement',
-            body: body,
-            left: init,
-            right: test
-        });
-    }
-    else {
-        if (state & 8 /* Await */)
-            { this.error(64 /* ForAwaitNotOf */); }
-        var update = null;
-        this.expect(context, 17 /* Semicolon */);
-        if (this.token !== 17 /* Semicolon */ && this.token !== 16 /* RightParen */)
-            { test = this.parseExpression(context | 32768 /* AllowIn */); }
-        this.expect(context, 17 /* Semicolon */);
-        if (this.token !== 16 /* RightParen */)
-            { update = this.parseExpression(context | 32768 /* AllowIn */); }
-        this.expect(context, 16 /* RightParen */);
-        this.setGlobalFlag(4096 /* BlockStatement */, false);
-        this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
-        body = this.parseStatement(context | 65536 /* ForStatement */);
-        this.flags = savedFlag;
-        return this.finishNode(pos, {
-            type: 'ForStatement',
-            body: body,
-            init: init,
-            test: test,
-            update: update
-        });
+    switch (this.token) {
+        // 'of'
+        case 4210 /* OfKeyword */:
+            this.parseOptional(context, 4210 /* OfKeyword */);
+            if (state & 7 /* Variable */) {
+                // Only a single variable declaration is allowed in a for of statement
+                if (declarations && declarations[0].init != null)
+                    { this.error(35 /* InvalidVarInitForOf */); }
+            }
+            else {
+                this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
+                if (!isValidDestructuringAssignmentTarget(init))
+                    { this.error(36 /* InvalidLHSInForLoop */); }
+            }
+            var right = this.parseAssignmentExpression(context | 32768 /* AllowIn */);
+            this.expect(context, 16 /* RightParen */);
+            this.setGlobalFlag(4096 /* BlockStatement */, false);
+            this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
+            body = this.parseStatement(context | 65536 /* ForStatement */);
+            this.flags = savedFlag;
+            return this.finishNode(pos, {
+                type: 'ForOfStatement',
+                body: body,
+                left: init,
+                right: right,
+                await: !!(state & 8 /* Await */)
+            });
+        // 'in'
+        case 10033 /* InKeyword */:
+            if (state & 8 /* Await */)
+                { this.error(64 /* ForAwaitNotOf */); }
+            this.expect(context, 10033 /* InKeyword */);
+            if (!(state & 7 /* Variable */)) {
+                this.reinterpretExpressionAsPattern(context | 65536 /* ForStatement */, init);
+            }
+            else if (declarations && declarations.length !== 1) {
+                this.error(0 /* Unexpected */);
+            }
+            test = this.parseExpression(context | 32768 /* AllowIn */);
+            this.expect(context, 16 /* RightParen */);
+            this.setGlobalFlag(4096 /* BlockStatement */, false);
+            this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
+            body = this.parseStatement(context | 65536 /* ForStatement */);
+            this.flags = savedFlag;
+            return this.finishNode(pos, {
+                type: 'ForInStatement',
+                body: body,
+                left: init,
+                right: test
+            });
+        default:
+            if (state & 8 /* Await */)
+                { this.error(64 /* ForAwaitNotOf */); }
+            var update = null;
+            // Invalid: `for (var a = ++effects in {});`
+            // Invalid: `for (var a = (++effects, -1) in stored = a, {a: 0, b: 1, c: 2}) {  ++iterations;  }`
+            if (this.token === 16 /* RightParen */)
+                { this.error(122 /* InvalidVarDeclInForIn */); }
+            this.expect(context, 17 /* Semicolon */);
+            if (this.token !== 17 /* Semicolon */ && this.token !== 16 /* RightParen */) {
+                test = this.parseExpression(context | 32768 /* AllowIn */);
+            }
+            this.expect(context, 17 /* Semicolon */);
+            if (this.token !== 16 /* RightParen */)
+                { update = this.parseExpression(context | 32768 /* AllowIn */); }
+            this.expect(context, 16 /* RightParen */);
+            this.setGlobalFlag(4096 /* BlockStatement */, false);
+            this.setGlobalFlag(32768 /* Continue */ | 8192 /* Break */, true);
+            body = this.parseStatement(context | 65536 /* ForStatement */);
+            this.flags = savedFlag;
+            return this.finishNode(pos, {
+                type: 'ForStatement',
+                body: body,
+                init: init,
+                test: test,
+                update: update
+            });
     }
 };
 Parser.prototype.parseSwitchStatement = function parseSwitchStatement (context) {
@@ -3814,8 +3818,6 @@ Parser.prototype.parseComputedPropertyName = function parseComputedPropertyName 
 Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpressionAsPattern (context, params) {
         var this$1 = this;
 
-    if (!params)
-        { return; }
     switch (params.type) {
         case 'Identifier':
         case 'MemberExpression':
@@ -3828,9 +3830,7 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
             // Invalid '[a, ...(b = c)] = 0'
             // Invalid 'for ([...x = 1] in [[]]);'
             if (params.argument.type === 'AssignmentExpression') {
-                if (context & 65536 /* ForStatement */)
-                    { this.error(38 /* InvalidLHSInForIn */); }
-                this.error(40 /* InvalidLHSInAssignment */);
+                this.error(context & 65536 /* ForStatement */ ? 38 /* InvalidLHSInForIn */ : 40 /* InvalidLHSInAssignment */);
             }
             params.type = 'RestElement';
             this.reinterpretExpressionAsPattern(context, params.argument);

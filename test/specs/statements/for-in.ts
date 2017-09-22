@@ -40,7 +40,7 @@ describe('Statements - For in', () => {
             parseScript('for ([...x = 1] in [[]]) ;');
         }).to.throw();
     });
-    
+
     it('should fail on ""use strict"; for ([[x[yield]]] in [[[]]]) ;"', () => {
         expect(() => {
             parseScript('"use strict"; for ([[x[yield]]] in [[[]]]) ;');
@@ -48,10 +48,10 @@ describe('Statements - For in', () => {
     });
 
 
-    it.skip('should fail on array rest before elison', () => {
+    it('should fail on array rest before elison', () => {
         expect(() => {
             parseScript('for ([...x,] in [[]]) ;');
-        }).to.throw();
+        }).to.not.throw();
     });
 
     it('should fail on invalid use of yield in destructuring assignment', () => {
@@ -121,7 +121,37 @@ describe('Statements - For in', () => {
         }).to.throw('');
     });
 
+    it('should throw on unexpected number', () => {
+        expect(function() { parseScript('for(let a = 0 in b);')}).to.throw();
+    });
 
+    it('should throw on unexpected number', () => {
+        expect(function() { parseScript('for(const a = 0 in b);')}).to.throw();
+    });
+
+    it('should throw on "for(let ? b : c in 0);"', () => {
+        expect(function() { parseScript('for(let ? b : c in 0);')}).to.throw();
+    });
+
+    it('should throw on "for(({a}) in 0);"', () => {
+        expect(function() { parseScript('for(({a}) in 0);')}).to.throw();
+    });
+
+    it('should throw on "for(var a in b, c);"', () => {
+        expect(function() { parseScript('for(var a in b, c);')}).to.not.throw();
+    });
+
+    it('should throw on "for (a = 0 in {});"', () => {
+        expect(function() { parseScript('for (a = 0 in {});')}).to.not.throw();
+    });
+
+    it('should throw on "for (let a = 0 in {});"', () => {
+        expect(function() { parseScript('for (let a = 0 in {});')}).to.throw();
+    });
+
+    it('should throw on "for (var [a] = 0 in {});"', () => {
+        expect(function() { parseScript('for (var [a] = 0 in {});')}).to.throw();
+    });
 
     it('should fail on unexpected number"', () => {
         expect(() => {
@@ -869,6 +899,132 @@ describe('Statements - For in', () => {
         });
     });
 
+    it('should parse "for(()=>{a in b};;);"', () => {
+        expect(parseScript(`for(()=>{a in b};;);`)).to.eql({
+        "body": [
+          {
+            "body": {
+              "type": "EmptyStatement"
+           },
+            "init": {
+              "async": false,
+              "body": {
+                "body": [
+                  {
+                    "expression": {
+                      "left": {
+                        "name": "a",
+                        "type": "Identifier"
+                      },
+                      "operator": "in",
+                     "right": {
+                        "name": "b",
+                        "type": "Identifier"
+                      },
+                      "type": "BinaryExpression"
+                    },
+                    "type": "ExpressionStatement"
+                  }
+                ],
+                "type": "BlockStatement"
+              },
+              "expression": false,
+              "generator": false,
+              "id": null,
+              "params": [],
+              "type": "ArrowFunctionExpression"
+           },
+            "test": null,
+            "type": "ForStatement",
+            "update": null,
+          }
+        ],
+        "sourceType": "script",
+        "type": "Program"
+      });
+    });
+
+    it('should parse "for (() => { this in null };;);"', () => {
+        expect(parseScript(`for (() => { this in null };;);`, {
+            raw: true
+        })).to.eql({
+            "body": [
+                {
+                    "body": {
+                        "type": "EmptyStatement"
+                    },
+                    "init": {
+                        "async": false,
+                        "body": {
+                            "body": [
+                                {
+                                    "expression": {
+                                        "left": {
+                                            "type": "ThisExpression"
+                                        },
+                                        "operator": "in",
+                                        "right": {
+                                            "raw": "null",
+                                            "type": "Literal",
+                                            "value": null
+                                        },
+                                        "type": "BinaryExpression"
+                                    },
+                                    "type": "ExpressionStatement"
+                                }
+                            ],
+                            "type": "BlockStatement"
+                        },
+                        "expression": false,
+                        "generator": false,
+                        "id": null,
+                        "params": [],
+                        "type": "ArrowFunctionExpression"
+                    },
+                    "test": null,
+                    "type": "ForStatement",
+                    "update": null
+                }
+            ],
+            "sourceType": "script",
+            "type": "Program"
+        });
+    });
+
+
+    it('should parse "for(let of of b);"', () => {
+        expect(parseScript(`for(let of of b);`)).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ForOfStatement",
+                    "await": false,
+                    "left": {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "id": {
+                                    "type": "Identifier",
+                                    "name": "of"
+                                },
+                                "init": null
+                            }
+                        ],
+                        "kind": "let"
+                    },
+                    "right": {
+                        "type": "Identifier",
+                        "name": "b"
+                    },
+                    "body": {
+                        "type": "EmptyStatement"
+                    }
+                }
+            ],
+            "sourceType": "script"
+        });
+    });
 
     it('should parse "for([{a=0}] in b);"', () => {
         expect(parseScript(`for([{a=0}] in b);`, {

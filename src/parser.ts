@@ -1,20 +1,11 @@
 import { Chars } from './chars';
 import * as ESTree from './estree';
 import { isKeyword, isAssignmentOperator, isDigit, hasOwn, toHex, tryCreate, fromCodePoint, hasMask, isUpdateExpression, isBinaryOperator, isUunaryExpression, isValidDestructuringAssignmentTarget, isDirective, getQualifiedJSXName, isStartOfExpression, isStartOfStatement } from './common';
-import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFlag, ParenthesizedState } from './masks';
+import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFlag, ParenthesizedState, IterationState } from './masks';
 import { createError, Errors } from './errors';
 import { Token, tokenDesc, descKeyword } from './token';
 import { isIDStart, isIdentifierStart, isIdentifierPart } from './unicode';
 import { ParserOptions, SavedState, OnComment, ErrorLocation, Location } from './interface';
-
-export const enum IterationState {
-    None = 0,
-        Var = 1 << 0,
-        Let = 1 << 1,
-        Const = 1 << 2,
-        Await = 1 << 3,
-        Variable = Var | Let | Const
-}
 
 export class Parser {
     source: string;
@@ -2118,7 +2109,7 @@ export class Parser {
                     return this.parseFunctionDeclaration(context);
                 }
             default:
-                return this.parseLabelledStatement(context);
+                return this.parseLabelledStatement(context | Context.AllowIn);
         }
     }
 
@@ -2144,7 +2135,7 @@ export class Parser {
         }
 
         const savedFlag = this.flags;
-
+        
         this.setGlobalFlag(Flags.BlockStatement, true);
 
         this.expect(context, Token.LeftParen);
@@ -2161,31 +2152,31 @@ export class Parser {
                 case Token.ConstKeyword:
                     state |= IterationState.Const;
                     break;
-                default:
-                    // ignore
+                default: // ignore
             }
-
+            
             if (state & IterationState.Variable) {
 
                 const startPos = this.startNode();
                 kind = tokenDesc(this.token);
 
-                if (state & IterationState.Var) {
-                    this.expect(context, Token.VarKeyword);
-                }
+                // 'var'
+                if (state & IterationState.Var) this.expect(context, Token.VarKeyword);
 
+                // 'let'
                 if (state & IterationState.Let) {
                     this.expect(context, Token.LetKeyword);
                     context |= Context.Let;
                 }
 
+                // 'const'
                 if (state & IterationState.Const) {
                     this.expect(context, Token.ConstKeyword);
                     context |= Context.Const;
                 }
 
                 declarations = this.parseVariableDeclarationList(context | Context.ForStatement);
-
+                
                 init = this.finishNode(startPos, {
                     type: 'VariableDeclaration',
                     declarations,
@@ -2194,104 +2185,109 @@ export class Parser {
             } else {
                 init = this.parseExpression(context & ~Context.AllowIn | Context.ForStatement);
             }
-
         }
 
         this.flags = savedFlag;
 
-        if (this.parseOptional(context, Token.OfKeyword)) {
+        switch (this.token) {
 
-            if (state & IterationState.Variable) {
+            // 'of'
+            case Token.OfKeyword:
+                this.parseOptional(context, Token.OfKeyword);
+                if (state & IterationState.Variable) {
+                    // Only a single variable declaration is allowed in a for of statement
+                    if (declarations && declarations[0].init != null) this.error(Errors.InvalidVarInitForOf);
+                } else {
+                    this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
+                    if (!isValidDestructuringAssignmentTarget(init)) this.error(Errors.InvalidLHSInForLoop);
+                }
 
-                // Only a single variable declaration is allowed in a for of statement
-                if (declarations && declarations[0].init != null) this.error(Errors.InvalidVarInitForOf);
-            } else {
-                this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
-                if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForLoop);
-            }
+                const right = this.parseAssignmentExpression(context | Context.AllowIn);
 
-            const right = this.parseAssignmentExpression(context | Context.AllowIn);
+                this.expect(context, Token.RightParen);
 
-            this.expect(context, Token.RightParen);
+                this.setGlobalFlag(Flags.BlockStatement, false);
+                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
 
-            this.setGlobalFlag(Flags.BlockStatement, false);
-            this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                body = this.parseStatement(context | Context.ForStatement);
 
-            body = this.parseStatement(context | Context.ForStatement);
+                this.flags = savedFlag;
 
-            this.flags = savedFlag;
+                return this.finishNode(pos, {
+                    type: 'ForOfStatement',
+                    body,
+                    left: init,
+                    right,
+                    await: !!(state & IterationState.Await)
+                });
 
-            return this.finishNode(pos, {
-                type: 'ForOfStatement',
-                body,
-                left: init,
-                right,
-                await: !!(state & IterationState.Await)
-            });
+            // 'in'
+            case Token.InKeyword:
 
-        } else if (this.token === Token.InKeyword) {
+                if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
 
-            if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
+                this.expect(context, Token.InKeyword);
 
-            // Invalid:  'for (a=12 in e) break;'
-            if (!(state & IterationState.Variable) && init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForIn);
+                if (!(state & IterationState.Variable)) {
+                    this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
+                } else if (declarations && declarations.length !== 1) {
+                        this.error(Errors.Unexpected);
+                }
 
-            this.expect(context, Token.InKeyword);
+                test = this.parseExpression(context | Context.AllowIn);
 
-            if (state & IterationState.Variable) {
-                if (declarations && declarations.length !== 1) this.error(Errors.Unexpected);
-            } else {
-                this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
-                if (!isValidDestructuringAssignmentTarget(init) || init.type === 'AssignmentExpression') this.error(Errors.InvalidLHSInForLoop);
-            }
+                this.expect(context, Token.RightParen);
 
-            test = this.parseExpression(context | Context.AllowIn);
+                this.setGlobalFlag(Flags.BlockStatement, false);
+                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
 
-            this.expect(context, Token.RightParen);
+                body = this.parseStatement(context | Context.ForStatement);
 
-            this.setGlobalFlag(Flags.BlockStatement, false);
-            this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                this.flags = savedFlag;
 
-            body = this.parseStatement(context | Context.ForStatement);
+                return this.finishNode(pos, {
+                    type: 'ForInStatement',
+                    body,
+                    left: init,
+                    right: test
+                });
 
-            this.flags = savedFlag;
+            default:
 
-            return this.finishNode(pos, {
-                type: 'ForInStatement',
-                body,
-                left: init,
-                right: test
-            });
-        } else {
+                if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
 
-            if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
+                let update = null;
 
-            let update = null;
+                // Invalid: `for (var a = ++effects in {});`
+                // Invalid: `for (var a = (++effects, -1) in stored = a, {a: 0, b: 1, c: 2}) {  ++iterations;  }`
+                if (this.token === Token.RightParen) this.error(Errors.InvalidVarDeclInForIn);
 
-            this.expect(context, Token.Semicolon);
+                this.expect(context, Token.Semicolon);
 
-            if (this.token !== Token.Semicolon && this.token !== Token.RightParen) test = this.parseExpression(context | Context.AllowIn);
+                if (this.token !== Token.Semicolon && this.token !== Token.RightParen) {
+                    test = this.parseExpression(context | Context.AllowIn);
+                }
 
-            this.expect(context, Token.Semicolon);
+                this.expect(context, Token.Semicolon);
 
-            if (this.token !== Token.RightParen) update = this.parseExpression(context | Context.AllowIn);
+                if (this.token !== Token.RightParen) update = this.parseExpression(context | Context.AllowIn);
 
-            this.expect(context, Token.RightParen);
+                this.expect(context, Token.RightParen);
 
-            this.setGlobalFlag(Flags.BlockStatement, false);
-            this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                this.setGlobalFlag(Flags.BlockStatement, false);
+                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
 
-            body = this.parseStatement(context | Context.ForStatement);
+                body = this.parseStatement(context | Context.ForStatement);
 
-            this.flags = savedFlag;
+                this.flags = savedFlag;
 
-            return this.finishNode(pos, {
-                type: 'ForStatement',
-                body,
-                init,
-                test,
-                update
-            });
+                return this.finishNode(pos, {
+                    type: 'ForStatement',
+                    body,
+                    init,
+                    test,
+                    update
+                });
         }
     }
 
@@ -3607,8 +3603,6 @@ export class Parser {
 
     private reinterpretExpressionAsPattern(context: Context, params: any): void {
 
-        if (!params) return;
-
         switch (params.type) {
             case 'Identifier':
             case 'MemberExpression':
@@ -3622,8 +3616,7 @@ export class Parser {
                 // Invalid '[a, ...(b = c)] = 0'
                 // Invalid 'for ([...x = 1] in [[]]);'
                 if (params.argument.type === 'AssignmentExpression') {
-                    if (context & Context.ForStatement) this.error(Errors.InvalidLHSInForIn);
-                    this.error(Errors.InvalidLHSInAssignment);
+                    this.error(context & Context.ForStatement ? Errors.InvalidLHSInForIn : Errors.InvalidLHSInAssignment);
                 }
                 params.type = 'RestElement';
                 this.reinterpretExpressionAsPattern(context, params.argument);
@@ -4850,7 +4843,10 @@ export class Parser {
         const pos = this.startNode();
         const value = this.tokenValue;
         const raw = this.tokenRaw;
+        
         this.nextToken(context);
+        
+                                
 
         const node = this.finishNode(pos, {
             type: 'Literal',

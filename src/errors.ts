@@ -120,7 +120,8 @@ export const enum Errors {
     InvalidStrictExpPostion,
     InvalidStrictLexical,
     MissingInitializer,
-    InvalidLabeledForOf
+    InvalidLabeledForOf,
+    InvalidVarDeclInForIn
 }
 
 export const ErrorMessages: {
@@ -164,7 +165,7 @@ export const ErrorMessages: {
     [Errors.InvalidLHSInForLoop]: 'Invalid left-hand side in for-loop',
     [Errors.InvalidVarInitForOf]: 'Invalid variable declaration in for-of statement',
     [Errors.UninitalizedBindingPatternForInit]: 'Binding pattern appears without initializer in for statement init',
-    [Errors.InvalidLHSInForIn]: 'InvalidLHSInForIn',
+    [Errors.InvalidLHSInForIn]: 'Invalid left-hand side in for-in',
     [Errors.PropertyAfterRestProperty]: 'Unexpected token',
     [Errors.StrictLHSAssignment]: 'Eval or arguments can\'t be assigned to in strict mode code',
     [Errors.InvalidLHSInAssignment]: 'Invalid left-hand side in assignment',
@@ -246,6 +247,8 @@ export const ErrorMessages: {
     [Errors.InvalidStrictLexical]: 'Lexical declarations must not have a binding named "let"',
     [Errors.MissingInitializer]: 'Missing initializer',
     [Errors.InvalidLabeledForOf]: 'The body of a for-of statement must not be a labeled function declaration',
+    [Errors.InvalidVarDeclInForIn]: 'Invalid variable declaration in for-in statement',
+    
 };
 
 function constructError(msg: string, column: number): Error {
