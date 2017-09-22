@@ -4,7 +4,9 @@ Cherow is a very fast, standard-compliant [ECMAScript](http://www.ecma-internati
 
 It strictly follows the ECMAScript® 2018 Language Specification and should parse acc. these specifications
 
-It's safe to use in production even I'm not done with this parser. I'm finishing the parser in the dev branch.
+It's safe to use in production.
+
+Please note that I'm not done with this parser. The develoment are done in the the*dev branch*.
 
 ## Features 
 
@@ -86,13 +88,6 @@ cherow.parseScript('// foo',
 
 ```
 
-**Esprima**
-
-```js
-
-cherow.parseScript('{ a: b}', { raw: true, directives: true });
-
-```
 
 ## Performance and benchmarks
 
