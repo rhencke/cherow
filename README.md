@@ -13,6 +13,7 @@ Please note that I'm not done with this parser. The development are done in the 
 - Full support for ECMAScript® 2018 [(ECMA-262 8th Edition)](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 - Stage 3 proposals (*experimental*)
 - Support for JSX, a syntax extension for React
+- Skips URL source comments by default
 - Optional tracking of syntax node location (index-based and line-column)
 - 4650 unit tests with full code coverage
 
