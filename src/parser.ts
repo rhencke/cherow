@@ -372,7 +372,7 @@ export class Parser {
                         if (this.index === 0 && this.source.charCodeAt(this.index + 1) === Chars.Exclamation) {
                             this.index += 2;
                             this.column += 2;
-                            this.skipSourceURLComment();
+                            this.skipShebangComment();
                             continue;
                         }
                     }
@@ -743,7 +743,7 @@ export class Parser {
         }
     }
 
-    private skipSourceURLComment() {
+    private skipShebangComment() {
         loop: while (this.hasNext()) {
             switch (this.nextChar()) {
                 case Chars.LineFeed:

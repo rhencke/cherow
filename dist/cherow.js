@@ -919,7 +919,7 @@ Parser.prototype.scanToken = function scanToken (context) {
                     if (this$1.index === 0 && this$1.source.charCodeAt(this$1.index + 1) === 33 /* Exclamation */) {
                         this$1.index += 2;
                         this$1.column += 2;
-                        this$1.skipSourceURLComment();
+                        this$1.skipShebangComment();
                         continue;
                     }
                 }
@@ -1249,7 +1249,7 @@ Parser.prototype.skipSingleLineComment = function skipSingleLineComment (offset)
         this.handleComment('SingleLineComment', this.source.slice(start, this.index), this.startPos, this.index);
     }
 };
-Parser.prototype.skipSourceURLComment = function skipSourceURLComment () {
+Parser.prototype.skipShebangComment = function skipShebangComment () {
         var this$1 = this;
 
     loop: while (this.hasNext()) {
