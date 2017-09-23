@@ -7,51 +7,117 @@ describe('Espressions - Array', () => {
 
        it('should parse simple array"', () => {
             expect(parseScript('[]', {
-                ranges: true
+                ranges: true,
+                locations: true
             })).to.eql({
-                "body": [{
-                    "end": 2,
-                    "expression": {
-                        "elements": [],
-                        "end": 2,
-                        "start": 0,
-                        "type": "ArrayExpression"
+              "type": "Program",
+              "start": 0,
+              "end": 2,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 2
+                }
+              },
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 2,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
                     },
+                    "end": {
+                      "line": 1,
+                      "column": 2
+                    }
+                  },
+                  "expression": {
+                    "type": "ArrayExpression",
                     "start": 0,
-                    "type": "ExpressionStatement"
-                }],
-                "end": 2,
-                "sourceType": "script",
-                "start": 0,
-                "type": "Program"
+                    "end": 2,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 2
+                      }
+                    },
+                    "elements": []
+                  }
+                }
+              ],
+              "sourceType": "script"
             });
         });
     
         it('should parse simple array with ellison"', () => {
             expect(parseScript(' [,,,,,]', {
-                ranges: true
+                ranges: true,
+                locations: true
             })).to.eql({
-                "body": [{
-                    "end": 8,
-                    "expression": {
-                        "elements": [
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
-                        ],
-                        "end": 8,
-                        "start": 1,
-                        "type": "ArrayExpression"
+              "type": "Program",
+              "start": 0,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                }
+              },
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 1,
+                  "end": 8,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 1
                     },
+                    "end": {
+                      "line": 1,
+                      "column": 8
+                    }
+                  },
+                  "expression": {
+                    "type": "ArrayExpression",
                     "start": 1,
-                    "type": "ExpressionStatement"
-                }],
-                "end": 8,
-                "sourceType": "script",
-                "start": 0,
-                "type": "Program"
+                    "end": 8,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 8
+                      }
+                    },
+                    "elements": [
+                      null,
+                      null,
+                      null,
+                      null,
+                      null
+                    ]
+                  }
+                }
+              ],
+              "sourceType": "script"
             });
         });
 

@@ -144,7 +144,7 @@ describe('Espressions - Async', () => {
         it('should parse async as an identifier', () => {
             expect(parseScript('typeof async == "string"', {
                 raw: true,
-                ranges: true
+                ranges: true,
             })).to.eql({
                 "type": "Program",
                 "start": 0,
@@ -213,7 +213,7 @@ describe('Espressions - Async', () => {
         it('should parse async as an member expression', () => {
             expect(parseScript('async.abc', {
                 raw: true,
-                ranges: true
+                ranges: true,
             })).to.eql({
                 "type": "Program",
                 "start": 0,

@@ -38,89 +38,248 @@ describe('Espressions - Addition', () => {
     it('should parse "1 + 1 !== 2"', () => {
         expect(parseScript('1 + 1 !== 2', {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
-              "body": [
-                {
-                  "end": 11,
-                  "expression": {
-                    "end": 11,
-                   "left": {
-                      "end": 5,
-                      "left": {
-                        "end": 1,
-                        "raw": "1",
-                        "start": 0,
-                        "type": "Literal",
-                        "value": 1
-                      },
-                      "operator": "+",
-                      "right": {
-                        "end": 5,
-                        "raw": "1",
-                        "start": 4,
-                        "type": "Literal",
-                        "value": 1
-                     },
-                      "start": 0,
-                      "type": "BinaryExpression"
-                    },
-                    "operator": "!==",
-                    "right": {
-                      "end": 11,
-                      "raw": "2",
-                      "start": 10,
-                      "type": "Literal",
-                      "value": 2,
-                   },
-                   "start": 0,
-                    "type": "BinaryExpression"
+            "type": "Program",
+            "start": 0,
+            "end": 11,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
                   },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  }
+                },
+                "expression": {
+                  "type": "BinaryExpression",
                   "start": 0,
-                  "type": "ExpressionStatement"
+                  "end": 11,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 11
+                    }
+                  },
+                  "left": {
+                    "type": "BinaryExpression",
+                    "start": 0,
+                    "end": 5,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 5
+                      }
+                    },
+                    "left": {
+                      "type": "Literal",
+                      "start": 0,
+                      "end": 1,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 0
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 1
+                        }
+                      },
+                      "value": 1,
+                      "raw": "1"
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 4,
+                      "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  },
+                  "operator": "!==",
+                  "right": {
+                    "type": "Literal",
+                    "start": 10,
+                    "end": 11,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 11
+                      }
+                    },
+                    "value": 2,
+                    "raw": "2"
+                  }
                 }
-              ],
-              "end": 11,
-             "sourceType": "script",
-             "start": 0,
-              "type": "Program"
-            });
+              }
+            ],
+            "sourceType": "script"
+          });
     });
 
     it('should parse "-0 + -0"', () => {
         expect(parseScript('-0 + -0', {
-            raw: true
+            raw: true,
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
-            "body": [{
+            "start": 0,
+            "end": 7,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            "body": [
+              {
                 "type": "ExpressionStatement",
+                "start": 0,
+                "end": 7,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 7
+                  }
+                },
                 "expression": {
-                    "type": "BinaryExpression",
-                    "operator": "+",
-                    "left": {
-                        "type": "UnaryExpression",
-                        "operator": "-",
-                        "argument": {
-                            "type": "Literal",
-                            "value": 0,
-                            "raw": "0"
-                        },
-                        "prefix": true
+                  "type": "BinaryExpression",
+                  "start": 0,
+                  "end": 7,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
                     },
-                    "right": {
-                        "type": "UnaryExpression",
-                        "operator": "-",
-                        "argument": {
-                            "type": "Literal",
-                            "value": 0,
-                            "raw": "0"
-                        },
-                        "prefix": true
+                    "end": {
+                      "line": 1,
+                      "column": 7
                     }
+                  },
+                  "left": {
+                    "type": "UnaryExpression",
+                    "start": 0,
+                    "end": 2,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 2
+                      }
+                    },
+                    "operator": "-",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 1,
+                      "end": 2,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 2
+                        }
+                      },
+                      "value": 0,
+                      "raw": "0"
+                    }
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "UnaryExpression",
+                    "start": 5,
+                    "end": 7,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 5
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 7
+                      }
+                    },
+                    "operator": "-",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 6,
+                      "end": 7,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 7
+                        }
+                      },
+                      "value": 0,
+                      "raw": "0"
+                    }
+                  }
                 }
-            }],
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should parse "0 + -0"', () => {

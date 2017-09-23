@@ -11514,7 +11514,7 @@ describe('TC262 - explicit', () => {
     it('should parse "a => ((b, c) => ((a, b), c));"', () => {
       expect(parseScript('a => ((b, c) => ((a, b), c));', {
           ranges: true,
-          raw: true
+          raw: true,
       })).to.eql({
         "type": "Program",
         "start": 0,

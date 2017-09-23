@@ -523,46 +523,111 @@ describe('Declaration - Lexical', () => {
     it('should parse function name arrow', () => {
         expect(parseScript(`const arrow = () => {};`, {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 23,
-            "body": [{
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            },
+            "body": [
+              {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 23,
-                "declarations": [{
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  }
+                },
+                "declarations": [
+                  {
                     "type": "VariableDeclarator",
                     "start": 6,
                     "end": 22,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 6
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 22
+                      }
+                    },
                     "id": {
-                        "type": "Identifier",
-                        "start": 6,
-                        "end": 11,
-                        "name": "arrow"
+                      "type": "Identifier",
+                      "start": 6,
+                      "end": 11,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 11
+                        }
+                      },
+                      "name": "arrow"
                     },
                     "init": {
-                        "type": "ArrowFunctionExpression",
-                        "start": 14,
-                        "end": 22,
-                        "id": null,
-                        "generator": false,
-                        "expression": false,
-                        "async": false,
-                        "params": [],
-                        "body": {
-                            "type": "BlockStatement",
-                            "start": 20,
-                            "end": 22,
-                            "body": []
+                      "type": "ArrowFunctionExpression",
+                      "start": 14,
+                      "end": 22,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
                         }
+                      },
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 20,
+                        "end": 22,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 20
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 22
+                          }
+                        },
+                        "body": []
+                      }
                     }
-                }],
+                  }
+                ],
                 "kind": "const"
-            }],
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
 

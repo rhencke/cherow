@@ -247,13 +247,7 @@ export function isValidSimpleAssignmentTarget(expr: Expression | Pattern): boole
     switch (expr.type) {
         case 'Identifier':
         case 'MemberExpression':
-        case 'ClassExpression':
-        case 'CallExpression':
-        case 'TemplateLiteral':
-        case 'AssignmentExpression':
-        case 'NewExpression':
             return true;
-
         default:
             return false;
     }

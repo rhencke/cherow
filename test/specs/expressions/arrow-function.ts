@@ -10,7 +10,6 @@ describe('Expressions - Arrow function', () => {
         }).to.throw('');
     });    
 
-
     it('should fail on strict duplicate params', () => {
         expect(() => {
             parseScript('"use strict"; (a, a) => 42;');
@@ -694,51 +693,128 @@ var await;
     it('should parse eval as binding identifier in sloppy mode', () => {
         expect(parseScript(`var af = eval => eval;`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations:  true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 22,
-            "body": [{
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            "body": [
+              {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 22,
-                "declarations": [{
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "declarations": [
+                  {
                     "type": "VariableDeclarator",
                     "start": 4,
                     "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      }
+                    },
                     "id": {
-                        "type": "Identifier",
-                        "start": 4,
-                        "end": 6,
-                        "name": "af"
+                      "type": "Identifier",
+                      "start": 4,
+                      "end": 6,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 6
+                        }
+                      },
+                      "name": "af"
                     },
                     "init": {
-                        "type": "ArrowFunctionExpression",
-                        "start": 9,
-                        "end": 21,
-                        "id": null,
-                        "generator": false,
-                        "expression": true,
-                        "async": false,
-                        "params": [{
-                            "type": "Identifier",
-                            "start": 9,
-                            "end": 13,
-                            "name": "eval"
-                        }],
-                        "body": {
-                            "type": "Identifier",
-                            "start": 17,
-                            "end": 21,
-                            "name": "eval"
+                      "type": "ArrowFunctionExpression",
+                      "start": 9,
+                      "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
                         }
+                      },
+                      "id": null,
+                      "generator": false,
+                      "expression": true,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start": 9,
+                          "end": 13,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 13
+                            }
+                          },
+                          "name": "eval"
+                        }
+                      ],
+                      "body": {
+                        "type": "Identifier",
+                        "start": 17,
+                        "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 21
+                          }
+                        },
+                        "name": "eval"
+                      }
                     }
-                }],
+                  }
+                ],
                 "kind": "var"
-            }],
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should capture closure variabels', () => {
@@ -749,7 +825,7 @@ var await;
             }
          }`, {
             ranges: true,
-            raw: true
+            raw: true,
         })).to.eql({
             "type": "Program",
             "start": 0,

@@ -215,11 +215,6 @@ function isValidSimpleAssignmentTarget(expr) {
     switch (expr.type) {
         case 'Identifier':
         case 'MemberExpression':
-        case 'ClassExpression':
-        case 'CallExpression':
-        case 'TemplateLiteral':
-        case 'AssignmentExpression':
-        case 'NewExpression':
             return true;
         default:
             return false;
@@ -652,7 +647,7 @@ Parser.prototype.parseModule = function parseModule (context) {
 Parser.prototype.parseScript = function parseScript (context) {
     return this.finishNodeAt(this.startPos, this.source.length, {
         type: 'Program',
-        body: this.parseScriptBody(context),
+        body: this.parseStatementList(context),
         sourceType: 'script'
     });
 };
@@ -796,8 +791,8 @@ Parser.prototype.scanToken = function scanToken (context) {
 
     this.flags &= ~(1 /* LineTerminator */ | 256 /* HasExtendedUnicodeEscape */);
     this.endPos = this.index;
-    this.endColumn = this.index;
-    this.endLine = this.index;
+    this.endColumn = this.column;
+    this.endLine = this.line;
     scan: while (this.index >= 0 && this.hasNext()) {
         this$1.startPos = this$1.index;
         this$1.startColumn = this$1.column;
@@ -1967,7 +1962,7 @@ Parser.prototype.parseModuleItems = function parseModuleItems (context) {
     }
     return statements;
 };
-Parser.prototype.parseScriptBody = function parseScriptBody (context) {
+Parser.prototype.parseStatementList = function parseStatementList (context) {
         var this$1 = this;
 
     this.nextToken(context);
@@ -1992,7 +1987,7 @@ Parser.prototype.parseScriptBody = function parseScriptBody (context) {
 Parser.prototype.startNode = function startNode () {
     return {
         start: this.startPos,
-        line: this.line,
+        line: this.startLine,
         column: this.startColumn
     };
 };
@@ -2023,8 +2018,8 @@ Parser.prototype.finishNodeAt = function finishNodeAt (start, end, node) {
     if (hasMask(this.flags, 524288 /* OptionsLoc */)) {
         node.loc = {
             start: {
-                line: this.startLine,
-                column: this.startColumn,
+                line: this.line,
+                column: 0,
             },
             end: {
                 line: 1,
@@ -3394,7 +3389,7 @@ Parser.prototype.parseUpdateExpression = function parseUpdateExpression (context
                 this.error(53 /* StrictLHSPrefix */);
             }
         }
-        else if (!isValidDestructuringAssignmentTarget(argument))
+        else if (!isValidSimpleAssignmentTarget(argument))
             { this.error(40 /* InvalidLHSInAssignment */); }
         return this.finishNode(pos, {
             type: 'UpdateExpression',
@@ -3412,7 +3407,7 @@ Parser.prototype.parseUpdateExpression = function parseUpdateExpression (context
         // operated upon by a Prefix Increment(12.4.6) or a Prefix Decrement(12.4.7) operator.
         if (context & 2 /* Strict */ && this.isEvalOrArguments(argument.name))
             { this.error(54 /* StrictLHSPostfix */); }
-        if (!isValidDestructuringAssignmentTarget(argument))
+        if (!isValidSimpleAssignmentTarget(argument))
             { this.error(40 /* InvalidLHSInAssignment */); }
         var operator$1 = this.token;
         this.nextToken(context);
@@ -3822,7 +3817,29 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
         case 'AssignmentPattern':
         case 'ArrayPattern':
         case 'ObjectPattern':
-        case 'RestElement':
+            return;
+        case 'ObjectExpression':
+            params.type = 'ObjectPattern';
+            // ObjectPattern and ObjectExpression are isomorphic
+            for (var i = 0; i < params.properties.length; i++) {
+                var property = params.properties[i];
+                this$1.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
+            }
+            return;
+        case 'ArrayExpression':
+            params.type = 'ArrayPattern';
+            for (var i$1 = 0; i$1 < params.elements.length; ++i$1) {
+                // skip holes in pattern
+                if (params.elements[i$1] !== null)
+                    { this$1.reinterpretExpressionAsPattern(context, params.elements[i$1]); }
+            }
+            return;
+        case 'AssignmentExpression':
+            params.type = 'AssignmentPattern';
+            if (params.operator !== '=')
+                { this.error(1 /* UnexpectedToken */, tokenDesc(this.token)); }
+            delete params.operator;
+            this.reinterpretExpressionAsPattern(context, params.left);
             return;
         case 'SpreadElement':
             // Invalid '[a, ...(b = c)] = 0'
@@ -3833,31 +3850,8 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
             params.type = 'RestElement';
             this.reinterpretExpressionAsPattern(context, params.argument);
             return;
-        case 'ArrayExpression':
-            params.type = 'ArrayPattern';
-            for (var i = 0; i < params.elements.length; ++i) {
-                // skip holes in pattern
-                if (params.elements[i] !== null)
-                    { this$1.reinterpretExpressionAsPattern(context, params.elements[i]); }
-            }
-            return;
         case 'Property':
             this.reinterpretExpressionAsPattern(context, params.value);
-            return;
-        case 'ObjectExpression':
-            params.type = 'ObjectPattern';
-            // ObjectPattern and ObjectExpression are isomorphic
-            for (var i$1 = 0; i$1 < params.properties.length; i$1++) {
-                var property = params.properties[i$1];
-                this$1.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
-            }
-            return;
-        case 'AssignmentExpression':
-            params.type = 'AssignmentPattern';
-            if (context & 32 /* Assignment */ && params.operator !== '=')
-                { this.error(1 /* UnexpectedToken */, tokenDesc(this.token)); }
-            delete params.operator;
-            this.reinterpretExpressionAsPattern(context, params.left);
             return;
         default:
             this.error(1 /* UnexpectedToken */, tokenDesc(this.token));

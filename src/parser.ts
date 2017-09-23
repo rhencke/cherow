@@ -83,7 +83,7 @@ export class Parser {
     public parseScript(context: any): ESTree.Node {
         return this.finishNodeAt(this.startPos, this.source.length, {
             type: 'Program',
-            body: this.parseScriptBody(context),
+            body: this.parseStatementList(context),
             sourceType: 'script'
         });
     }
@@ -237,8 +237,8 @@ export class Parser {
         this.flags &= ~(Flags.LineTerminator | Flags.HasExtendedUnicodeEscape);
 
         this.endPos = this.index;
-        this.endColumn = this.index;
-        this.endLine = this.index;
+        this.endColumn = this.column;
+        this.endLine = this.line;
 
         scan: while (this.index >= 0 && this.hasNext()) {
 
@@ -1528,7 +1528,7 @@ export class Parser {
         return statements;
     }
 
-    private parseScriptBody(context: Context): ESTree.Statement[] {
+    private parseStatementList(context: Context): ESTree.Statement[] {
 
         this.nextToken(context);
 
@@ -1554,12 +1554,12 @@ export class Parser {
     private startNode() {
         return {
             start: this.startPos,
-            line: this.line,
+            line: this.startLine,
             column: this.startColumn
         };
     }
 
-    private finishNode(marker: any, node: any): any {
+    private finishNode(marker: Location, node: any) {
         if (hasMask(this.flags, Flags.OptionsRanges)) {
             node.start = marker.start;
             node.end = this.endPos;
@@ -1587,15 +1587,14 @@ export class Parser {
         if (hasMask(this.flags, Flags.OptionsRanges)) {
             node.start = start;
             node.end = end;
-
         }
 
         if (hasMask(this.flags, Flags.OptionsLoc)) {
 
             node.loc = {
                 start: {
-                    line: this.startLine,
-                    column: this.startColumn,
+                    line: this.line,
+                    column: 0,
                 },
                 end: {
                     line: 1,
@@ -2865,7 +2864,6 @@ export class Parser {
     private parseExpression(context: Context): ESTree.Expression | ESTree.SequenceExpression {
         const pos = this.startNode();
         const expr = this.parseAssignmentExpression(context);
-
         if (this.token !== Token.Comma) return expr;
 
         const expressions: ESTree.Expression[] = [];
@@ -3149,7 +3147,7 @@ export class Parser {
                 if ((operator === Token.Decrement || operator === Token.Increment) && this.isEvalOrArguments(argument.name)) {
                     this.error(Errors.StrictLHSPrefix);
                 }
-            } else if (!isValidDestructuringAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
+            } else if (!isValidSimpleAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
 
             return this.finishNode(pos, {
                 type: 'UpdateExpression',
@@ -3170,7 +3168,7 @@ export class Parser {
             // operated upon by a Prefix Increment(12.4.6) or a Prefix Decrement(12.4.7) operator.
             if (context & Context.Strict && this.isEvalOrArguments(argument.name)) this.error(Errors.StrictLHSPostfix);
 
-            if (!isValidDestructuringAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
+            if (!isValidSimpleAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
 
             const operator = this.token;
 
@@ -3590,7 +3588,30 @@ export class Parser {
             case 'AssignmentPattern':
             case 'ArrayPattern':
             case 'ObjectPattern':
-            case 'RestElement':
+                return;
+            case 'ObjectExpression':
+                params.type = 'ObjectPattern';
+                // ObjectPattern and ObjectExpression are isomorphic
+                for (let i = 0; i < params.properties.length; i++) {
+                    const property = params.properties[i];
+                    this.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
+                }
+                return;
+
+            case 'ArrayExpression':
+                params.type = 'ArrayPattern';
+                for (let i = 0; i < params.elements.length; ++i) {
+                    // skip holes in pattern
+                    if (params.elements[i] !== null) this.reinterpretExpressionAsPattern(context, params.elements[i]);
+                }
+                return;
+
+            case 'AssignmentExpression':
+                params.type = 'AssignmentPattern';
+                if (params.operator !== '=') this.error(Errors.UnexpectedToken, tokenDesc(this.token));
+
+                delete params.operator;
+                this.reinterpretExpressionAsPattern(context, params.left);
                 return;
 
             case 'SpreadElement':
@@ -3603,34 +3624,10 @@ export class Parser {
                 this.reinterpretExpressionAsPattern(context, params.argument);
                 return;
 
-            case 'ArrayExpression':
-                params.type = 'ArrayPattern';
-                for (let i = 0; i < params.elements.length; ++i) {
-                    // skip holes in pattern
-                    if (params.elements[i] !== null) this.reinterpretExpressionAsPattern(context, params.elements[i]);
-                }
-                return;
-
             case 'Property':
                 this.reinterpretExpressionAsPattern(context, params.value);
                 return;
 
-            case 'ObjectExpression':
-                params.type = 'ObjectPattern';
-                // ObjectPattern and ObjectExpression are isomorphic
-                for (let i = 0; i < params.properties.length; i++) {
-                    const property = params.properties[i];
-                    this.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
-                }
-                return;
-
-            case 'AssignmentExpression':
-                params.type = 'AssignmentPattern';
-                if (context & Context.Assignment && params.operator !== '=') this.error(Errors.UnexpectedToken, tokenDesc(this.token));
-
-                delete params.operator;
-                this.reinterpretExpressionAsPattern(context, params.left);
-                return;
             default:
                 this.error(Errors.UnexpectedToken, tokenDesc(this.token));
         }

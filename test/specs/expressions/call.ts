@@ -27,170 +27,402 @@ describe('Espressions - Call', () => {
             expect(parseScript('(function() {}(5, ...[6, 7, 8], 9));', {
                 ranges: true,
                 next: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
-                "type": "Program",
-                "start": 0,
-                "end": 36,
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 0,
-                    "end": 36,
-                    "expression": {
-                      "type": "CallExpression",
+              "type": "Program",
+              "start": 0,
+              "end": 36,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 36
+                }
+              },
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 1,
+                    "end": 34,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 34
+                      }
+                    },
+                    "callee": {
+                      "type": "FunctionExpression",
                       "start": 1,
-                      "end": 34,
-                      "callee": {
-                        "type": "FunctionExpression",
-                        "start": 1,
-                        "end": 14,
-                        "id": null,
-                        "generator": false,
-                        "expression": false,
-                        "async": false,
-                        "params": [],
-                        "body": {
-                          "type": "BlockStatement",
-                          "start": 12,
-                          "end": 14,
-                          "body": []
+                      "end": 14,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
                         }
                       },
-                      "arguments": [
-                        {
-                          "type": "Literal",
-                          "start": 15,
-                          "end": 16,
-                          "value": 5,
-                          "raw": "5"
-                        },
-                        {
-                          "type": "SpreadElement",
-                          "start": 18,
-                          "end": 30,
-                          "argument": {
-                            "type": "ArrayExpression",
-                            "start": 21,
-                            "end": 30,
-                            "elements": [
-                              {
-                                "type": "Literal",
-                                "start": 22,
-                                "end": 23,
-                                "value": 6,
-                                "raw": "6"
-                              },
-                              {
-                                "type": "Literal",
-                                "start": 25,
-                                "end": 26,
-                                "value": 7,
-                                "raw": "7"
-                              },
-                              {
-                                "type": "Literal",
-                                "start": 28,
-                                "end": 29,
-                                "value": 8,
-                                "raw": "8"
-                              }
-                            ]
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 12,
+                        "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
                           }
                         },
-                        {
-                          "type": "Literal",
-                          "start": 32,
-                          "end": 33,
-                          "value": 9,
-                          "raw": "9"
+                        "body": []
+                      }
+                    },
+                    "arguments": [
+                      {
+                        "type": "Literal",
+                        "start": 15,
+                        "end": 16,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 16
+                          }
+                        },
+                        "value": 5,
+                        "raw": "5"
+                      },
+                      {
+                        "type": "SpreadElement",
+                        "start": 18,
+                        "end": 30,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 18
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 30
+                          }
+                        },
+                        "argument": {
+                          "type": "ArrayExpression",
+                          "start": 21,
+                          "end": 30,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 30
+                            }
+                          },
+                          "elements": [
+                            {
+                              "type": "Literal",
+                              "start": 22,
+                              "end": 23,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 22
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 23
+                                }
+                              },
+                              "value": 6,
+                              "raw": "6"
+                            },
+                            {
+                              "type": "Literal",
+                              "start": 25,
+                              "end": 26,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 25
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 26
+                                }
+                              },
+                              "value": 7,
+                              "raw": "7"
+                            },
+                            {
+                              "type": "Literal",
+                              "start": 28,
+                              "end": 29,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 28
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 29
+                                }
+                              },
+                              "value": 8,
+                              "raw": "8"
+                            }
+                          ]
                         }
-                      ]
-                    }
+                      },
+                      {
+                        "type": "Literal",
+                        "start": 32,
+                        "end": 33,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 32
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 33
+                          }
+                        },
+                        "value": 9,
+                        "raw": "9"
+                      }
+                    ]
                   }
-                ],
-                "sourceType": "script"
-              });
+                }
+              ],
+              "sourceType": "script"
+            });
         });
 
         it('should parse spread operator applied to assignment expression following other elements', () => {
             expect(parseScript('(function() {}(1, 2, ...target = source));', {
                 ranges: true,
                 next: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
-                "type": "Program",
-                "start": 0,
-                "end": 42,
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 0,
-                    "end": 42,
-                    "expression": {
-                      "type": "CallExpression",
+              "type": "Program",
+              "start": 0,
+              "end": 42,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 42
+                }
+              },
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start": 0,
+                  "end": 42,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 42
+                    }
+                  },
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 1,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 40
+                      }
+                    },
+                    "callee": {
+                      "type": "FunctionExpression",
                       "start": 1,
-                      "end": 40,
-                      "callee": {
-                        "type": "FunctionExpression",
-                        "start": 1,
-                        "end": 14,
-                        "id": null,
-                        "generator": false,
-                        "expression": false,
-                        "async": false,
-                        "params": [],
-                        "body": {
-                          "type": "BlockStatement",
-                          "start": 12,
-                          "end": 14,
-                          "body": []
+                      "end": 14,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
                         }
                       },
-                      "arguments": [
-                        {
-                          "type": "Literal",
-                          "start": 15,
-                          "end": 16,
-                          "value": 1,
-                          "raw": "1"
+                      "id": null,
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 12,
+                        "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
+                          }
                         },
-                        {
-                          "type": "Literal",
-                          "start": 18,
-                          "end": 19,
-                          "value": 2,
-                          "raw": "2"
+                        "body": []
+                      }
+                    },
+                    "arguments": [
+                      {
+                        "type": "Literal",
+                        "start": 15,
+                        "end": 16,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 16
+                          }
                         },
-                        {
-                          "type": "SpreadElement",
-                          "start": 21,
+                        "value": 1,
+                        "raw": "1"
+                      },
+                      {
+                        "type": "Literal",
+                        "start": 18,
+                        "end": 19,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 18
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 19
+                          }
+                        },
+                        "value": 2,
+                        "raw": "2"
+                      },
+                      {
+                        "type": "SpreadElement",
+                        "start": 21,
+                        "end": 39,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 21
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 39
+                          }
+                        },
+                        "argument": {
+                          "type": "AssignmentExpression",
+                          "start": 24,
                           "end": 39,
-                          "argument": {
-                            "type": "AssignmentExpression",
-                            "start": 24,
-                            "end": 39,
-                            "operator": "=",
-                            "left": {
-                              "type": "Identifier",
-                              "start": 24,
-                              "end": 30,
-                              "name": "target"
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 24
                             },
-                            "right": {
-                              "type": "Identifier",
-                              "start": 33,
-                              "end": 39,
-                              "name": "source"
+                            "end": {
+                              "line": 1,
+                              "column": 39
                             }
+                          },
+                          "operator": "=",
+                          "left": {
+                            "type": "Identifier",
+                            "start": 24,
+                            "end": 30,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 24
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 30
+                              }
+                            },
+                            "name": "target"
+                          },
+                          "right": {
+                            "type": "Identifier",
+                            "start": 33,
+                            "end": 39,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 33
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 39
+                              }
+                            },
+                            "name": "source"
                           }
                         }
-                      ]
-                    }
+                      }
+                    ]
                   }
-                ],
-                "sourceType": "script"
-              });
+                }
+              ],
+              "sourceType": "script"
+            });
         });
         
         it('should parse spread multi object undefined"', () => {
