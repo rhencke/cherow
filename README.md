@@ -93,7 +93,7 @@ cherow.parseScript('// foo',
 The main difference between Cherow and Acorn and Esprima is that the mention libraries either doesn't parse everything 
 according to TC39, or they doesn't fail as they should according to the ECMAScript specs.
 
-Cherow parses everything after the specs, and fails 90% after the specs (*works in progress*). 
+Cherow parses everything after the specs, and fails 90% after the specs (*work in progress*). 
 
 
 ## Performance and benchmarks

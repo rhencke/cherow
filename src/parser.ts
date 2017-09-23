@@ -208,7 +208,7 @@ export class Parser {
     /**
      * Advance to new line
      */
-    private advanceToNewLine() {
+    private advanceNewline() {
         this.flags |= Flags.LineTerminator;
         this.index++;
         this.column = 0;
@@ -251,14 +251,14 @@ export class Parser {
             switch (first) {
                 case Chars.CarriageReturn:
                 case Chars.LineFeed:
-                    this.advanceToNewLine();
+                    this.advanceNewline();
                     if (first === Chars.CarriageReturn && this.hasNext() && this.nextChar() === Chars.LineFeed) {
                         this.index++;
                     }
                     continue;
                 case Chars.LineSeparator:
                 case Chars.ParagraphSeparator:
-                    this.advanceToNewLine();
+                    this.advanceNewline();
                     continue;
                 case Chars.Tab:
                 case Chars.VerticalTab:
@@ -366,6 +366,17 @@ export class Parser {
                         }
                     }
 
+                    // `#`
+                case Chars.Hash:
+                    {
+                        if (this.index === 0 && this.source.charCodeAt(this.index + 1) === Chars.Exclamation) {
+                            this.index += 2;
+                            this.column += 2;
+                            this.skipSourceURLComment();
+                            continue;
+                        }
+                    }
+
                     // `{`
                 case Chars.LeftBrace:
                     this.advance();
@@ -374,7 +385,7 @@ export class Parser {
                     // `}`
                 case Chars.RightBrace:
                     this.advance();
-                    this.flags |= Flags.LineTerminator, true;
+                    this.flags |= Flags.LineTerminator;
                     return Token.RightBrace;
 
                     // `~`
@@ -710,7 +721,7 @@ export class Parser {
 
     private skipSingleLineComment(offset: number) {
 
-        const commentStart = this.index;
+        const start = this.index;
 
         loop:
             while (this.hasNext()) {
@@ -719,7 +730,7 @@ export class Parser {
                     case Chars.CarriageReturn:
                     case Chars.LineSeparator:
                     case Chars.ParagraphSeparator:
-                        this.advanceToNewLine();
+                        this.advanceNewline();
                         if (this.hasNext() && this.nextChar() === Chars.LineFeed) this.index++;
                         break loop;
                     default:
@@ -728,14 +739,29 @@ export class Parser {
             }
 
         if (this.flags & Flags.OptionsOnComment) {
-            this.handleComment('SingleLineComment', this.source.slice(commentStart, this.index), this.startPos, this.index);
+            this.handleComment('SingleLineComment', this.source.slice(start, this.index), this.startPos, this.index);
         }
     }
 
+    private skipSourceURLComment() {
+        loop: while (this.hasNext()) {
+            switch (this.nextChar()) {
+                case Chars.LineFeed:
+                case Chars.CarriageReturn:
+                case Chars.LineSeparator:
+                case Chars.ParagraphSeparator:
+                    this.advanceNewline();
+                    if (this.hasNext() && this.nextChar() === Chars.LineFeed) this.index++;
+                    break loop;
+                default:
+                    this.advance();
+            }
+        }
+    }
     private skipMultiLineComment() {
 
-        const commentStart = this.index;
-        let unterminatedComment = false;
+        const start = this.index;
+        let closed = false;
 
         loop:
             while (this.hasNext()) {
@@ -744,7 +770,7 @@ export class Parser {
                     case Chars.Asterisk:
                         this.advance();
                         if (this.consume(Chars.Slash)) {
-                            unterminatedComment = true;
+                            closed = true;
                             break loop;
                         }
                         break;
@@ -752,7 +778,7 @@ export class Parser {
                     case Chars.LineSeparator:
                     case Chars.ParagraphSeparator:
                     case Chars.LineFeed:
-                        this.advanceToNewLine();
+                        this.advanceNewline();
                         if (this.hasNext() && this.nextChar() === Chars.LineFeed) this.index++;
                         break;
                     default:
@@ -760,10 +786,10 @@ export class Parser {
                 }
             }
 
-        if (!unterminatedComment) this.error(Errors.UnterminatedComment);
+        if (!closed) this.error(Errors.UnterminatedComment);
 
         if (this.flags & Flags.OptionsOnComment) {
-            this.handleComment('MultiLineComment', this.source.slice(commentStart, this.index - 2), this.startPos, this.index);
+            this.handleComment('MultiLineComment', this.source.slice(start, this.index - 2), this.startPos, this.index);
         }
     }
 
