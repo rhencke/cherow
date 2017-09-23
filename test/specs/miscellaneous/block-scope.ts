@@ -10,14 +10,14 @@ describe('Block scope', () => {
         it('should fail on redeclaration with AsyncFunctionDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ async function f() {} async function f() {} }');
-            }).to.not.throw();
+            }).to.throw();
         });
         it('should fail on redeclaration with AsyncGeneratorDeclaration (AsyncFunctionDeclaration in BlockStatement)', () => {
             expect(() => {
                 parseScript('{ async function f() {} async function* f() {} }', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
         it('should fail on "redeclaration with ClassDeclaration (AsyncFunctionDeclaration in BlockStatement)"', () => {
             expect(() => {
@@ -34,7 +34,7 @@ describe('Block scope', () => {
                 parseScript('{ async function* f() {} async function f() {} }', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
         it('should fail on "redeclaration with const-LexicalDeclaration (AsyncGeneratorDeclaration in BlockStatement)"', () => {
             expect(() => {
@@ -46,7 +46,7 @@ describe('Block scope', () => {
                 parseScript('{ async function* f() {} function f() {} }', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
         it('should fail on redeclaration with GeneratorDeclaration (AsyncGeneratorDeclaration in BlockStatement))', () => {
             expect(() => {

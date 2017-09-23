@@ -17,6 +17,12 @@ describe('Espressions - Exponentiation', () => {
         }).to.throw();
     });
 
+    it('should fail on assignment operator', () => {
+        expect(() => {
+            parseScript(`3 **= 3`)
+        }).to.throw();
+    });
+
     it('should fail on invalid "!1 ** 2" operator', () => {
         expect(() => {
             parseScript(`!1 ** 2`)
@@ -551,32 +557,6 @@ describe('Espressions - Exponentiation', () => {
             ],
             "sourceType": "script"
           });
-    });
-
-    it('should parse assignment operator', () => {
-        expect(parseScript('3 **= 3', {
-            raw: true
-        })).to.eql({
-            "body": [{
-                "expression": {
-                    "left": {
-                        "raw": "3",
-                        "type": "Literal",
-                        "value": 3
-                    },
-                    "operator": "**=",
-                    "right": {
-                        "raw": "3",
-                        "type": "Literal",
-                        "value": 3
-                    },
-                    "type": "AssignmentExpression"
-                },
-                "type": "ExpressionStatement"
-            }],
-            "sourceType": "script",
-            "type": "Program"
-        });
     });
 
     it('should parse exponent operator - "16 / 2 ** 2"', () => {

@@ -27,11 +27,10 @@ export const enum Context {
     Binding                = 1 << 24,  // If node was parsed in a binding context
     IfStatement            = 1 << 25,  // If node was parsed in a binding context
     RequireInitializer     = 1 << 26,  // If node was parsed in a context where a variable declaration initializer are required (export)
-    DisallowDestructuring  = 1 << 27,  // If node was parsed in a context where destructuring are disallowed
-    Const                  = 1 << 28,  // Variable declaration
-    Let                    = 1 << 29,  // Variable declaration
-    Var                    = 1 << 20,  // Variable declaration
-    
+    Const                  = 1 << 27,  // Variable declaration
+    Let                    = 1 << 28,  // Variable declaration
+    Var                    = 1 << 29,  // Variable declaration
+
     // An Lexical declaration can be either 'const¨' or 'let
     Lexical = Let | Const,
 
@@ -53,25 +52,24 @@ export const enum Flags {
     NonSimpleParameter           = 1 << 9,
     AllowSuper                   = 1 << 10,
     ArgumentList                 = 1 << 11,
-    BlockStatement               = 1 << 12,
-    Break                        = 1 << 13,
-    TopLevel                     = 1 << 14,
-    Continue                     = 1 << 15,
-    AllowConstructorWithSupoer   = 1 << 16,
-    Arrow                        = 1 << 17, // If node was parsed in the 'arrow' context
-    AsyncArrow                   = 1 << 18, // If node was parsed in the 'async' context
+    Break                        = 1 << 12,
+    TopLevel                     = 1 << 13,
+    Continue                     = 1 << 14,
+    AllowConstructorWithSupoer   = 1 << 15,
+    Arrow                        = 1 << 16, // If node was parsed in the 'arrow' context
+    AsyncArrow                   = 1 << 17, // If node was parsed in the 'async' context
 
     /* Options */
-    OptionsRanges                = 1 << 19,
-    OptionsLoc                   = 1 << 20,
-    OptionsSource                = 1 << 21,
-    OptionsJSX                   = 1 << 22,
-    OptionsTS                    = 1 << 23,
-    OptionsRaw                   = 1 << 24,
-    OptionsNext                  = 1 << 25,
-    OptionsOnComment             = 1 << 26,
-    OptionsOnToken               = 1 << 27,
-    OptionsV8                    = 1 << 28
+    OptionsRanges                = 1 << 18,
+    OptionsLoc                   = 1 << 19,
+    OptionsSource                = 1 << 20,
+    OptionsJSX                   = 1 << 21,
+    OptionsTS                    = 1 << 22,
+    OptionsRaw                   = 1 << 23,
+    OptionsNext                  = 1 << 24,
+    OptionsOnComment             = 1 << 25,
+    OptionsOnToken               = 1 << 26,
+    OptionsV8                    = 1 << 27
 }
 
 export const enum IterationState {

@@ -243,6 +243,22 @@ export function isValidDestructuringAssignmentTarget(expr: Expression | Pattern)
     }
 }
 
+export function isValidSimpleAssignmentTarget(expr: Expression | Pattern): boolean {
+    switch (expr.type) {
+        case 'Identifier':
+        case 'MemberExpression':
+        case 'ClassExpression':
+        case 'CallExpression':
+        case 'TemplateLiteral':
+        case 'AssignmentExpression':
+        case 'NewExpression':
+            return true;
+
+        default:
+            return false;
+    }
+}
+
 export function isAssignmentOperator(t: Token): boolean {
     switch (t) {
         case Token.ShiftLeftAssign:

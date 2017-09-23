@@ -143,6 +143,142 @@ describe('Declarations - Functions', () => {
         }).to.throw('');
     });
 
+    it('should parse two function decl on top-level with same name', () => {
+        expect(parseScript(`function a() {}
+        function a() {}`, {
+            ranges: true
+        })).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "params": [],
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [],
+                        "start": 13,
+                        "end": 15
+                    },
+                    "async": false,
+                    "generator": false,
+                    "expression": false,
+                    "id": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 9,
+                        "end": 10
+                    },
+                    "start": 0,
+                    "end": 15
+                },
+                {
+                    "type": "FunctionDeclaration",
+                    "params": [],
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [],
+                        "start": 37,
+                        "end": 39
+                    },
+                    "async": false,
+                    "generator": false,
+                    "expression": false,
+                    "id": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 33,
+                        "end": 34
+                    },
+                    "start": 24,
+                    "end": 39
+                }
+            ],
+            "sourceType": "script",
+            "start": 0,
+            "end": 39
+        });
+    });
+
+    it('should parse one function decl on top-level with two nested func decl with same name', () => {
+        expect(parseScript(`function a() {
+            function a() {}
+            function a() {}
+            }`, {
+            ranges: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 84,
+            "body": [
+              {
+                "type": "FunctionDeclaration",
+                "start": 0,
+                "end": 84,
+                "id": {
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 10,
+                  "name": "a"
+                },
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 13,
+                  "end": 84,
+                  "body": [
+                    {
+                      "type": "FunctionDeclaration",
+                      "start": 27,
+                      "end": 42,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 36,
+                        "end": 37,
+                        "name": "a"
+                      },
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 40,
+                        "end": 42,
+                        "body": []
+                      }
+                    },
+                    {
+                      "type": "FunctionDeclaration",
+                      "start": 55,
+                      "end": 70,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 64,
+                        "end": 65,
+                        "name": "a"
+                      },
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 68,
+                        "end": 70,
+                        "body": []
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
     it('should parse yield as function name in sloppy mode', () => {
         expect(parseScript(`function yield() {}`, {
             ranges: true

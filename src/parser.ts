@@ -1,6 +1,6 @@
 import { Chars } from './chars';
 import * as ESTree from './estree';
-import { isKeyword, isAssignmentOperator, isDigit, hasOwn, toHex, tryCreate, fromCodePoint, hasMask, isUpdateExpression, isBinaryOperator, isUunaryExpression, isValidDestructuringAssignmentTarget, isDirective, getQualifiedJSXName, isStartOfExpression, isStartOfStatement } from './common';
+import { isKeyword, isAssignmentOperator, isDigit, hasOwn, toHex, tryCreate, fromCodePoint, hasMask, isUpdateExpression, isBinaryOperator, isUunaryExpression, isValidDestructuringAssignmentTarget, isDirective, getQualifiedJSXName, isStartOfExpression, isStartOfStatement, isValidSimpleAssignmentTarget } from './common';
 import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFlag, ParenthesizedState, IterationState } from './masks';
 import { createError, Errors } from './errors';
 import { Token, tokenDesc, descKeyword } from './token';
@@ -209,7 +209,7 @@ export class Parser {
      * Advance to new line
      */
     private advanceToNewLine() {
-        this.setGlobalFlag(Flags.LineTerminator, true);
+        this.flags |= Flags.LineTerminator;
         this.index++;
         this.column = 0;
         this.line++;
@@ -351,7 +351,7 @@ export class Parser {
                     // `}`
                 case Chars.RightBrace:
                     this.advance();
-                    this.setGlobalFlag(Flags.LineTerminator, true);
+                    this.flags |= Flags.LineTerminator, true;
                     return Token.RightBrace;
 
                     // `~`
@@ -609,7 +609,7 @@ export class Parser {
 
                     // '\uVar', `\u{N}var`
                 case Chars.Backslash:
-                    this.setGlobalFlag(Flags.HasExtendedUnicodeEscape, true);
+                    this.flags |= Flags.HasExtendedUnicodeEscape;
 
                     // `A`...`Z`
                 case Chars.UpperA:
@@ -807,7 +807,7 @@ export class Parser {
             if (isIdentifierPart(code)) {
                 this.advance();
             } else if (code === Chars.Backslash) {
-                this.setGlobalFlag(Flags.HasExtendedUnicodeEscape, true);
+                this.flags |= Flags.HasExtendedUnicodeEscape;
                 ret += this.source.slice(start, this.index);
                 ret += fromCodePoint(this.peekUnicodeEscape());
                 start = this.index;
@@ -1515,14 +1515,6 @@ export class Parser {
         }
     }
 
-    private setGlobalFlag(flag: Flags, val: boolean) {
-        if (val) {
-            this.flags |= flag;
-        } else {
-            this.flags &= ~flag;
-        }
-    }
-
     private parseModuleItems(context: Context): ESTree.Statement[] {
         const pos = this.startNode();
         this.nextToken(context);
@@ -2050,7 +2042,7 @@ export class Parser {
                 if (this.flags & Flags.OptionsNext && this.nextTokenIsLeftParen(context)) return this.parseStatement(context);
                 if (!(context & Context.Module)) this.error(Errors.UnexpectedToken, tokenDesc(this.token));
             case Token.FunctionKeyword:
-                return this.parseFunctionDeclaration(context | Context.Statement);
+                return this.parseFunctionDeclaration(context);
             case Token.ClassKeyword:
                 return this.parseClassDeclaration(context);
             case Token.ConstKeyword:
@@ -2135,8 +2127,6 @@ export class Parser {
         }
 
         const savedFlag = this.flags;
-        
-        this.setGlobalFlag(Flags.BlockStatement, true);
 
         this.expect(context, Token.LeftParen);
 
@@ -2154,7 +2144,7 @@ export class Parser {
                     break;
                 default: // ignore
             }
-            
+
             if (state & IterationState.Variable) {
 
                 const startPos = this.startNode();
@@ -2176,7 +2166,7 @@ export class Parser {
                 }
 
                 declarations = this.parseVariableDeclarationList(context | Context.ForStatement);
-                
+
                 init = this.finishNode(startPos, {
                     type: 'VariableDeclaration',
                     declarations,
@@ -2206,8 +2196,7 @@ export class Parser {
 
                 this.expect(context, Token.RightParen);
 
-                this.setGlobalFlag(Flags.BlockStatement, false);
-                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                this.flags |= (Flags.Continue | Flags.Break);
 
                 body = this.parseStatement(context | Context.ForStatement);
 
@@ -2221,7 +2210,7 @@ export class Parser {
                     await: !!(state & IterationState.Await)
                 });
 
-            // 'in'
+                // 'in'
             case Token.InKeyword:
 
                 if (state & IterationState.Await) this.error(Errors.ForAwaitNotOf);
@@ -2231,15 +2220,14 @@ export class Parser {
                 if (!(state & IterationState.Variable)) {
                     this.reinterpretExpressionAsPattern(context | Context.ForStatement, init);
                 } else if (declarations && declarations.length !== 1) {
-                        this.error(Errors.Unexpected);
+                    this.error(Errors.Unexpected);
                 }
 
                 test = this.parseExpression(context | Context.AllowIn);
 
                 this.expect(context, Token.RightParen);
 
-                this.setGlobalFlag(Flags.BlockStatement, false);
-                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                this.flags |= (Flags.Continue | Flags.Break);
 
                 body = this.parseStatement(context | Context.ForStatement);
 
@@ -2274,8 +2262,7 @@ export class Parser {
 
                 this.expect(context, Token.RightParen);
 
-                this.setGlobalFlag(Flags.BlockStatement, false);
-                this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+                this.flags |= (Flags.Continue | Flags.Break);
 
                 body = this.parseStatement(context | Context.ForStatement);
 
@@ -2307,7 +2294,7 @@ export class Parser {
 
         let hasDefault = false;
 
-        this.setGlobalFlag(Flags.Break | Flags.BlockStatement, true);
+        this.flags |= Flags.Break;
 
         while (this.token !== Token.RightBrace) {
             const clause = this.parseSwitchCase(context);
@@ -2397,9 +2384,9 @@ export class Parser {
         this.expect(context, Token.LeftParen);
         const object = this.parseExpression(context | Context.AllowIn);
         this.expect(context, Token.RightParen);
-        this.setGlobalFlag(Flags.TopLevel, true);
+        this.flags |= Flags.TopLevel;
         const body = this.parseStatement(context);
-        this.setGlobalFlag(Flags.TopLevel, false);
+        this.flags &= ~Flags.TopLevel;
         return this.finishNode(pos, {
             type: 'WithStatement',
             object,
@@ -2418,8 +2405,8 @@ export class Parser {
         this.expect(context, Token.RightParen);
 
         const savedFlag = this.flags;
-        this.setGlobalFlag(Flags.Break | Flags.BlockStatement, false);
-        this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+        this.flags &= ~Flags.Break;
+        this.flags |= (Flags.Continue | Flags.Break);
         const body = this.parseStatement(context);
         this.flags = savedFlag;
 
@@ -2435,8 +2422,8 @@ export class Parser {
         this.expect(context, Token.DoKeyword);
 
         const savedFlag = this.flags;
-        this.setGlobalFlag(Flags.Break | Flags.BlockStatement, false);
-        this.setGlobalFlag(Flags.Continue | Flags.Break, true);
+        this.flags &= ~Flags.Break;
+        this.flags |= (Flags.Continue | Flags.Break);
 
         const body = this.parseStatement(context);
 
@@ -2520,9 +2507,9 @@ export class Parser {
             if (context & Context.Strict &&
                 this.token === Token.FunctionKeyword) this.error(Errors.StrictFunction);
             this.addLabel(expr.name);
-            this.setGlobalFlag(Flags.TopLevel, true);
+            this.flags |= Flags.TopLevel;
             const body: ESTree.Statement = this.parseStatement(context & ~Context.ForStatement | Context.AnnexB);
-            this.setGlobalFlag(Flags.TopLevel, false);
+            this.flags &= ~Flags.TopLevel;
             this.removeLabel(expr.name);
 
             return this.finishNode(pos, {
@@ -2562,8 +2549,8 @@ export class Parser {
         const test = this.parseExpression(context | Context.AllowIn);
 
         this.expect(context, Token.RightParen);
-        this.setGlobalFlag(Flags.BlockStatement, false);
-        this.setGlobalFlag(Flags.TopLevel, true);
+
+        this.flags |= Flags.TopLevel;
         const consequent: ESTree.Statement = this.parseIfStatementChild(context);
 
         let alternate: ESTree.Statement | null = null;
@@ -2662,7 +2649,7 @@ export class Parser {
                 // Invalid: 'function static() { "use strict"; }'
                 if (context & Context.Module) {
                     this.errorLocation = this.trackErrorLocation();
-                    this.setGlobalFlag(Flags.HasReservedWord, true);
+                    this.flags |= Flags.HasReservedWord;
                 }
             }
 
@@ -2674,7 +2661,7 @@ export class Parser {
             // Note: if the function is the only statement of an `if` or `else` body,
             // like in `if (foo) function x() {}`, this should *not* be called (as it
             // can never conflict from an early error standpoint).
-            if (context & Context.Statement) {
+            if (context & Context.Statement && !(context & Context.AnnexB)) {
                 if (!this.initBlockScope() && name in this.blockScope) {
                     // Don't allow overwriting block-scoped variables
                     // Valid: `var x = 1; function x() {}`
@@ -2766,7 +2753,7 @@ export class Parser {
             this.expect(context, Token.RightParen);
         }
 
-        const body = this.parseBlockStatement(context | Context.IfClause);
+        const body = this.parseBlockStatement(context | Context.IfClause | Context.Statement);
 
         this.blockScope = blockScope;
         if (blockScope !== undefined) this.parentScope = parentScope;
@@ -2786,10 +2773,10 @@ export class Parser {
         const parentScope = this.parentScope;
         if (blockScope != null) this.parentScope = blockScope;
         this.blockScope = context & Context.IfClause ? blockScope : undefined;
-        this.setGlobalFlag(Flags.BlockStatement, true);
+
         this.expect(context, Token.LeftBrace);
 
-        while (this.token !== Token.RightBrace) body.push(this.parseStatementListItem(context));
+        while (this.token !== Token.RightBrace) body.push(this.parseStatementListItem(context | Context.Statement));
 
         this.expect(context, Token.RightBrace);
         this.flags = flag;
@@ -2956,15 +2943,15 @@ export class Parser {
 
         if (context & Context.Yield && this.token === Token.YieldKeyword) return this.parseYieldExpression(context, pos);
 
-        const expr = this.parseBinaryExpression(context, 0, pos);
+        const expr: any = this.parseBinaryExpression(context, 0, pos);
 
         const operator = this.token;
 
         // Fast path for assignment operators
         if (isAssignmentOperator(this.token)) {
-            if (this.isEvalOrArgumentInStrictMode(context, expr)) this.error(Errors.StrictLHSAssignment);
-            // Invalid '({a} += 0);'
-            if (context & Context.Parenthesis && context & Context.DisallowDestructuring) this.error(Errors.InvalidLHSInAssignment);
+            if (context & Context.Strict && this.isEvalOrArguments(expr.name)) {
+                this.error(Errors.StrictLHSAssignment);
+            } else if (!isValidSimpleAssignmentTarget(expr)) this.error(Errors.InvalidLHSInAssignment);
             this.nextToken(context);
             return this.finishNode(pos, {
                 type: 'AssignmentExpression',
@@ -2974,7 +2961,9 @@ export class Parser {
             });
 
         } else if (this.parseOptional(context, Token.Assign)) {
-            if (this.isEvalOrArgumentInStrictMode(context, expr)) this.error(Errors.StrictLHSAssignment);
+            if (context & Context.Strict && this.isEvalOrArguments(expr.name)) {
+                this.error(Errors.StrictLHSAssignment);
+            }
             // Reinterpret expression as pattern
             this.reinterpretExpressionAsPattern(context | Context.Assignment, expr);
 
@@ -3140,61 +3129,46 @@ export class Parser {
         return value === 'eval' || value === 'arguments';
     }
 
-    private isEvalOrArgumentInStrictMode(context: Context, node: any): boolean {
-        // Bail out quickly if we are not in strict mode or the node type
-        // isn't an identifier
-        if (!(context & Context.Strict)) return false;
-        if (node.type !== 'Identifier') return false;
-
-        switch (node.name) {
-            case 'eval':
-            case 'arguments':
-                return true;
-            default:
-                return false;
-        }
-    }
-
     private parseUpdateExpression(context: Context, pos: Location): ESTree.Expression {
-
+        let argument: any;
         if (this.token === Token.Increment || this.token === Token.Decrement) {
 
             const operator = this.token;
 
             this.nextToken(context);
 
-            const argumentt: any = this.parseLeftHandSideExpression(context, pos);
+            argument = this.parseLeftHandSideExpression(context, pos);
 
             if (context & Context.Strict) {
                 // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its
                 // UnaryExpression is a direct reference to a variable, function argument, or function name
-                if (operator === Token.DeleteKeyword && argumentt.type === 'Identifier') this.error(Errors.StrictDelete);
+                if (operator === Token.DeleteKeyword && argument.type === 'Identifier') this.error(Errors.StrictDelete);
                 // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
                 // Assignment operator(12.15) or of a PostfixExpression or as the UnaryExpression
                 // operated upon by a Prefix Increment(12.4.6) or a Prefix Decrement(12.4.7) operator
-                if ((operator === Token.Decrement || operator === Token.Increment) && this.isEvalOrArgumentInStrictMode(context, argumentt)) this.error(Errors.StrictLHSPrefix);
-            }
-
-            if (!isValidDestructuringAssignmentTarget(argumentt)) this.error(Errors.InvalidLHSInAssignment);
+                if ((operator === Token.Decrement || operator === Token.Increment) && this.isEvalOrArguments(argument.name)) {
+                    this.error(Errors.StrictLHSPrefix);
+                }
+            } else if (!isValidDestructuringAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
 
             return this.finishNode(pos, {
                 type: 'UpdateExpression',
                 operator: tokenDesc(operator),
                 prefix: true,
-                argument: argumentt
+                argument
             });
         }
 
         if (this.flags & Flags.OptionsJSX && this.token === Token.LessThan) return this.parseJSXElement(context | Context.JSXChild);
 
-        const argument: any = this.parseLeftHandSideExpression(context, pos);
+        argument = this.parseLeftHandSideExpression(context, pos);
 
         if (!(this.flags & Flags.LineTerminator) && (this.token === Token.Increment || this.token === Token.Decrement)) {
 
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
             // Assignment operator(12.15) or of a PostfixExpression or as the UnaryExpression
             // operated upon by a Prefix Increment(12.4.6) or a Prefix Decrement(12.4.7) operator.
-            if (this.isEvalOrArgumentInStrictMode(context, argument)) this.error(Errors.StrictLHSPostfix);
+            if (context & Context.Strict && this.isEvalOrArguments(argument.name)) this.error(Errors.StrictLHSPostfix);
 
             if (!isValidDestructuringAssignmentTarget(argument)) this.error(Errors.InvalidLHSInAssignment);
 
@@ -3254,15 +3228,13 @@ export class Parser {
             this.error(Errors.InvalidLHSInForLoop);
         }
 
-        if (this.token === Token.LeftBrace) context |= Context.DisallowDestructuring;
-
         if (this.parseOptional(context, Token.RightParen)) {
             if (this.token === Token.Arrow) return this.parseArrowExpression(context & ~Context.ForStatement, pos, []);
             this.error(Errors.MissingArrowAfterParentheses);
         }
 
         if (this.token === Token.Ellipsis) {
-            const rest = this.parseRestElement(context);
+            const rest = this.parseRestElement(context | Context.Binding);
             this.expect(context, Token.RightParen);
             // Valid: '(...a) => {};'
             if (this.token === Token.Arrow) return this.parseArrowExpression(context & ~Context.ForStatement, pos, [rest]);
@@ -3294,8 +3266,8 @@ export class Parser {
                 // Invalid: '(...a) + 1'
                 // Invalid: '(((...a)))'
                 // Invalid: '(...a)'
-                if (!(this.flags & Flags.HasRest)) this.setGlobalFlag(Flags.HasRest, true);
-                expr.push(this.parseRestElement(context));
+                if (!(this.flags & Flags.HasRest)) this.flags |= Flags.HasRest;
+                expr.push(this.parseRestElement(context | Context.Binding));
                 break;
             } else {
                 // Invalid: '((a), b) => 42'
@@ -3343,7 +3315,7 @@ export class Parser {
             this.throwError(Errors.InvalidShorthandPropertyAssignment);
         }
 
-        this.setGlobalFlag(Flags.Arrow, false);
+        this.flags &= ~Flags.Arrow;
 
         if (expr.length > 1) {
             return this.finishNodeAt(sequenceStartPos, sequenceEndPos, {
@@ -3423,29 +3395,28 @@ export class Parser {
         const pos = this.startNode();
         this.expect(context, Token.LeftBracket);
 
-        if (this.flags & Flags.ArgumentList) this.setGlobalFlag(Flags.NonSimpleParameter, true);
+        if (this.flags & Flags.ArgumentList) this.flags |= Flags.NonSimpleParameter;
         const elements: (ESTree.Pattern | null)[] = [];
 
         // Invalid:'function*g([yield]){}'
-        if (context & Context.Yield && context & Context.Binding && this.flags & Flags.ArgumentList && this.token === Token.YieldKeyword) this.error(Errors.DisallowedInContext, tokenDesc(this.token));
+        if (context & Context.Yield &&
+            context & Context.Binding &&
+            this.flags & Flags.ArgumentList &&
+            this.token === Token.YieldKeyword) this.error(Errors.DisallowedInContext, tokenDesc(this.token));
 
-        loop:
-            while (this.token !== Token.RightBracket) {
-
-                if (this.parseOptional(context, Token.Comma)) {
-                    elements.push(null);
-                } else {
-                    switch (this.token) {
-                        case Token.Ellipsis:
-                            elements.push(this.parseAssignmentRestElement(context));
-                            break loop;
-                        default:
-                            elements.push(this.parseArrayAssignmentPattern(context | Context.AllowIn));
-                    }
-
-                    if (this.token !== Token.RightBracket) this.expect(context, Token.Comma);
+        while (this.token !== Token.RightBracket) {
+            if (this.parseOptional(context, Token.Comma)) {
+                elements.push(null);
+            } else {
+                if (this.token === Token.Ellipsis) {
+                    elements.push(this.parseAssignmentRestElement(context));
+                    break;
                 }
+                elements.push(this.parseArrayAssignmentPattern(context | Context.AllowIn));
+
+                if (this.token !== Token.RightBracket) this.expect(context, Token.Comma);
             }
+        }
 
         this.expect(context, Token.RightBracket);
 
@@ -3478,7 +3449,7 @@ export class Parser {
     private parseAssignmentPropertyList(context: Context): ESTree.ObjectPattern {
         const pos = this.startNode();
         const properties: (ESTree.AssignmentProperty | ESTree.RestElement)[] = [];
-        if (this.flags & Flags.ArgumentList) this.setGlobalFlag(Flags.NonSimpleParameter, true);
+        if (this.flags & Flags.ArgumentList) this.flags |= Flags.NonSimpleParameter;
 
         this.expect(context, Token.LeftBrace);
 
@@ -3672,9 +3643,9 @@ export class Parser {
 
         this.expect(context, Token.Arrow);
 
-        if (context & Context.Await) this.setGlobalFlag(Flags.AsyncArrow, true);
+        if (context & Context.Await) this.flags |= Flags.AsyncArrow;
 
-        if (context & Context.Arrow | Context.Parenthesis) this.setGlobalFlag(Flags.Arrow, true);
+        if (context & Context.Arrow | Context.Parenthesis) this.flags |= Flags.Arrow, true;
 
         context &= ~(Context.Yield | Context.AsyncFunctionBody);
 
@@ -3809,7 +3780,7 @@ export class Parser {
         const savedFunction = hasMask(this.flags, Flags.InFunctionBody);
         const savedFlags = this.flags;
 
-        this.setGlobalFlag(Flags.InFunctionBody | Flags.BlockStatement, true);
+        this.flags |= Flags.InFunctionBody;
 
         this.expect(context, Token.LeftBrace);
 
@@ -3893,7 +3864,7 @@ export class Parser {
                     }
 
                     // Remove the 'Arrow' flags now, else we are in deep shit
-                    this.setGlobalFlag(Flags.Arrow, false);
+                    this.flags &= ~Flags.Arrow;
 
                     break;
 
@@ -3935,7 +3906,7 @@ export class Parser {
 
                 if (context & Context.Parenthesis && !(this.flags & Flags.HasMemberExpression)) {
                     this.errorLocation = this.trackErrorLocation();
-                    this.setGlobalFlag(Flags.HasMemberExpression, true);
+                    this.flags |= Flags.HasMemberExpression;
                 }
 
                 expr = this.parseNonComputedMemberExpression(context, expr, pos);
@@ -4126,7 +4097,7 @@ export class Parser {
                 this.error(Errors.UnexpectedStrictReserved);
                 // Invalid: 'function static() { "use strict"; }'
                 this.errorLocation = this.trackErrorLocation();
-                this.setGlobalFlag(Flags.HasReservedWord, true);
+                this.flags |= Flags.HasReservedWord;
             }
 
             name = this.parseIdentifier(context);
@@ -4151,8 +4122,9 @@ export class Parser {
     }
 
     private parseFormalParameterList(context: Context, flags: ObjectFlags): ESTree.Node[] {
-        this.setGlobalFlag(Flags.NonSimpleParameter, false);
+
         this.expect(context, Token.LeftParen);
+        this.flags &= ~Flags.NonSimpleParameter;
 
         // Invalid: 'function t(if) {}'
         // Invalid: '(function t(if) {})'
@@ -4163,25 +4135,25 @@ export class Parser {
         // Invalid: '(function*() { function*(x = yield 3) {} })'
         if (context & Context.Yield && !(context & Context.Method) && this.token === Token.YieldKeyword) this.error(Errors.DisallowedInContext, tokenDesc(this.token));
 
-        this.setGlobalFlag(Flags.ArgumentList, true);
+        this.flags |= Flags.ArgumentList;
 
         const result = [];
 
         while (this.token !== Token.RightParen) {
             if (this.token === Token.Ellipsis) {
                 if (flags & ObjectFlags.Setter) this.error(Errors.BadSetterRestParameter);
-                this.setGlobalFlag(Flags.NonSimpleParameter, true);
-                result.push(this.parseRestElement(context &= ~Context.Method));
-            } else {
-                result.push(this.parseFormalParameter(context &= ~Context.Method, flags));
+                this.flags |= Flags.NonSimpleParameter;
+                result.push(this.parseRestElement(context & ~Context.Method | Context.Binding));
+                this.parseOptional(context, Token.Comma);
+                break;
             }
-
+            result.push(this.parseFormalParameter(context &= ~Context.Method, flags));
             if (this.token !== Token.RightParen) this.expect(context, Token.Comma);
         }
 
         if (flags & ObjectFlags.Getter && result.length > 0) this.error(Errors.BadGetterArity);
         if (flags & ObjectFlags.Setter && result.length !== 1) this.error(Errors.BadSetterArity);
-        this.setGlobalFlag(Flags.ArgumentList, false);
+        this.flags &= ~Flags.ArgumentList;
 
         this.expect(context, Token.RightParen);
         return result;
@@ -4201,7 +4173,7 @@ export class Parser {
         // Invalid: 'function a(yield){ 'use strict'; }':
         if (hasMask(this.token, Token.FutureReserved)) {
             this.errorLocation = this.trackErrorLocation();
-            this.setGlobalFlag(Flags.HasReservedWord, true);
+            this.flags |= Flags.HasReservedWord;
         }
 
         // Invalid: '`async function f(await) {}`':
@@ -4210,7 +4182,7 @@ export class Parser {
         if (this.token === Token.Identifier && this.isEvalOrArguments(this.tokenValue)) {
             if (context & Context.Strict) this.error(Errors.StrictParamName);
             this.errorLocation = this.trackErrorLocation();
-            this.setGlobalFlag(Flags.HasEvalArgInParam, true);
+            this.flags |= Flags.HasEvalArgInParam;
         }
 
         const param = this.parseBindingPatternOrIdentifier(context | Context.Binding);
@@ -4234,7 +4206,7 @@ export class Parser {
                 if (context & Context.Strict) this.error(Errors.UnexpectedStrictReserved);
                 // Invalid 'package => {"use strict"}'
                 this.errorLocation = this.trackErrorLocation();
-                this.setGlobalFlag(Flags.HasReservedWord, true);
+                this.flags |= Flags.HasReservedWord;
             }
 
             if (context & Context.Strict) {
@@ -4330,7 +4302,7 @@ export class Parser {
                     this.error(Errors.UnexpectedToken, tokenDesc(this.token));
                 }
 
-                this.setGlobalFlag(Flags.AsyncArrow, true);
+                this.flags |= Flags.AsyncArrow;
 
                 // Return identifier
                 return expr;
@@ -4613,7 +4585,7 @@ export class Parser {
         const pos = this.startNode();
         this.flags &= ~Flags.HasPrototype;
 
-        if (this.flags & Flags.ArgumentList) this.setGlobalFlag(Flags.NonSimpleParameter, true);
+        if (this.flags & Flags.ArgumentList) this.flags |= Flags.NonSimpleParameter;
 
         this.expect(context, Token.LeftBrace);
 
@@ -4736,7 +4708,7 @@ export class Parser {
 
                 if (tokenValue === '__proto__') {
                     if (this.flags & Flags.HasPrototype) this.error(Errors.DuplicateProtoProperty);
-                    this.setGlobalFlag(Flags.HasPrototype, true);
+                    this.flags |= Flags.HasPrototype;
                 }
 
                 this.expect(context, Token.Colon);
@@ -4801,9 +4773,9 @@ export class Parser {
 
         if (isGenerator) context |= Context.Yield;
 
-        if (Context.Super) this.setGlobalFlag(Flags.AllowConstructorWithSupoer, true);
+        if (Context.Super) this.flags |= Flags.AllowConstructorWithSupoer;
 
-        if (!(context & Context.HasConstructor)) this.setGlobalFlag(Flags.AllowSuper, true);
+        if (!(context & Context.HasConstructor)) this.flags |= Flags.AllowSuper;
 
         if (flags & ObjectFlags.Async) context |= Context.Await;
 
@@ -4853,10 +4825,10 @@ export class Parser {
         const pos = this.startNode();
         const value = this.tokenValue;
         const raw = this.tokenRaw;
-        
+
         this.nextToken(context);
-        
-                                
+
+
 
         const node = this.finishNode(pos, {
             type: 'Literal',
@@ -4871,7 +4843,7 @@ export class Parser {
     private parseIdentifier(context: Context): ESTree.Identifier {
         const name = this.tokenValue;
         const pos = this.startNode();
-        if (this.flags & Flags.ArgumentList) this.setGlobalFlag(Flags.NonSimpleParameter, true);
+        if (this.flags & Flags.ArgumentList) this.flags |= Flags.NonSimpleParameter;
 
         this.nextToken(context);
 
