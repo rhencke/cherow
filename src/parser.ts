@@ -2994,10 +2994,10 @@ export class Parser {
 
         this.nextToken(context);
 
-        const consequent = this.parseAssignmentExpression(context & ~Context.Concisebody | Context.AllowIn);
+        const consequent = this.parseAssignmentExpression(context & ~Context.Concisebody);
         this.expect(context, Token.Colon);
 
-        const alternate = this.parseAssignmentExpression(context &= ~(Context.AllowIn | Context.Concisebody));
+        const alternate = this.parseAssignmentExpression(context & ~Context.Concisebody);
 
         return this.finishNode(pos, {
             type: 'ConditionalExpression',
@@ -4402,6 +4402,15 @@ export class Parser {
         let id = null;
 
         if (this.isIdentifier(context, this.token)) {
+            const name = this.tokenValue;
+            if (context & Context.Statement) {
+                if (!this.initBlockScope() && name in this.blockScope) {
+                    if (this.blockScope !== this.functionScope || this.blockScope[name] === ScopeMasks.NonShadowable) {
+                        this.error(Errors.DuplicateIdentifier, name);
+                    }
+                }
+                this.blockScope[name] = ScopeMasks.Shadowable;
+            }
             id = this.parseBindingIdentifier(context | Context.Strict);
             // Valid: `export default class {};`
             // Invalid: `class {};`

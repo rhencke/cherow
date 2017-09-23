@@ -3264,9 +3264,9 @@ Parser.prototype.parseConditionalExpression = function parseConditionalExpressio
     if (!(context & 2048 /* Concisebody */) && this.flags & 65536 /* Arrow */)
         { return expression; }
     this.nextToken(context);
-    var consequent = this.parseAssignmentExpression(context & ~2048 /* Concisebody */ | 32768 /* AllowIn */);
+    var consequent = this.parseAssignmentExpression(context & ~2048 /* Concisebody */);
     this.expect(context, 21 /* Colon */);
-    var alternate = this.parseAssignmentExpression(context &= ~(32768 /* AllowIn */ | 2048 /* Concisebody */));
+    var alternate = this.parseAssignmentExpression(context & ~2048 /* Concisebody */);
     return this.finishNode(pos, {
         type: 'ConditionalExpression',
         test: expression,
@@ -4546,6 +4546,15 @@ Parser.prototype.parseClassDeclaration = function parseClassDeclaration (context
     this.expect(context, 8269 /* ClassKeyword */);
     var id = null;
     if (this.isIdentifier(context, this.token)) {
+        var name = this.tokenValue;
+        if (context & 8 /* Statement */) {
+            if (!this.initBlockScope() && name in this.blockScope) {
+                if (this.blockScope !== this.functionScope || this.blockScope[name] === 2 /* NonShadowable */) {
+                    this.error(92 /* DuplicateIdentifier */, name);
+                }
+            }
+            this.blockScope[name] = 1 /* Shadowable */;
+        }
         id = this.parseBindingIdentifier(context | 2 /* Strict */);
         // Valid: `export default class {};`
         // Invalid: `class {};`

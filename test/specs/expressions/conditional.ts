@@ -4,8 +4,62 @@ import * as chai from 'chai';
 const expect = chai.expect; 
 
 describe('Espressions - Conditional', () => {
-    
-    it('should parse call', () => {
+  
+  it('should parse with in keyword', () => {
+    expect(parseScript('b ? c : d in e;', {
+        ranges: true,
+        raw: true
+    })).to.eql({
+      "type": "Program",
+      "start": 0,
+      "end": 15,
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "start": 0,
+          "end": 15,
+          "expression": {
+            "type": "ConditionalExpression",
+            "start": 0,
+            "end": 14,
+            "test": {
+              "type": "Identifier",
+              "start": 0,
+              "end": 1,
+              "name": "b"
+            },
+            "consequent": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "name": "c"
+            },
+            "alternate": {
+              "type": "BinaryExpression",
+              "start": 8,
+              "end": 14,
+              "left": {
+                "type": "Identifier",
+                "start": 8,
+                "end": 9,
+                "name": "d"
+              },
+              "operator": "in",
+              "right": {
+                "type": "Identifier",
+                "start": 13,
+                "end": 14,
+                "name": "e"
+              }
+            }
+          }
+        }
+      ],
+      "sourceType": "script"
+    });
+  });
+  
+  it('should parse call', () => {
         expect(parseScript('false ? 0 : f(n - 1);', {
             ranges: true
         })).to.eql({
