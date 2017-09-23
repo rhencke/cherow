@@ -118,30 +118,73 @@ describe('Statements - do-while', () => {
     it('should parse "while ( "" );"', () => {
         expect(parseScript('while ( "" );', {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
-            "body": [{
-                "body": {
-                    "end": 13,
-                    "start": 12,
-                    "type": "EmptyStatement"
-                },
-                "end": 13,
-                "start": 0,
-                "test": {
-                    "end": 10,
-                    "raw": "\"\"",
-                    "start": 8,
-                    "type": "Literal",
-                    "value": ""
-                },
-                "type": "WhileStatement"
-            }],
-            "end": 13,
-            "sourceType": "script",
+            "type": "Program",
             "start": 0,
-            "type": "Program"
-        });
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "body": [
+              {
+                "type": "WhileStatement",
+                "start": 0,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  }
+                },
+                "test": {
+                  "type": "Literal",
+                  "start": 8,
+                  "end": 10,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 10
+                    }
+                  },
+                  "value": "",
+                  "raw": "\"\""
+                },
+                "body": {
+                  "type": "EmptyStatement",
+                  "start": 12,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
     });
 
     it('should parse "do continue; while(1);"', () => {
@@ -183,48 +226,122 @@ describe('Statements - do-while', () => {
     it('should parse "{do ; while(false); false}"', () => {
         expect(parseScript('{do ; while(false); false}', {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
-            "body": [{
-                "body": [{
-                        "body": {
-                            "end": 5,
-                            "start": 4,
-                            "type": "EmptyStatement"
-                        },
-                        "end": 19,
-                        "start": 1,
-                        "test": {
-                            "end": 17,
-                            "raw": "false",
-                            "start": 12,
-                            "type": "Literal",
-                            "value": false,
-                        },
-                        "type": "DoWhileStatement"
-                    },
-                    {
-                        "end": 25,
-                        "expression": {
-                            "end": 25,
-                            "raw": "false",
-                            "start": 20,
-                            "type": "Literal",
-                            "value": false
-                        },
-                        "start": 20,
-                        "type": "ExpressionStatement"
-                    }
-                ],
-                "end": 26,
-                "start": 0,
-                "type": "BlockStatement"
-            }],
-            "end": 26,
-            "sourceType": "script",
+            "type": "Program",
             "start": 0,
-            "type": "Program"
-        });
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "body": [
+              {
+                "type": "BlockStatement",
+                "start": 0,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "body": [
+                  {
+                    "type": "DoWhileStatement",
+                    "start": 1,
+                    "end": 19,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 19
+                      }
+                    },
+                    "body": {
+                      "type": "EmptyStatement",
+                      "start": 4,
+                      "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      }
+                    },
+                    "test": {
+                      "type": "Literal",
+                      "start": 12,
+                      "end": 17,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 17
+                        }
+                      },
+                      "value": false,
+                      "raw": "false"
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 20,
+                    "end": 25,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 25
+                      }
+                    },
+                    "expression": {
+                      "type": "Literal",
+                      "start": 20,
+                      "end": 25,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 20
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 25
+                        }
+                      },
+                      "value": false,
+                      "raw": "false"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sourceType": "script"
+          });
     });
 
     it('should parse "do ; while (true)"', () => {

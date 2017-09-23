@@ -74,97 +74,239 @@ describe('Trailing comma', () => {
     it('should parse trailing comma object expression', () => {
         expect(parseScript(`({foo(a,) {}})`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 14,
-            "body": [{
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              }
+            },
+            "body": [
+              {
                 "type": "ExpressionStatement",
                 "start": 0,
                 "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 14
+                  }
+                },
                 "expression": {
-                    "type": "ObjectExpression",
-                    "start": 1,
-                    "end": 13,
-                    "properties": [{
-                        "type": "Property",
-                        "start": 2,
-                        "end": 12,
-                        "method": true,
-                        "shorthand": false,
-                        "computed": false,
-                        "key": {
-                            "type": "Identifier",
-                            "start": 2,
-                            "end": 5,
-                            "name": "foo"
+                  "type": "ObjectExpression",
+                  "start": 1,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 2,
+                      "end": 12,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 2
                         },
-                        "kind": "init",
-                        "value": {
-                            "type": "FunctionExpression",
-                            "start": 5,
-                            "end": 12,
-                            "id": null,
-                            "generator": false,
-                            "expression": false,
-                            "async": false,
-                            "params": [{
-                                "type": "Identifier",
-                                "start": 6,
-                                "end": 7,
-                                "name": "a"
-                            }],
-                            "body": {
-                                "type": "BlockStatement",
-                                "start": 10,
-                                "end": 12,
-                                "body": []
-                            }
+                        "end": {
+                          "line": 1,
+                          "column": 12
                         }
-                    }]
+                      },
+                      "method": true,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 2,
+                        "end": 5,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 5
+                          }
+                        },
+                        "name": "foo"
+                      },
+                      "kind": "init",
+                      "value": {
+                        "type": "FunctionExpression",
+                        "start": 5,
+                        "end": 12,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 5
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 12
+                          }
+                        },
+                        "id": null,
+                        "generator": false,
+                        "expression": false,
+                        "async": false,
+                        "params": [
+                          {
+                            "type": "Identifier",
+                            "start": 6,
+                            "end": 7,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 6
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 7
+                              }
+                            },
+                            "name": "a"
+                          }
+                        ],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 10,
+                          "end": 12,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 10
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 12
+                            }
+                          },
+                          "body": []
+                        }
+                      }
+                    }
+                  ]
                 }
-            }],
+              }
+            ],
             "sourceType": "script"
-        })
+          })
     });
 
     it('should parse trailing comma function declaration', () => {
         expect(parseScript(`function foo(a,) { }`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 20,
-            "body": [{
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "body": [
+              {
                 "type": "FunctionDeclaration",
                 "start": 0,
                 "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 20
+                  }
+                },
                 "id": {
-                    "type": "Identifier",
-                    "start": 9,
-                    "end": 12,
-                    "name": "foo"
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    }
+                  },
+                  "name": "foo"
                 },
                 "generator": false,
                 "expression": false,
                 "async": false,
-                "params": [{
+                "params": [
+                  {
                     "type": "Identifier",
                     "start": 13,
                     "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
                     "name": "a"
-                }],
+                  }
+                ],
                 "body": {
-                    "type": "BlockStatement",
-                    "start": 17,
-                    "end": 20,
-                    "body": []
+                  "type": "BlockStatement",
+                  "start": 17,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    }
+                  },
+                  "body": []
                 }
-            }],
+              }
+            ],
             "sourceType": "script"
-        })
+          })
     });
 
     it('should parse trailing comma function expression', () => {

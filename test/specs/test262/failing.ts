@@ -813,7 +813,7 @@ is y`);
     it('should fail on "‿ = 10" to throw', () => {
         expect(() => {
             parseScript('‿ = 10');
-        }).to.not.throw();
+        }).to.throw();
     });
     it('should fail on "if(true) let a = 1;" to throw', () => {
         expect(() => {

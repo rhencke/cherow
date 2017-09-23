@@ -234,59 +234,140 @@ describe('Espressions - New target', () => {
         it('should parse new target declaration', () => {
             expect(parseScript('function f() { new.target; }', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
-                "type": "Program",
-                "start": 0,
-                "end": 28,
-                "body": [
-                  {
-                    "type": "FunctionDeclaration",
-                    "start": 0,
-                    "end": 28,
-                    "id": {
-                      "type": "Identifier",
-                      "start": 9,
-                      "end": 10,
-                      "name": "f"
+              "type": "Program",
+              "start": 0,
+              "end": 28,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 28
+                }
+              },
+              "body": [
+                {
+                  "type": "FunctionDeclaration",
+                  "start": 0,
+                  "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
                     },
-                    "generator": false,
-                    "expression": false,
-                    "async": false,
-                    "params": [],
-                    "body": {
-                      "type": "BlockStatement",
-                      "start": 13,
-                      "end": 28,
-                      "body": [
-                        {
-                          "type": "ExpressionStatement",
+                    "end": {
+                      "line": 1,
+                      "column": 28
+                    }
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 9,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "name": "f"
+                  },
+                  "generator": false,
+                  "expression": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 13,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 28
+                      }
+                    },
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 15,
+                        "end": 26,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 26
+                          }
+                        },
+                        "expression": {
+                          "type": "MetaProperty",
                           "start": 15,
-                          "end": 26,
-                          "expression": {
-                            "type": "MetaProperty",
-                            "start": 15,
-                            "end": 25,
-                            "meta": {
-                              "type": "Identifier",
-                              "start": 15,
-                              "end": 18,
-                              "name": "new"
+                          "end": 25,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 15
                             },
-                            "property": {
-                              "type": "Identifier",
-                              "start": 19,
-                              "end": 25,
-                              "name": "target"
+                            "end": {
+                              "line": 1,
+                              "column": 25
                             }
+                          },
+                          "meta": {
+                            "type": "Identifier",
+                            "start": 15,
+                            "end": 18,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 15
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 18
+                              }
+                            },
+                            "name": "new"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 19,
+                            "end": 25,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 19
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 25
+                              }
+                            },
+                            "name": "target"
                           }
                         }
-                      ]
-                    }
+                      }
+                    ]
                   }
-                ],
-                "sourceType": "script"
-              });
+                }
+              ],
+              "sourceType": "script"
+            });
         });
     
         it('should parse new target expression', () => {

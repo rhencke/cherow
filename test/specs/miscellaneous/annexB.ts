@@ -15,45 +15,108 @@ describe('AnnexB semantics', () => {
         it('should parse if function as label in sloppy mode', () => {
             expect(parseScript('a: function f() {}', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
                 "start": 0,
                 "end": 18,
-                "body": [{
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 18
+                  }
+                },
+                "body": [
+                  {
                     "type": "LabeledStatement",
                     "start": 0,
                     "end": 18,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 18
+                      }
+                    },
                     "body": {
-                        "type": "FunctionDeclaration",
-                        "start": 3,
-                        "end": 18,
-                        "id": {
-                            "type": "Identifier",
-                            "start": 12,
-                            "end": 13,
-                            "name": "f"
+                      "type": "FunctionDeclaration",
+                      "start": 3,
+                      "end": 18,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 3
                         },
-                        "generator": false,
-                        "expression": false,
-                        "async": false,
-                        "params": [],
-                        "body": {
-                            "type": "BlockStatement",
-                            "start": 16,
-                            "end": 18,
-                            "body": []
+                        "end": {
+                          "line": 1,
+                          "column": 18
                         }
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start": 12,
+                        "end": 13,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 13
+                          }
+                        },
+                        "name": "f"
+                      },
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 16,
+                        "end": 18,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 18
+                          }
+                        },
+                        "body": []
+                      }
                     },
                     "label": {
-                        "type": "Identifier",
-                        "start": 0,
-                        "end": 1,
-                        "name": "a"
+                      "type": "Identifier",
+                      "start": 0,
+                      "end": 1,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 0
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 1
+                        }
+                      },
+                      "name": "a"
                     }
-                }],
+                  }
+                ],
                 "sourceType": "script"
-            });
+              });
         });
 
 
@@ -118,20 +181,51 @@ describe('AnnexB semantics', () => {
         it('should parse "if (0) function a(){} else;"', () => {
             expect(parseScript('if (0) function a(){} else;', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
                 "start": 0,
                 "end": 27,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 27
+                  }
+                },
                 "body": [
                   {
                     "type": "IfStatement",
                     "start": 0,
                     "end": 27,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 27
+                      }
+                    },
                     "test": {
                       "type": "Literal",
                       "start": 4,
                       "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
                       "value": 0,
                       "raw": "0"
                     },
@@ -139,10 +233,30 @@ describe('AnnexB semantics', () => {
                       "type": "FunctionDeclaration",
                       "start": 7,
                       "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
+                        }
+                      },
                       "id": {
                         "type": "Identifier",
                         "start": 16,
                         "end": 17,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 17
+                          }
+                        },
                         "name": "a"
                       },
                       "generator": false,
@@ -153,13 +267,33 @@ describe('AnnexB semantics', () => {
                         "type": "BlockStatement",
                         "start": 19,
                         "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 19
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 21
+                          }
+                        },
                         "body": []
                       }
                     },
                     "alternate": {
                       "type": "EmptyStatement",
                       "start": 26,
-                      "end": 27
+                      "end": 27,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 27
+                        }
+                      }
                     }
                   }
                 ],
@@ -170,36 +304,97 @@ describe('AnnexB semantics', () => {
         it('should parse "if (0); else function a(){}"', () => {
             expect(parseScript('if (0); else function a(){}', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
                 "start": 0,
                 "end": 27,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 27
+                  }
+                },
                 "body": [
                   {
                     "type": "IfStatement",
                     "start": 0,
                     "end": 27,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 27
+                      }
+                    },
                     "test": {
                       "type": "Literal",
                       "start": 4,
                       "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
                       "value": 0,
                       "raw": "0"
                     },
                     "consequent": {
                       "type": "EmptyStatement",
                       "start": 6,
-                      "end": 7
+                      "end": 7,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 7
+                        }
+                      }
                     },
                     "alternate": {
                       "type": "FunctionDeclaration",
                       "start": 13,
                       "end": 27,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 27
+                        }
+                      },
                       "id": {
                         "type": "Identifier",
                         "start": 22,
                         "end": 23,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 22
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 23
+                          }
+                        },
                         "name": "a"
                       },
                       "generator": false,
@@ -210,6 +405,16 @@ describe('AnnexB semantics', () => {
                         "type": "BlockStatement",
                         "start": 25,
                         "end": 27,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 27
+                          }
+                        },
                         "body": []
                       }
                     }
@@ -222,20 +427,51 @@ describe('AnnexB semantics', () => {
         it('should parse "if (0) function a(){} else function b(){}"', () => {
             expect(parseScript('if (0) function a(){} else function b(){}', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
                 "start": 0,
                 "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 41
+                  }
+                },
                 "body": [
                   {
                     "type": "IfStatement",
                     "start": 0,
                     "end": 41,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 41
+                      }
+                    },
                     "test": {
                       "type": "Literal",
                       "start": 4,
                       "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
                       "value": 0,
                       "raw": "0"
                     },
@@ -243,10 +479,30 @@ describe('AnnexB semantics', () => {
                       "type": "FunctionDeclaration",
                       "start": 7,
                       "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
+                        }
+                      },
                       "id": {
                         "type": "Identifier",
                         "start": 16,
                         "end": 17,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 17
+                          }
+                        },
                         "name": "a"
                       },
                       "generator": false,
@@ -257,6 +513,16 @@ describe('AnnexB semantics', () => {
                         "type": "BlockStatement",
                         "start": 19,
                         "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 19
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 21
+                          }
+                        },
                         "body": []
                       }
                     },
@@ -264,10 +530,30 @@ describe('AnnexB semantics', () => {
                       "type": "FunctionDeclaration",
                       "start": 27,
                       "end": 41,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 41
+                        }
+                      },
                       "id": {
                         "type": "Identifier",
                         "start": 36,
                         "end": 37,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 36
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 37
+                          }
+                        },
                         "name": "b"
                       },
                       "generator": false,
@@ -278,6 +564,16 @@ describe('AnnexB semantics', () => {
                         "type": "BlockStatement",
                         "start": 39,
                         "end": 41,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 39
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 41
+                          }
+                        },
                         "body": []
                       }
                     }

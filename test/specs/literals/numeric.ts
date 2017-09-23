@@ -10,25 +10,58 @@ describe('Literal - Numeric', () => {
             it('1e+01', () => {
                 expect(parseScript('1e+01', {
                     ranges: true,
-                    raw: true
+                    raw: true,
+                    locations: true
                 })).to.eql({
-                    "body": [{
-                        "end": 5,
-                        "expression": {
-                            "end": 5,
-                            "raw": "1e+01",
-                            "start": 0,
-                            "type": "Literal",
-                            "value": 10
-                        },
-                        "start": 0,
-                        "type": "ExpressionStatement"
-                    }],
-                    "end": 5,
-                    "sourceType": "script",
+                    "type": "Program",
                     "start": 0,
-                    "type": "Program"
-                })
+                    "end": 5,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 5
+                      }
+                    },
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 0,
+                        "end": 5,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 0
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 5
+                          }
+                        },
+                        "expression": {
+                          "type": "Literal",
+                          "start": 0,
+                          "end": 5,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 0
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 5
+                            }
+                          },
+                          "value": 10,
+                          "raw": "1e+01"
+                        }
+                      }
+                    ],
+                    "sourceType": "script"
+                  })
             })
             
             it('2e+01', () => {
@@ -131,25 +164,58 @@ describe('Literal - Numeric', () => {
             it('3E-01', () => {
                 expect(parseScript('3E-01', {
                     ranges: true,
-                    raw: true
+                    raw: true,
+                    locations: true
                 })).to.eql({
-                    "body": [{
-                        "end": 5,
-                        "expression": {
-                            "end": 5,
-                            "raw": "3E-01",
-                            "start": 0,
-                            "type": "Literal",
-                            "value": 0.3
-                        },
-                        "start": 0,
-                        "type": "ExpressionStatement"
-                    }],
-                    "end": 5,
-                    "sourceType": "script",
+                    "type": "Program",
                     "start": 0,
-                    "type": "Program"
-                })
+                    "end": 5,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 5
+                      }
+                    },
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 0,
+                        "end": 5,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 0
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 5
+                          }
+                        },
+                        "expression": {
+                          "type": "Literal",
+                          "start": 0,
+                          "end": 5,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 0
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 5
+                            }
+                          },
+                          "value": 0.3,
+                          "raw": "3E-01"
+                        }
+                      }
+                    ],
+                    "sourceType": "script"
+                  })
             })
     
     

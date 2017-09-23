@@ -131,7 +131,7 @@ describe('Block scope', () => {
               }
               fn({a : [0], b : 1, c : {v : 1}, get d() {}, set e(x) {}})`, {
                 raw: true,
-                ranges: true
+                ranges: true,
             })).to.eql({
                 "type": "Program",
                 "start": 0,

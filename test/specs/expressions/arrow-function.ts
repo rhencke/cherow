@@ -1054,31 +1054,82 @@ var await;
     it('should parse nested object destructuring with a null value', () => {
         expect(parseScript(`var f = ([{ x }] = [null]) => {};`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 33,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            },
             "body": [
               {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 4,
                     "end": 32,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 32
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 4,
                       "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
                       "name": "f"
                     },
                     "init": {
                       "type": "ArrowFunctionExpression",
                       "start": 8,
                       "end": 32,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 32
+                        }
+                      },
                       "id": null,
                       "generator": false,
                       "expression": false,
@@ -1088,20 +1139,60 @@ var await;
                           "type": "AssignmentPattern",
                           "start": 9,
                           "end": 25,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 25
+                            }
+                          },
                           "left": {
                             "type": "ArrayPattern",
                             "start": 9,
                             "end": 16,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 16
+                              }
+                            },
                             "elements": [
                               {
                                 "type": "ObjectPattern",
                                 "start": 10,
                                 "end": 15,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 10
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 15
+                                  }
+                                },
                                 "properties": [
                                   {
                                     "type": "Property",
                                     "start": 12,
                                     "end": 13,
+                                    "loc": {
+                                      "start": {
+                                        "line": 1,
+                                        "column": 12
+                                      },
+                                      "end": {
+                                        "line": 1,
+                                        "column": 13
+                                      }
+                                    },
                                     "method": false,
                                     "shorthand": true,
                                     "computed": false,
@@ -1109,6 +1200,16 @@ var await;
                                       "type": "Identifier",
                                       "start": 12,
                                       "end": 13,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 12
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 13
+                                        }
+                                      },
                                       "name": "x"
                                     },
                                     "kind": "init",
@@ -1116,6 +1217,16 @@ var await;
                                       "type": "Identifier",
                                       "start": 12,
                                       "end": 13,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 12
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 13
+                                        }
+                                      },
                                       "name": "x"
                                     }
                                   }
@@ -1127,11 +1238,31 @@ var await;
                             "type": "ArrayExpression",
                             "start": 19,
                             "end": 25,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 19
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 25
+                              }
+                            },
                             "elements": [
                               {
                                 "type": "Literal",
                                 "start": 20,
                                 "end": 24,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 24
+                                  }
+                                },
                                 "value": null,
                                 "raw": "null"
                               }
@@ -1143,6 +1274,16 @@ var await;
                         "type": "BlockStatement",
                         "start": 30,
                         "end": 32,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 30
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 32
+                          }
+                        },
                         "body": []
                       }
                     }
@@ -1158,31 +1299,82 @@ var await;
     it('should parse arrow parameters cover includes rest concise body function body', () => {
         expect(parseScript(`f = ([,] = g()) => {}`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
             "body": [
               {
                 "type": "ExpressionStatement",
                 "start": 0,
                 "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 21
+                  }
+                },
                 "expression": {
                   "type": "AssignmentExpression",
                   "start": 0,
                   "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 21
+                    }
+                  },
                   "operator": "=",
                   "left": {
                     "type": "Identifier",
                     "start": 0,
                     "end": 1,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 1
+                      }
+                    },
                     "name": "f"
                   },
                   "right": {
                     "type": "ArrowFunctionExpression",
                     "start": 4,
                     "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      }
+                    },
                     "id": null,
                     "generator": false,
                     "expression": false,
@@ -1192,10 +1384,30 @@ var await;
                         "type": "AssignmentPattern",
                         "start": 5,
                         "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 5
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
+                          }
+                        },
                         "left": {
                           "type": "ArrayPattern",
                           "start": 5,
                           "end": 8,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 5
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 8
+                            }
+                          },
                           "elements": [
                             null
                           ]
@@ -1204,10 +1416,30 @@ var await;
                           "type": "CallExpression",
                           "start": 11,
                           "end": 14,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 11
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 14
+                            }
+                          },
                           "callee": {
                             "type": "Identifier",
                             "start": 11,
                             "end": 12,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 11
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 12
+                              }
+                            },
                             "name": "g"
                           },
                           "arguments": []
@@ -1218,6 +1450,16 @@ var await;
                       "type": "BlockStatement",
                       "start": 19,
                       "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
+                        }
+                      },
                       "body": []
                     }
                   }

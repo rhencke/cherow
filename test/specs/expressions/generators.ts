@@ -154,31 +154,82 @@ describe('Generators', () => {
     it('should parse arguments with arguments', () => {
         expect(parseScript(`var g = function* (x = args = arguments) { function arguments() {} };`, {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 69,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 69
+              }
+            },
             "body": [
               {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 69,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 69
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 4,
                     "end": 68,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 68
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 4,
                       "end": 5,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 5
+                        }
+                      },
                       "name": "g"
                     },
                     "init": {
                       "type": "FunctionExpression",
                       "start": 8,
                       "end": 68,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 68
+                        }
+                      },
                       "id": null,
                       "generator": true,
                       "expression": false,
@@ -188,27 +239,77 @@ describe('Generators', () => {
                           "type": "AssignmentPattern",
                           "start": 19,
                           "end": 39,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 19
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 39
+                            }
+                          },
                           "left": {
                             "type": "Identifier",
                             "start": 19,
                             "end": 20,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 19
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 20
+                              }
+                            },
                             "name": "x"
                           },
                           "right": {
                             "type": "AssignmentExpression",
                             "start": 23,
                             "end": 39,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 23
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 39
+                              }
+                            },
                             "operator": "=",
                             "left": {
                               "type": "Identifier",
                               "start": 23,
                               "end": 27,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 23
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 27
+                                }
+                              },
                               "name": "args"
                             },
                             "right": {
                               "type": "Identifier",
                               "start": 30,
                               "end": 39,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 30
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 39
+                                }
+                              },
                               "name": "arguments"
                             }
                           }
@@ -218,15 +319,45 @@ describe('Generators', () => {
                         "type": "BlockStatement",
                         "start": 41,
                         "end": 68,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 41
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 68
+                          }
+                        },
                         "body": [
                           {
                             "type": "FunctionDeclaration",
                             "start": 43,
                             "end": 66,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 43
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 66
+                              }
+                            },
                             "id": {
                               "type": "Identifier",
                               "start": 52,
                               "end": 61,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 52
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 61
+                                }
+                              },
                               "name": "arguments"
                             },
                             "generator": false,
@@ -237,6 +368,16 @@ describe('Generators', () => {
                               "type": "BlockStatement",
                               "start": 64,
                               "end": 66,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 64
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 66
+                                }
+                              },
                               "body": []
                             }
                           }

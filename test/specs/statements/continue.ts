@@ -21,39 +21,110 @@ describe('Statement - Continue', () => {
             }
           }`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
           "type": "Program",
           "start": 0,
           "end": 135,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 6,
+              "column": 11
+            }
+          },
           "body": [
             {
               "type": "LabeledStatement",
               "start": 0,
               "end": 135,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 6,
+                  "column": 11
+                }
+              },
               "body": {
                 "type": "ForStatement",
                 "start": 7,
                 "end": 135,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 11
+                  }
+                },
                 "init": {
                   "type": "VariableDeclaration",
                   "start": 12,
                   "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 21
+                    }
+                  },
                   "declarations": [
                     {
                       "type": "VariableDeclarator",
                       "start": 16,
                       "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
+                        }
+                      },
                       "id": {
                         "type": "Identifier",
                         "start": 16,
                         "end": 17,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 17
+                          }
+                        },
                         "name": "x"
                       },
                       "init": {
                         "type": "Literal",
                         "start": 20,
                         "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 20
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 21
+                          }
+                        },
                         "value": 0,
                         "raw": "0"
                       }
@@ -65,10 +136,30 @@ describe('Statement - Continue', () => {
                   "type": "BinaryExpression",
                   "start": 23,
                   "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 29
+                    }
+                  },
                   "left": {
                     "type": "Identifier",
                     "start": 23,
                     "end": 24,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 24
+                      }
+                    },
                     "name": "x"
                   },
                   "operator": "<",
@@ -76,6 +167,16 @@ describe('Statement - Continue', () => {
                     "type": "Literal",
                     "start": 27,
                     "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 27
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 29
+                      }
+                    },
                     "value": 10,
                     "raw": "10"
                   }
@@ -85,15 +186,45 @@ describe('Statement - Continue', () => {
                   "type": "BlockStatement",
                   "start": 32,
                   "end": 135,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 6,
+                      "column": 11
+                    }
+                  },
                   "body": [
                     {
                       "type": "WhileStatement",
                       "start": 46,
                       "end": 123,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 5,
+                          "column": 13
+                        }
+                      },
                       "test": {
                         "type": "Literal",
                         "start": 53,
                         "end": 57,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 19
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 23
+                          }
+                        },
                         "value": true,
                         "raw": "true"
                       },
@@ -101,21 +232,61 @@ describe('Statement - Continue', () => {
                         "type": "BlockStatement",
                         "start": 59,
                         "end": 123,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 5,
+                            "column": 13
+                          }
+                        },
                         "body": [
                           {
                             "type": "ExpressionStatement",
                             "start": 75,
                             "end": 79,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 18
+                              }
+                            },
                             "expression": {
                               "type": "UpdateExpression",
                               "start": 75,
                               "end": 78,
+                              "loc": {
+                                "start": {
+                                  "line": 3,
+                                  "column": 14
+                                },
+                                "end": {
+                                  "line": 3,
+                                  "column": 17
+                                }
+                              },
                               "operator": "++",
                               "prefix": false,
                               "argument": {
                                 "type": "Identifier",
                                 "start": 75,
                                 "end": 76,
+                                "loc": {
+                                  "start": {
+                                    "line": 3,
+                                    "column": 14
+                                  },
+                                  "end": {
+                                    "line": 3,
+                                    "column": 15
+                                  }
+                                },
                                 "name": "x"
                               }
                             }
@@ -124,10 +295,30 @@ describe('Statement - Continue', () => {
                             "type": "ContinueStatement",
                             "start": 94,
                             "end": 109,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 29
+                              }
+                            },
                             "label": {
                               "type": "Identifier",
                               "start": 103,
                               "end": 108,
+                              "loc": {
+                                "start": {
+                                  "line": 4,
+                                  "column": 23
+                                },
+                                "end": {
+                                  "line": 4,
+                                  "column": 28
+                                }
+                              },
                               "name": "label"
                             }
                           }
@@ -141,6 +332,16 @@ describe('Statement - Continue', () => {
                 "type": "Identifier",
                 "start": 0,
                 "end": 5,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 5
+                  }
+                },
                 "name": "label"
               }
             }
@@ -158,35 +359,96 @@ describe('Statement - Continue', () => {
             }
           }`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
           "type": "Program",
           "start": 0,
           "end": 150,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 11
+            }
+          },
           "body": [
             {
               "type": "ForStatement",
               "start": 0,
               "end": 150,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 7,
+                  "column": 11
+                }
+              },
               "init": {
                 "type": "VariableDeclaration",
                 "start": 5,
                 "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 14
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 9,
                     "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 9,
                       "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
                       "name": "x"
                     },
                     "init": {
                       "type": "Literal",
                       "start": 13,
                       "end": 14,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
+                        }
+                      },
                       "value": 0,
                       "raw": "0"
                     }
@@ -198,10 +460,30 @@ describe('Statement - Continue', () => {
                 "type": "BinaryExpression",
                 "start": 16,
                 "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
                 "left": {
                   "type": "Identifier",
                   "start": 16,
                   "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
                   "name": "x"
                 },
                 "operator": "<",
@@ -209,6 +491,16 @@ describe('Statement - Continue', () => {
                   "type": "Literal",
                   "start": 20,
                   "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
                   "value": 10,
                   "raw": "10"
                 }
@@ -218,21 +510,61 @@ describe('Statement - Continue', () => {
                 "type": "BlockStatement",
                 "start": 25,
                 "end": 150,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 11
+                  }
+                },
                 "body": [
                   {
                     "type": "ExpressionStatement",
                     "start": 39,
                     "end": 43,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 16
+                      }
+                    },
                     "expression": {
                       "type": "UpdateExpression",
                       "start": 39,
                       "end": 42,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 15
+                        }
+                      },
                       "operator": "++",
                       "prefix": false,
                       "argument": {
                         "type": "Identifier",
                         "start": 39,
                         "end": 40,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 13
+                          }
+                        },
                         "name": "x"
                       }
                     }
@@ -241,25 +573,75 @@ describe('Statement - Continue', () => {
                     "type": "ForStatement",
                     "start": 56,
                     "end": 138,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 13
+                      }
+                    },
                     "init": {
                       "type": "VariableDeclaration",
                       "start": 61,
                       "end": 70,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 26
+                        }
+                      },
                       "declarations": [
                         {
                           "type": "VariableDeclarator",
                           "start": 65,
                           "end": 70,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 26
+                            }
+                          },
                           "id": {
                             "type": "Identifier",
                             "start": 65,
                             "end": 66,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 21
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 22
+                              }
+                            },
                             "name": "y"
                           },
                           "init": {
                             "type": "Literal",
                             "start": 69,
                             "end": 70,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 26
+                              }
+                            },
                             "value": 0,
                             "raw": "0"
                           }
@@ -271,10 +653,30 @@ describe('Statement - Continue', () => {
                       "type": "BinaryExpression",
                       "start": 72,
                       "end": 77,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 33
+                        }
+                      },
                       "left": {
                         "type": "Identifier",
                         "start": 72,
                         "end": 73,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 28
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 29
+                          }
+                        },
                         "name": "y"
                       },
                       "operator": "<",
@@ -282,6 +684,16 @@ describe('Statement - Continue', () => {
                         "type": "Literal",
                         "start": 76,
                         "end": 77,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 32
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 33
+                          }
+                        },
                         "value": 2,
                         "raw": "2"
                       }
@@ -291,21 +703,61 @@ describe('Statement - Continue', () => {
                       "type": "BlockStatement",
                       "start": 80,
                       "end": 138,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 36
+                        },
+                        "end": {
+                          "line": 6,
+                          "column": 13
+                        }
+                      },
                       "body": [
                         {
                           "type": "ExpressionStatement",
                           "start": 96,
                           "end": 100,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 14
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 18
+                            }
+                          },
                           "expression": {
                             "type": "UpdateExpression",
                             "start": 96,
                             "end": 99,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 17
+                              }
+                            },
                             "operator": "++",
                             "prefix": false,
                             "argument": {
                               "type": "Identifier",
                               "start": 96,
                               "end": 97,
+                              "loc": {
+                                "start": {
+                                  "line": 4,
+                                  "column": 14
+                                },
+                                "end": {
+                                  "line": 4,
+                                  "column": 15
+                                }
+                              },
                               "name": "y"
                             }
                           }
@@ -314,6 +766,16 @@ describe('Statement - Continue', () => {
                           "type": "ContinueStatement",
                           "start": 115,
                           "end": 124,
+                          "loc": {
+                            "start": {
+                              "line": 5,
+                              "column": 14
+                            },
+                            "end": {
+                              "line": 5,
+                              "column": 23
+                            }
+                          },
                           "label": null
                         }
                       ]
@@ -336,35 +798,96 @@ describe('Statement - Continue', () => {
             continue;
           }`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
           "type": "Program",
           "start": 0,
           "end": 148,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 11
+            }
+          },
           "body": [
             {
               "type": "ForStatement",
               "start": 0,
               "end": 148,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 7,
+                  "column": 11
+                }
+              },
               "init": {
                 "type": "VariableDeclaration",
                 "start": 5,
                 "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 14
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 9,
                     "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 9,
                       "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
                       "name": "x"
                     },
                     "init": {
                       "type": "Literal",
                       "start": 13,
                       "end": 14,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
+                        }
+                      },
                       "value": 0,
                       "raw": "0"
                     }
@@ -376,10 +899,30 @@ describe('Statement - Continue', () => {
                 "type": "BinaryExpression",
                 "start": 16,
                 "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
                 "left": {
                   "type": "Identifier",
                   "start": 16,
                   "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
                   "name": "x"
                 },
                 "operator": "<",
@@ -387,6 +930,16 @@ describe('Statement - Continue', () => {
                   "type": "Literal",
                   "start": 20,
                   "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
                   "value": 10,
                   "raw": "10"
                 }
@@ -396,21 +949,61 @@ describe('Statement - Continue', () => {
                 "type": "BlockStatement",
                 "start": 25,
                 "end": 148,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 11
+                  }
+                },
                 "body": [
                   {
                     "type": "ExpressionStatement",
                     "start": 39,
                     "end": 43,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 16
+                      }
+                    },
                     "expression": {
                       "type": "UpdateExpression",
                       "start": 39,
                       "end": 42,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 15
+                        }
+                      },
                       "operator": "++",
                       "prefix": false,
                       "argument": {
                         "type": "Identifier",
                         "start": 39,
                         "end": 40,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 13
+                          }
+                        },
                         "name": "x"
                       }
                     }
@@ -419,25 +1012,75 @@ describe('Statement - Continue', () => {
                     "type": "ForStatement",
                     "start": 56,
                     "end": 114,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 13
+                      }
+                    },
                     "init": {
                       "type": "VariableDeclaration",
                       "start": 61,
                       "end": 70,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 26
+                        }
+                      },
                       "declarations": [
                         {
                           "type": "VariableDeclarator",
                           "start": 65,
                           "end": 70,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 26
+                            }
+                          },
                           "id": {
                             "type": "Identifier",
                             "start": 65,
                             "end": 66,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 21
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 22
+                              }
+                            },
                             "name": "y"
                           },
                           "init": {
                             "type": "Literal",
                             "start": 69,
                             "end": 70,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 26
+                              }
+                            },
                             "value": 0,
                             "raw": "0"
                           }
@@ -449,10 +1092,30 @@ describe('Statement - Continue', () => {
                       "type": "BinaryExpression",
                       "start": 72,
                       "end": 77,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 33
+                        }
+                      },
                       "left": {
                         "type": "Identifier",
                         "start": 72,
                         "end": 73,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 28
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 29
+                          }
+                        },
                         "name": "y"
                       },
                       "operator": "<",
@@ -460,6 +1123,16 @@ describe('Statement - Continue', () => {
                         "type": "Literal",
                         "start": 76,
                         "end": 77,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 32
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 33
+                          }
+                        },
                         "value": 2,
                         "raw": "2"
                       }
@@ -469,21 +1142,61 @@ describe('Statement - Continue', () => {
                       "type": "BlockStatement",
                       "start": 80,
                       "end": 114,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 36
+                        },
+                        "end": {
+                          "line": 5,
+                          "column": 13
+                        }
+                      },
                       "body": [
                         {
                           "type": "ExpressionStatement",
                           "start": 96,
                           "end": 100,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 14
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 18
+                            }
+                          },
                           "expression": {
                             "type": "UpdateExpression",
                             "start": 96,
                             "end": 99,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 17
+                              }
+                            },
                             "operator": "++",
                             "prefix": false,
                             "argument": {
                               "type": "Identifier",
                               "start": 96,
                               "end": 97,
+                              "loc": {
+                                "start": {
+                                  "line": 4,
+                                  "column": 14
+                                },
+                                "end": {
+                                  "line": 4,
+                                  "column": 15
+                                }
+                              },
                               "name": "y"
                             }
                           }
@@ -495,6 +1208,16 @@ describe('Statement - Continue', () => {
                     "type": "ContinueStatement",
                     "start": 127,
                     "end": 136,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 21
+                      }
+                    },
                     "label": null
                   }
                 ]

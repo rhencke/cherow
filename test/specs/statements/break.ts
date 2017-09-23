@@ -24,62 +24,153 @@ describe('Statement - Break', () => {
             else y;
         }`, {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
-            "type": "Program",
-            "start": 0,
-            "end": 83,
-            "body": [
-              {
-                "type": "WhileStatement",
-                "start": 0,
-                "end": 83,
-                "test": {
-                  "type": "Literal",
-                  "start": 7,
-                  "end": 11,
-                  "value": true,
-                  "raw": "true"
+          "type": "Program",
+          "start": 0,
+          "end": 83,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 5,
+              "column": 9
+            }
+          },
+          "body": [
+            {
+              "type": "WhileStatement",
+              "start": 0,
+              "end": 83,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
                 },
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 13,
-                  "end": 83,
-                  "body": [
-                    {
-                      "type": "IfStatement",
-                      "start": 27,
-                      "end": 73,
-                      "test": {
-                        "type": "Identifier",
-                        "start": 31,
-                        "end": 32,
-                        "name": "x"
+                "end": {
+                  "line": 5,
+                  "column": 9
+                }
+              },
+              "test": {
+                "type": "Literal",
+                "start": 7,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  }
+                },
+                "value": true,
+                "raw": "true"
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 83,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 9
+                  }
+                },
+                "body": [
+                  {
+                    "type": "IfStatement",
+                    "start": 27,
+                    "end": 73,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 12
                       },
-                      "consequent": {
-                        "type": "BreakStatement",
-                        "start": 34,
-                        "end": 53,
-                        "label": null
-                      },
-                      "alternate": {
-                        "type": "ExpressionStatement",
-                        "start": 71,
-                        "end": 73,
-                        "expression": {
-                          "type": "Identifier",
-                          "start": 71,
-                          "end": 72,
-                          "name": "y"
+                      "end": {
+                        "line": 4,
+                        "column": 19
+                      }
+                    },
+                    "test": {
+                      "type": "Identifier",
+                      "start": 31,
+                      "end": 32,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 17
                         }
+                      },
+                      "name": "x"
+                    },
+                    "consequent": {
+                      "type": "BreakStatement",
+                      "start": 34,
+                      "end": 53,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 13
+                        }
+                      },
+                      "label": null
+                    },
+                    "alternate": {
+                      "type": "ExpressionStatement",
+                      "start": 71,
+                      "end": 73,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 19
+                        }
+                      },
+                      "expression": {
+                        "type": "Identifier",
+                        "start": 71,
+                        "end": 72,
+                        "loc": {
+                          "start": {
+                            "line": 4,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 4,
+                            "column": 18
+                          }
+                        },
+                        "name": "y"
                       }
                     }
-                  ]
-                }
+                  }
+                ]
               }
-            ],
-            "sourceType": "script"
-          });
+            }
+          ],
+          "sourceType": "script"
+        });
     });
 
     it('should parse while (true) { break }', () => {

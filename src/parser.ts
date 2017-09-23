@@ -240,7 +240,7 @@ export class Parser {
         this.endColumn = this.column;
         this.endLine = this.line;
 
-        scan: while (this.index >= 0 && this.hasNext()) {
+        while (this.hasNext()) {
 
             this.startPos = this.index;
             this.startColumn = this.column;
@@ -252,12 +252,35 @@ export class Parser {
                 case Chars.CarriageReturn:
                 case Chars.LineFeed:
                     this.advanceToNewLine();
-                    if (first === Chars.CarriageReturn && this.hasNext() && this.nextChar() === Chars.LineFeed) this.index++;
+                    if (first === Chars.CarriageReturn && this.hasNext() && this.nextChar() === Chars.LineFeed) {
+                        this.index++;
+                    }
+                    continue;
+                case Chars.LineSeparator:
+                case Chars.ParagraphSeparator:
+                    this.advanceToNewLine();
                     continue;
                 case Chars.Tab:
                 case Chars.VerticalTab:
                 case Chars.FormFeed:
                 case Chars.Space:
+                case Chars.NonBreakingSpace:
+                case Chars.Ogham:
+                case Chars.EnQuad:
+                case Chars.EmQuad:
+                case Chars.EnSpace:
+                case Chars.EmSpace:
+                case Chars.ThreePerEmSpace:
+                case Chars.FourPerEmSpace:
+                case Chars.SixPerEmSpace:
+                case Chars.FigureSpace:
+                case Chars.PunctuationSpace:
+                case Chars.ThinSpace:
+                case Chars.HairSpace:
+                case Chars.NarrowNoBreakSpace:
+                case Chars.MathematicalSpace:
+                case Chars.IdeographicSpace:
+                case Chars.ZeroWidthNoBreakSpace:
                     this.advance();
                     continue;
 
@@ -675,35 +698,6 @@ export class Parser {
                     return this.scanIdentifier(context);
 
                 default:
-
-                    if (first > Chars.MaxAsciiCharacter) {
-                        switch (first) {
-                            case Chars.ParagraphSeparator:
-                            case Chars.LineSeparator:
-                                this.advanceToNewLine();
-                                continue;
-                            case Chars.ParagraphSeparator:
-                            case Chars.Space:
-                            case Chars.Tab:
-                            case Chars.VerticalTab:
-                            case Chars.FormFeed:
-                            case Chars.NonBreakingSpace:
-                            case Chars.NextLine:
-                            case Chars.Ogham:
-                            case Chars.EnQuad:
-                            case Chars.ZeroWidthSpace:
-                            case Chars.NarrowNoBreakSpace:
-                            case Chars.MathematicalSpace:
-                            case Chars.IdeographicSpace:
-                            case Chars.ByteOrderMark:
-                            case Chars.CarriageReturn:
-                                this.advance();
-                                continue;
-                            default:
-                                // break the loop here so we can parse 'T'
-                                break scan;
-                        }
-                    }
 
                     if (isIDStart(first)) return this.scanIdentifier(context);
 
@@ -1593,12 +1587,12 @@ export class Parser {
 
             node.loc = {
                 start: {
-                    line: this.line,
+                    line: 1,
                     column: 0,
                 },
                 end: {
-                    line: 1,
-                    column: end
+                    line: this.endLine,
+                    column: this.endColumn
                 }
             };
         }

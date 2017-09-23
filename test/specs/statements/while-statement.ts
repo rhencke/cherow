@@ -208,79 +208,203 @@ describe('Statements - While statement', () => {
         it('should parse "while (x < 10) { x++; y--; }"', () => {
             expect(parseScript('while (x < 10) { x++; y--; }', {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
-                "body": [{
-                    "body": {
-                        "body": [{
-                                "end": 21,
-                                "expression": {
-                                    "argument": {
-                                        "end": 18,
-                                        "name": "x",
-                                        "start": 17,
-                                        "type": "Identifier"
-                                    },
-                                    "end": 20,
-                                    "operator": "++",
-                                    "prefix": false,
-                                    "start": 17,
-                                    "type": "UpdateExpression"
-                                },
-                                "start": 17,
-                                "type": "ExpressionStatement"
-                            },
-                            {
-                                "end": 26,
-                                "expression": {
-                                    "argument": {
-                                        "end": 23,
-                                        "name": "y",
-                                        "start": 22,
-                                        "type": "Identifier"
-                                    },
-                                    "end": 25,
-                                    "operator": "--",
-                                    "prefix": false,
-                                    "start": 22,
-                                    "type": "UpdateExpression"
-                                },
-                                "start": 22,
-                                "type": "ExpressionStatement"
-                            }
-                        ],
-                        "end": 28,
-                        "start": 15,
-                        "type": "BlockStatement"
-                    },
-                    "end": 28,
-                    "start": 0,
-                    "test": {
-                        "end": 13,
-                        "left": {
-                            "end": 8,
-                            "name": "x",
-                            "start": 7,
-                            "type": "Identifier"
-                        },
-                        "operator": "<",
-                        "right": {
-                            "end": 13,
-                            "raw": "10",
-                            "start": 11,
-                            "type": "Literal",
-                            "value": 10
-                        },
-                        "start": 7,
-                        "type": "BinaryExpression"
-                    },
-                    "type": "WhileStatement"
-                }],
-                "end": 28,
-                "sourceType": "script",
+                "type": "Program",
                 "start": 0,
-                "type": "Program"
-            });
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  }
+                },
+                "body": [
+                  {
+                    "type": "WhileStatement",
+                    "start": 0,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 28
+                      }
+                    },
+                    "test": {
+                      "type": "BinaryExpression",
+                      "start": 7,
+                      "end": 13,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 13
+                        }
+                      },
+                      "left": {
+                        "type": "Identifier",
+                        "start": 7,
+                        "end": 8,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 7
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 8
+                          }
+                        },
+                        "name": "x"
+                      },
+                      "operator": "<",
+                      "right": {
+                        "type": "Literal",
+                        "start": 11,
+                        "end": 13,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 13
+                          }
+                        },
+                        "value": 10,
+                        "raw": "10"
+                      }
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 15,
+                      "end": 28,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 28
+                        }
+                      },
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 17,
+                          "end": 21,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 17
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 21
+                            }
+                          },
+                          "expression": {
+                            "type": "UpdateExpression",
+                            "start": 17,
+                            "end": 20,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 17
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 20
+                              }
+                            },
+                            "operator": "++",
+                            "prefix": false,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 17,
+                              "end": 18,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 17
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 18
+                                }
+                              },
+                              "name": "x"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 22,
+                          "end": 26,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 22
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 26
+                            }
+                          },
+                          "expression": {
+                            "type": "UpdateExpression",
+                            "start": 22,
+                            "end": 25,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 22
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 25
+                              }
+                            },
+                            "operator": "--",
+                            "prefix": false,
+                            "argument": {
+                              "type": "Identifier",
+                              "start": 22,
+                              "end": 23,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 22
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 23
+                                }
+                              },
+                              "name": "y"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "sourceType": "script"
+              });
         });
    
         it('should parse FunctionExpression within a "while" Expression', () => {
@@ -294,131 +418,516 @@ describe('Statements - While statement', () => {
                 } ;
                 var __in__do__after__break="Satisfaction";
             } ;`, {
-                raw: true
+                raw: true,
+                ranges: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
-                "body": [{
-                        "type": "WhileStatement",
-                        "test": {
-                            "type": "BinaryExpression",
-                            "operator": "===",
-                            "left": {
-                                "type": "Literal",
-                                "value": 1,
-                                "raw": "1"
-                            },
-                            "right": {
-                                "type": "Literal",
-                                "value": 1,
-                                "raw": "1"
-                            }
-                        },
-                        "body": {
-                            "type": "BlockStatement",
-                            "body": [{
-                                    "type": "IfStatement",
-                                    "test": {
-                                        "type": "Identifier",
-                                        "name": "__in__do__before__break"
-                                    },
-                                    "consequent": {
-                                        "type": "BreakStatement",
-                                        "label": null
-                                    },
-                                    "alternate": null
-                                },
-                                {
-                                    "type": "VariableDeclaration",
-                                    "declarations": [{
-                                        "type": "VariableDeclarator",
-                                        "id": {
-                                            "type": "Identifier",
-                                            "name": "__in__do__before__break"
-                                        },
-                                        "init": {
-                                            "type": "Literal",
-                                            "value": "can't",
-                                            "raw": "\"can't\""
-                                        }
-                                    }],
-                                    "kind": "var"
-                                },
-                                {
-                                    "type": "WhileStatement",
-                                    "test": {
-                                        "type": "Literal",
-                                        "value": 1,
-                                        "raw": "1"
-                                    },
-                                    "body": {
-                                        "type": "BlockStatement",
-                                        "body": [{
-                                                "type": "VariableDeclaration",
-                                                "declarations": [{
-                                                    "type": "VariableDeclarator",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "__in__do__IN__before__break"
-                                                    },
-                                                    "init": {
-                                                        "type": "Literal",
-                                                        "value": "get",
-                                                        "raw": "\"get\""
-                                                    }
-                                                }],
-                                                "kind": "var"
-                                            },
-                                            {
-                                                "type": "BreakStatement",
-                                                "label": null
-                                            },
-                                            {
-                                                "type": "VariableDeclaration",
-                                                "declarations": [{
-                                                    "type": "VariableDeclarator",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "__in__do__IN__after__break"
-                                                    },
-                                                    "init": {
-                                                        "type": "Literal",
-                                                        "value": "no",
-                                                        "raw": "\"no\""
-                                                    }
-                                                }],
-                                                "kind": "var"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "type": "EmptyStatement"
-                                },
-                                {
-                                    "type": "VariableDeclaration",
-                                    "declarations": [{
-                                        "type": "VariableDeclarator",
-                                        "id": {
-                                            "type": "Identifier",
-                                            "name": "__in__do__after__break"
-                                        },
-                                        "init": {
-                                            "type": "Literal",
-                                            "value": "Satisfaction",
-                                            "raw": "\"Satisfaction\""
-                                        }
-                                    }],
-                                    "kind": "var"
-                                }
-                            ]
-                        }
+                "start": 0,
+                "end": 383,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 10,
+                    "column": 15
+                  }
+                },
+                "body": [
+                  {
+                    "type": "WhileStatement",
+                    "start": 0,
+                    "end": 381,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 10,
+                        "column": 13
+                      }
                     },
-                    {
-                        "type": "EmptyStatement"
+                    "test": {
+                      "type": "BinaryExpression",
+                      "start": 6,
+                      "end": 11,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 11
+                        }
+                      },
+                      "left": {
+                        "type": "Literal",
+                        "start": 6,
+                        "end": 7,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 6
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 7
+                          }
+                        },
+                        "value": 1,
+                        "raw": "1"
+                      },
+                      "operator": "===",
+                      "right": {
+                        "type": "Literal",
+                        "start": 10,
+                        "end": 11,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 10
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 11
+                          }
+                        },
+                        "value": 1,
+                        "raw": "1"
+                      }
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 13,
+                      "end": 381,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 10,
+                          "column": 13
+                        }
+                      },
+                      "body": [
+                        {
+                          "type": "IfStatement",
+                          "start": 31,
+                          "end": 64,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 49
+                            }
+                          },
+                          "test": {
+                            "type": "Identifier",
+                            "start": 34,
+                            "end": 57,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 19
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 42
+                              }
+                            },
+                            "name": "__in__do__before__break"
+                          },
+                          "consequent": {
+                            "type": "BreakStatement",
+                            "start": 58,
+                            "end": 64,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 43
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 49
+                              }
+                            },
+                            "label": null
+                          },
+                          "alternate": null
+                        },
+                        {
+                          "type": "VariableDeclaration",
+                          "start": 81,
+                          "end": 117,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 52
+                            }
+                          },
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start": 85,
+                              "end": 116,
+                              "loc": {
+                                "start": {
+                                  "line": 3,
+                                  "column": 20
+                                },
+                                "end": {
+                                  "line": 3,
+                                  "column": 51
+                                }
+                              },
+                              "id": {
+                                "type": "Identifier",
+                                "start": 85,
+                                "end": 108,
+                                "loc": {
+                                  "start": {
+                                    "line": 3,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 3,
+                                    "column": 43
+                                  }
+                                },
+                                "name": "__in__do__before__break"
+                              },
+                              "init": {
+                                "type": "Literal",
+                                "start": 109,
+                                "end": 116,
+                                "loc": {
+                                  "start": {
+                                    "line": 3,
+                                    "column": 44
+                                  },
+                                  "end": {
+                                    "line": 3,
+                                    "column": 51
+                                  }
+                                },
+                                "value": "can't",
+                                "raw": "\"can't\""
+                              }
+                            }
+                          ],
+                          "kind": "var"
+                        },
+                        {
+                          "type": "WhileStatement",
+                          "start": 134,
+                          "end": 306,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 17
+                            }
+                          },
+                          "test": {
+                            "type": "Literal",
+                            "start": 141,
+                            "end": 142,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 23
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 24
+                              }
+                            },
+                            "value": 1,
+                            "raw": "1"
+                          },
+                          "body": {
+                            "type": "BlockStatement",
+                            "start": 144,
+                            "end": 306,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 26
+                              },
+                              "end": {
+                                "line": 8,
+                                "column": 17
+                              }
+                            },
+                            "body": [
+                              {
+                                "type": "VariableDeclaration",
+                                "start": 166,
+                                "end": 204,
+                                "loc": {
+                                  "start": {
+                                    "line": 5,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 5,
+                                    "column": 58
+                                  }
+                                },
+                                "declarations": [
+                                  {
+                                    "type": "VariableDeclarator",
+                                    "start": 170,
+                                    "end": 203,
+                                    "loc": {
+                                      "start": {
+                                        "line": 5,
+                                        "column": 24
+                                      },
+                                      "end": {
+                                        "line": 5,
+                                        "column": 57
+                                      }
+                                    },
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start": 170,
+                                      "end": 197,
+                                      "loc": {
+                                        "start": {
+                                          "line": 5,
+                                          "column": 24
+                                        },
+                                        "end": {
+                                          "line": 5,
+                                          "column": 51
+                                        }
+                                      },
+                                      "name": "__in__do__IN__before__break"
+                                    },
+                                    "init": {
+                                      "type": "Literal",
+                                      "start": 198,
+                                      "end": 203,
+                                      "loc": {
+                                        "start": {
+                                          "line": 5,
+                                          "column": 52
+                                        },
+                                        "end": {
+                                          "line": 5,
+                                          "column": 57
+                                        }
+                                      },
+                                      "value": "get",
+                                      "raw": "\"get\""
+                                    }
+                                  }
+                                ],
+                                "kind": "var"
+                              },
+                              {
+                                "type": "BreakStatement",
+                                "start": 225,
+                                "end": 231,
+                                "loc": {
+                                  "start": {
+                                    "line": 6,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 6,
+                                    "column": 26
+                                  }
+                                },
+                                "label": null
+                              },
+                              {
+                                "type": "VariableDeclaration",
+                                "start": 252,
+                                "end": 288,
+                                "loc": {
+                                  "start": {
+                                    "line": 7,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 7,
+                                    "column": 56
+                                  }
+                                },
+                                "declarations": [
+                                  {
+                                    "type": "VariableDeclarator",
+                                    "start": 256,
+                                    "end": 287,
+                                    "loc": {
+                                      "start": {
+                                        "line": 7,
+                                        "column": 24
+                                      },
+                                      "end": {
+                                        "line": 7,
+                                        "column": 55
+                                      }
+                                    },
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start": 256,
+                                      "end": 282,
+                                      "loc": {
+                                        "start": {
+                                          "line": 7,
+                                          "column": 24
+                                        },
+                                        "end": {
+                                          "line": 7,
+                                          "column": 50
+                                        }
+                                      },
+                                      "name": "__in__do__IN__after__break"
+                                    },
+                                    "init": {
+                                      "type": "Literal",
+                                      "start": 283,
+                                      "end": 287,
+                                      "loc": {
+                                        "start": {
+                                          "line": 7,
+                                          "column": 51
+                                        },
+                                        "end": {
+                                          "line": 7,
+                                          "column": 55
+                                        }
+                                      },
+                                      "value": "no",
+                                      "raw": "\"no\""
+                                    }
+                                  }
+                                ],
+                                "kind": "var"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "EmptyStatement",
+                          "start": 307,
+                          "end": 308,
+                          "loc": {
+                            "start": {
+                              "line": 8,
+                              "column": 18
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 19
+                            }
+                          }
+                        },
+                        {
+                          "type": "VariableDeclaration",
+                          "start": 325,
+                          "end": 367,
+                          "loc": {
+                            "start": {
+                              "line": 9,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 9,
+                              "column": 58
+                            }
+                          },
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start": 329,
+                              "end": 366,
+                              "loc": {
+                                "start": {
+                                  "line": 9,
+                                  "column": 20
+                                },
+                                "end": {
+                                  "line": 9,
+                                  "column": 57
+                                }
+                              },
+                              "id": {
+                                "type": "Identifier",
+                                "start": 329,
+                                "end": 351,
+                                "loc": {
+                                  "start": {
+                                    "line": 9,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 9,
+                                    "column": 42
+                                  }
+                                },
+                                "name": "__in__do__after__break"
+                              },
+                              "init": {
+                                "type": "Literal",
+                                "start": 352,
+                                "end": 366,
+                                "loc": {
+                                  "start": {
+                                    "line": 9,
+                                    "column": 43
+                                  },
+                                  "end": {
+                                    "line": 9,
+                                    "column": 57
+                                  }
+                                },
+                                "value": "Satisfaction",
+                                "raw": "\"Satisfaction\""
+                              }
+                            }
+                          ],
+                          "kind": "var"
+                        }
+                      ]
                     }
+                  },
+                  {
+                    "type": "EmptyStatement",
+                    "start": 382,
+                    "end": 383,
+                    "loc": {
+                      "start": {
+                        "line": 10,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 10,
+                        "column": 15
+                      }
+                    }
+                  }
                 ],
                 "sourceType": "script"
-            });
+              });
         });
     
         it('should parse FunctionExpression within a "while" Expression', () => {
@@ -427,98 +936,239 @@ describe('Statements - While statement', () => {
                 break;
              };`, {
                 ranges: true,
-                raw: true
+                raw: true,
+                locations: true
             })).to.eql({
-                  "body": [
-                    {
+                "type": "Program",
+                "start": 0,
+                "end": 110,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 15
+                  }
+                },
+                "body": [
+                  {
+                    "type": "WhileStatement",
+                    "start": 0,
+                    "end": 109,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 14
+                      }
+                    },
+                    "test": {
+                      "type": "FunctionExpression",
+                      "start": 6,
+                      "end": 34,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 34
+                        }
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start": 15,
+                        "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 21
+                          }
+                        },
+                        "name": "__func"
+                      },
+                      "generator": false,
+                      "expression": false,
+                      "async": false,
+                      "params": [],
                       "body": {
+                        "type": "BlockStatement",
+                        "start": 23,
+                        "end": 34,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 23
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 34
+                          }
+                        },
                         "body": [
                           {
-                            "declarations": [
-                              {
-                                "end": 70,
-                                "id": {
-                                  "end": 66,
-                                  "name": "__reached",
-                                  "start": 57,
-                                  "type": "Identifier"
-                                },
-                                "init": {
-                                  "end": 70,
-                                  "raw": "1",
-                                  "start": 69,
-                                  "type": "Literal",
-                                  "value": 1
-                                },
-                                "start": 57,
-                                "type": "VariableDeclarator"
-                              }
-                            ],
-                            "end": 71,
-                            "kind": "var",
-                            "start": 53,
-                            "type": "VariableDeclaration"
-                          },
-                          {
-                            "end": 94,
-                            "label": null,
-                            "start": 88,
-                            "type": "BreakStatement"
-                          }
-                        ],
-                        "end": 109,
-                       "start": 35,
-                        "type": "BlockStatement"
-                      },
-                      "end": 109,
-                      "start": 0,
-                      "test": {
-                        "async": false,
-                        "body": {
-                          "body": [
-                            {
-                              "argument": {
-                                "end": 32,
-                               "raw": "0",
-                               "start": 31,
-                                "type": "Literal",
-                                "value": 0
+                            "type": "ReturnStatement",
+                            "start": 24,
+                            "end": 33,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 24
                               },
-                              "end": 33,
-                              "start": 24,
-                              "type": "ReturnStatement"
+                              "end": {
+                                "line": 1,
+                                "column": 33
+                              }
                             },
-                          ],
-                          "end": 34,
-                          "start": 23,
-                          "type": "BlockStatement"
+                            "argument": {
+                              "type": "Literal",
+                              "start": 31,
+                              "end": 32,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 31
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 32
+                                }
+                              },
+                              "value": 0,
+                              "raw": "0"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 35,
+                      "end": 109,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 35
                         },
-                        "end": 34,
-                        "expression": false,
-                        "generator": false,
-                       "id": {
-                          "end": 21,
-                          "name": "__func",
-                          "start": 15,
-                          "type": "Identifier"
-                       },
-                        "params": [],
-                        "start": 6,
-                        "type": "FunctionExpression"
+                        "end": {
+                          "line": 4,
+                          "column": 14
+                        }
                       },
-                      "type": "WhileStatement"
-                   },
-                    {
-                      "end": 110,
-                      "start": 109,
-                      "type": "EmptyStatement"
+                      "body": [
+                        {
+                          "type": "VariableDeclaration",
+                          "start": 53,
+                          "end": 71,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 34
+                            }
+                          },
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start": 57,
+                              "end": 70,
+                              "loc": {
+                                "start": {
+                                  "line": 2,
+                                  "column": 20
+                                },
+                                "end": {
+                                  "line": 2,
+                                  "column": 33
+                                }
+                              },
+                              "id": {
+                                "type": "Identifier",
+                                "start": 57,
+                                "end": 66,
+                                "loc": {
+                                  "start": {
+                                    "line": 2,
+                                    "column": 20
+                                  },
+                                  "end": {
+                                    "line": 2,
+                                    "column": 29
+                                  }
+                                },
+                                "name": "__reached"
+                              },
+                              "init": {
+                                "type": "Literal",
+                                "start": 69,
+                                "end": 70,
+                                "loc": {
+                                  "start": {
+                                    "line": 2,
+                                    "column": 32
+                                  },
+                                  "end": {
+                                    "line": 2,
+                                    "column": 33
+                                  }
+                                },
+                                "value": 1,
+                                "raw": "1"
+                              }
+                            }
+                          ],
+                          "kind": "var"
+                        },
+                        {
+                          "type": "BreakStatement",
+                          "start": 88,
+                          "end": 94,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 22
+                            }
+                          },
+                          "label": null
+                        }
+                      ]
                     }
-                  ],
-                  "end": 110,
-                  "sourceType": "script",
-                  "start": 0,
-                  "type": "Program"
-                });
+                  },
+                  {
+                    "type": "EmptyStatement",
+                    "start": 109,
+                    "end": 110,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 15
+                      }
+                    }
+                  }
+                ],
+                "sourceType": "script"
+              });
         });
     
         it('should parse "while(1);"', () => {

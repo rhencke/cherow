@@ -793,7 +793,7 @@ Parser.prototype.scanToken = function scanToken (context) {
     this.endPos = this.index;
     this.endColumn = this.column;
     this.endLine = this.line;
-    scan: while (this.index >= 0 && this.hasNext()) {
+    while (this.hasNext()) {
         this$1.startPos = this$1.index;
         this$1.startColumn = this$1.column;
         this$1.startLine = this$1.line;
@@ -802,13 +802,35 @@ Parser.prototype.scanToken = function scanToken (context) {
             case 13 /* CarriageReturn */:
             case 10 /* LineFeed */:
                 this$1.advanceToNewLine();
-                if (first === 13 /* CarriageReturn */ && this$1.hasNext() && this$1.nextChar() === 10 /* LineFeed */)
-                    { this$1.index++; }
+                if (first === 13 /* CarriageReturn */ && this$1.hasNext() && this$1.nextChar() === 10 /* LineFeed */) {
+                    this$1.index++;
+                }
+                continue;
+            case 8232 /* LineSeparator */:
+            case 8233 /* ParagraphSeparator */:
+                this$1.advanceToNewLine();
                 continue;
             case 9 /* Tab */:
             case 11 /* VerticalTab */:
             case 12 /* FormFeed */:
             case 32 /* Space */:
+            case 160 /* NonBreakingSpace */:
+            case 5760 /* Ogham */:
+            case 8192 /* EnQuad */:
+            case 8193 /* EmQuad */:
+            case 8194 /* EnSpace */:
+            case 8195 /* EmSpace */:
+            case 8196 /* ThreePerEmSpace */:
+            case 8197 /* FourPerEmSpace */:
+            case 8198 /* SixPerEmSpace */:
+            case 8199 /* FigureSpace */:
+            case 8200 /* PunctuationSpace */:
+            case 8201 /* ThinSpace */:
+            case 8202 /* HairSpace */:
+            case 8239 /* NarrowNoBreakSpace */:
+            case 8287 /* MathematicalSpace */:
+            case 12288 /* IdeographicSpace */:
+            case 65279 /* ZeroWidthNoBreakSpace */:
                 this$1.advance();
                 continue;
             // `/`, `/=`, `/>`
@@ -1188,34 +1210,6 @@ Parser.prototype.scanToken = function scanToken (context) {
             case 122 /* LowerZ */:
                 return this$1.scanIdentifier(context);
             default:
-                if (first > 127 /* MaxAsciiCharacter */) {
-                    switch (first) {
-                        case 8233 /* ParagraphSeparator */:
-                        case 8232 /* LineSeparator */:
-                            this$1.advanceToNewLine();
-                            continue;
-                        case 8233 /* ParagraphSeparator */:
-                        case 32 /* Space */:
-                        case 9 /* Tab */:
-                        case 11 /* VerticalTab */:
-                        case 12 /* FormFeed */:
-                        case 160 /* NonBreakingSpace */:
-                        case 133 /* NextLine */:
-                        case 5760 /* Ogham */:
-                        case 8192 /* EnQuad */:
-                        case 8203 /* ZeroWidthSpace */:
-                        case 8239 /* NarrowNoBreakSpace */:
-                        case 8287 /* MathematicalSpace */:
-                        case 12288 /* IdeographicSpace */:
-                        case 65519 /* ByteOrderMark */:
-                        case 13 /* CarriageReturn */:
-                            this$1.advance();
-                            continue;
-                        default:
-                            // break the loop here so we can parse 'T'
-                            break scan;
-                    }
-                }
                 if (isIDStart(first))
                     { return this$1.scanIdentifier(context); }
                 this$1.error(0 /* Unexpected */);
@@ -2018,12 +2012,12 @@ Parser.prototype.finishNodeAt = function finishNodeAt (start, end, node) {
     if (hasMask(this.flags, 524288 /* OptionsLoc */)) {
         node.loc = {
             start: {
-                line: this.line,
+                line: 1,
                 column: 0,
             },
             end: {
-                line: 1,
-                column: end
+                line: this.endLine,
+                column: this.endColumn
             }
         };
     }

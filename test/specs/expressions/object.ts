@@ -647,36 +647,97 @@ describe('Espressions - Object', () => {
     it('should parse super method calls in object literal concise generator', () => {
         expect(parseScript(`var object = { *g() {yield super.method(); } };`, {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 47,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 47
+              }
+            },
             "body": [
               {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 47,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 47
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 4,
                     "end": 46,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 46
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 4,
                       "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
                       "name": "object"
                     },
                     "init": {
                       "type": "ObjectExpression",
                       "start": 13,
                       "end": 46,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 46
+                        }
+                      },
                       "properties": [
                         {
                           "type": "Property",
                           "start": 15,
                           "end": 44,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 44
+                            }
+                          },
                           "method": true,
                           "shorthand": false,
                           "computed": false,
@@ -684,6 +745,16 @@ describe('Espressions - Object', () => {
                             "type": "Identifier",
                             "start": 16,
                             "end": 17,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 16
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 17
+                              }
+                            },
                             "name": "g"
                           },
                           "kind": "init",
@@ -691,6 +762,16 @@ describe('Espressions - Object', () => {
                             "type": "FunctionExpression",
                             "start": 17,
                             "end": 44,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 17
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 44
+                              }
+                            },
                             "id": null,
                             "generator": true,
                             "expression": false,
@@ -700,33 +781,103 @@ describe('Espressions - Object', () => {
                               "type": "BlockStatement",
                               "start": 20,
                               "end": 44,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 20
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 44
+                                }
+                              },
                               "body": [
                                 {
                                   "type": "ExpressionStatement",
                                   "start": 21,
                                   "end": 42,
+                                  "loc": {
+                                    "start": {
+                                      "line": 1,
+                                      "column": 21
+                                    },
+                                    "end": {
+                                      "line": 1,
+                                      "column": 42
+                                    }
+                                  },
                                   "expression": {
                                     "type": "YieldExpression",
                                     "start": 21,
                                     "end": 41,
+                                    "loc": {
+                                      "start": {
+                                        "line": 1,
+                                        "column": 21
+                                      },
+                                      "end": {
+                                        "line": 1,
+                                        "column": 41
+                                      }
+                                    },
                                     "delegate": false,
                                     "argument": {
                                       "type": "CallExpression",
                                       "start": 27,
                                       "end": 41,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 27
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 41
+                                        }
+                                      },
                                       "callee": {
                                         "type": "MemberExpression",
                                         "start": 27,
                                         "end": 39,
+                                        "loc": {
+                                          "start": {
+                                            "line": 1,
+                                            "column": 27
+                                          },
+                                          "end": {
+                                            "line": 1,
+                                            "column": 39
+                                          }
+                                        },
                                         "object": {
                                           "type": "Super",
                                           "start": 27,
-                                          "end": 32
+                                          "end": 32,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 27
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 32
+                                            }
+                                          }
                                         },
                                         "property": {
                                           "type": "Identifier",
                                           "start": 33,
                                           "end": 39,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 33
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 39
+                                            }
+                                          },
                                           "name": "method"
                                         },
                                         "computed": false
@@ -755,36 +906,97 @@ describe('Espressions - Object', () => {
         expect(parseScript(`var obj = { async method([[x, y, z] = [4, 5, 6]]) { }};`, {
             raw: true,
             ranges: true,
-            next: true
+            next: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 55,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 55
+              }
+            },
             "body": [
               {
                 "type": "VariableDeclaration",
                 "start": 0,
                 "end": 55,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 55
+                  }
+                },
                 "declarations": [
                   {
                     "type": "VariableDeclarator",
                     "start": 4,
                     "end": 54,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 54
+                      }
+                    },
                     "id": {
                       "type": "Identifier",
                       "start": 4,
                       "end": 7,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 7
+                        }
+                      },
                       "name": "obj"
                     },
                     "init": {
                       "type": "ObjectExpression",
                       "start": 10,
                       "end": 54,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 54
+                        }
+                      },
                       "properties": [
                         {
                           "type": "Property",
                           "start": 12,
                           "end": 53,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 12
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 53
+                            }
+                          },
                           "method": true,
                           "shorthand": false,
                           "computed": false,
@@ -792,6 +1004,16 @@ describe('Espressions - Object', () => {
                             "type": "Identifier",
                             "start": 18,
                             "end": 24,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 18
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 24
+                              }
+                            },
                             "name": "method"
                           },
                           "kind": "init",
@@ -799,6 +1021,16 @@ describe('Espressions - Object', () => {
                             "type": "FunctionExpression",
                             "start": 24,
                             "end": 53,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 24
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 53
+                              }
+                            },
                             "id": null,
                             "generator": false,
                             "expression": false,
@@ -808,32 +1040,92 @@ describe('Espressions - Object', () => {
                                 "type": "ArrayPattern",
                                 "start": 25,
                                 "end": 48,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 25
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 48
+                                  }
+                                },
                                 "elements": [
                                   {
                                     "type": "AssignmentPattern",
                                     "start": 26,
                                     "end": 47,
+                                    "loc": {
+                                      "start": {
+                                        "line": 1,
+                                        "column": 26
+                                      },
+                                      "end": {
+                                        "line": 1,
+                                        "column": 47
+                                      }
+                                    },
                                     "left": {
                                       "type": "ArrayPattern",
                                       "start": 26,
                                       "end": 35,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 26
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 35
+                                        }
+                                      },
                                       "elements": [
                                         {
                                           "type": "Identifier",
                                           "start": 27,
                                           "end": 28,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 27
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 28
+                                            }
+                                          },
                                           "name": "x"
                                         },
                                         {
                                           "type": "Identifier",
                                           "start": 30,
                                           "end": 31,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 30
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 31
+                                            }
+                                          },
                                           "name": "y"
                                         },
                                         {
                                           "type": "Identifier",
                                           "start": 33,
                                           "end": 34,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 33
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 34
+                                            }
+                                          },
                                           "name": "z"
                                         }
                                       ]
@@ -842,11 +1134,31 @@ describe('Espressions - Object', () => {
                                       "type": "ArrayExpression",
                                       "start": 38,
                                       "end": 47,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 38
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 47
+                                        }
+                                      },
                                       "elements": [
                                         {
                                           "type": "Literal",
                                           "start": 39,
                                           "end": 40,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 39
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 40
+                                            }
+                                          },
                                           "value": 4,
                                           "raw": "4"
                                         },
@@ -854,6 +1166,16 @@ describe('Espressions - Object', () => {
                                           "type": "Literal",
                                           "start": 42,
                                           "end": 43,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 42
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 43
+                                            }
+                                          },
                                           "value": 5,
                                           "raw": "5"
                                         },
@@ -861,6 +1183,16 @@ describe('Espressions - Object', () => {
                                           "type": "Literal",
                                           "start": 45,
                                           "end": 46,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 45
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 46
+                                            }
+                                          },
                                           "value": 6,
                                           "raw": "6"
                                         }
@@ -874,6 +1206,16 @@ describe('Espressions - Object', () => {
                               "type": "BlockStatement",
                               "start": 50,
                               "end": 53,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 50
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 53
+                                }
+                              },
                               "body": []
                             }
                           }
@@ -893,7 +1235,7 @@ describe('Espressions - Object', () => {
         expect(parseScript(`var obj = { async *method([[x, y, z] = [4, 5, 6]]) { }};`, {
             raw: true,
             ranges: true,
-            next: true
+            next: true,
         })).to.eql({
             "type": "Program",
             "start": 0,

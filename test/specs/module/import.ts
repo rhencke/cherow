@@ -219,41 +219,106 @@ describe('Import', () => {
       it('should import with trailing comma', () => {
           expect(parseModule('import { x , } from "/eval-gtbndng-indirect-trlng-comma_FIXTURE.js";', {
               ranges: true,
-              raw: true
+              raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 68,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 68,
-                  "specifiers": [{
-                      "type": "ImportSpecifier",
+            "type": "Program",
+            "start": 0,
+            "end": 68,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 68
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 68,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 68
+                  }
+                },
+                "specifiers": [
+                  {
+                    "type": "ImportSpecifier",
+                    "start": 9,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "imported": {
+                      "type": "Identifier",
                       "start": 9,
                       "end": 10,
-                      "imported": {
-                          "type": "Identifier",
-                          "start": 9,
-                          "end": 10,
-                          "name": "x"
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
                       },
-                      "local": {
-                          "type": "Identifier",
-                          "start": 9,
-                          "end": 10,
-                          "name": "x"
-                      }
-                  }],
-                  "source": {
-                      "type": "Literal",
-                      "start": 20,
-                      "end": 67,
-                      "value": "/eval-gtbndng-indirect-trlng-comma_FIXTURE.js",
-                      "raw": "\"/eval-gtbndng-indirect-trlng-comma_FIXTURE.js\""
+                      "name": "x"
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 9,
+                      "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
+                      "name": "x"
+                    }
                   }
-              }],
-              "sourceType": "module"
+                ],
+                "source": {
+                  "type": "Literal",
+                  "start": 20,
+                  "end": 67,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 67
+                    }
+                  },
+                  "value": "/eval-gtbndng-indirect-trlng-comma_FIXTURE.js",
+                  "raw": "\"/eval-gtbndng-indirect-trlng-comma_FIXTURE.js\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   
@@ -281,94 +346,243 @@ describe('Import', () => {
       it("should parse \"import foo, {bar} from \"foo\";\"", () => {
           expect(parseModule('import foo, {bar} from "foo";', {
               ranges: true,
-              raw: true
+              raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 29,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 29,
-                  "specifiers": [{
-                          "type": "ImportDefaultSpecifier",
-                          "start": 7,
-                          "end": 10,
-                          "local": {
-                              "type": "Identifier",
-                              "start": 7,
-                              "end": 10,
-                              "name": "foo"
-                          }
-                      },
-                      {
-                          "type": "ImportSpecifier",
-                          "start": 13,
-                          "end": 16,
-                          "imported": {
-                              "type": "Identifier",
-                              "start": 13,
-                              "end": 16,
-                              "name": "bar"
-                          },
-                          "local": {
-                              "type": "Identifier",
-                              "start": 13,
-                              "end": 16,
-                              "name": "bar"
-                          }
-                      }
-                  ],
-                  "source": {
-                      "type": "Literal",
-                      "start": 23,
-                      "end": 28,
-                      "value": "foo",
-                      "raw": "\"foo\""
+            "type": "Program",
+            "start": 0,
+            "end": 29,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 29
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 29
                   }
-              }],
-              "sourceType": "module"
+                },
+                "specifiers": [
+                  {
+                    "type": "ImportDefaultSpecifier",
+                    "start": 7,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 7,
+                      "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
+                      "name": "foo"
+                    }
+                  },
+                  {
+                    "type": "ImportSpecifier",
+                    "start": 13,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      }
+                    },
+                    "imported": {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 16,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 16
+                        }
+                      },
+                      "name": "bar"
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 13,
+                      "end": 16,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 16
+                        }
+                      },
+                      "name": "bar"
+                    }
+                  }
+                ],
+                "source": {
+                  "type": "Literal",
+                  "start": 23,
+                  "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 28
+                    }
+                  },
+                  "value": "foo",
+                  "raw": "\"foo\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   
       it("should parse \"import {default as foo} from \"foo\";\"", () => {
           expect(parseModule('import {default as foo} from "foo";', {
               ranges: true,
-              raw: true
+              raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 35,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 35,
-                  "specifiers": [{
-                      "type": "ImportSpecifier",
-                      "start": 8,
-                      "end": 22,
-                      "imported": {
-                          "type": "Identifier",
-                          "start": 8,
-                          "end": 15,
-                          "name": "default"
-                      },
-                      "local": {
-                          "type": "Identifier",
-                          "start": 19,
-                          "end": 22,
-                          "name": "foo"
-                      }
-                  }],
-                  "source": {
-                      "type": "Literal",
-                      "start": 29,
-                      "end": 34,
-                      "value": "foo",
-                      "raw": "\"foo\""
+            "type": "Program",
+            "start": 0,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 35,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 35
                   }
-              }],
-              "sourceType": "module"
+                },
+                "specifiers": [
+                  {
+                    "type": "ImportSpecifier",
+                    "start": 8,
+                    "end": 22,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 22
+                      }
+                    },
+                    "imported": {
+                      "type": "Identifier",
+                      "start": 8,
+                      "end": 15,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 15
+                        }
+                      },
+                      "name": "default"
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 19,
+                      "end": 22,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 19
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
+                        }
+                      },
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "source": {
+                  "type": "Literal",
+                  "start": 29,
+                  "end": 34,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 34
+                    }
+                  },
+                  "value": "foo",
+                  "raw": "\"foo\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   
@@ -413,72 +627,179 @@ describe('Import', () => {
       it("should parse \"import {} from \"foo\";\"", () => {
           expect(parseModule('import {} from "foo";', {
               ranges: true,
-              raw: true
+              raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 21,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 21,
-                  "specifiers": [],
-                  "source": {
-                      "type": "Literal",
-                      "start": 15,
-                      "end": 20,
-                      "value": "foo",
-                      "raw": "\"foo\""
+            "type": "Program",
+            "start": 0,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 21
                   }
-              }],
-              "sourceType": "module"
+                },
+                "specifiers": [],
+                "source": {
+                  "type": "Literal",
+                  "start": 15,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    }
+                  },
+                  "value": "foo",
+                  "raw": "\"foo\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   
       it('should export import default and namespace specifier', () => {
           expect(parseModule('import foo, * as bar from "foo";', {
               ranges: true,
-              raw: true
+              raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 32,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 32,
-                  "specifiers": [{
-                          "type": "ImportDefaultSpecifier",
-                          "start": 7,
-                          "end": 10,
-                          "local": {
-                              "type": "Identifier",
-                              "start": 7,
-                              "end": 10,
-                              "name": "foo"
-                          }
-                      },
-                      {
-                          "type": "ImportNamespaceSpecifier",
-                          "start": 12,
-                          "end": 20,
-                          "local": {
-                              "type": "Identifier",
-                              "start": 17,
-                              "end": 20,
-                              "name": "bar"
-                          }
-                      }
-                  ],
-                  "source": {
-                      "type": "Literal",
-                      "start": 26,
-                      "end": 31,
-                      "value": "foo",
-                      "raw": "\"foo\""
+            "type": "Program",
+            "start": 0,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 32
                   }
-              }],
-              "sourceType": "module"
+                },
+                "specifiers": [
+                  {
+                    "type": "ImportDefaultSpecifier",
+                    "start": 7,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 7,
+                      "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
+                      "name": "foo"
+                    }
+                  },
+                  {
+                    "type": "ImportNamespaceSpecifier",
+                    "start": 12,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      }
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 17,
+                      "end": 20,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 20
+                        }
+                      },
+                      "name": "bar"
+                    }
+                  }
+                ],
+                "source": {
+                  "type": "Literal",
+                  "start": 26,
+                  "end": 31,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 31
+                    }
+                  },
+                  "value": "foo",
+                  "raw": "\"foo\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   
@@ -487,46 +808,120 @@ describe('Import', () => {
           expect(parseModule('import foo, * as bar from "foo";', {
               ranges: true,
               raw: true,
+              locations: true
           })).to.eql({
-              "type": "Program",
-              "start": 0,
-              "end": 32,
-              "body": [{
-                  "type": "ImportDeclaration",
-                  "start": 0,
-                  "end": 32,
-                  "specifiers": [{
-                          "type": "ImportDefaultSpecifier",
-                          "start": 7,
-                          "end": 10,
-                          "local": {
-                              "type": "Identifier",
-                              "start": 7,
-                              "end": 10,
-                              "name": "foo"
-                          }
-                      },
-                      {
-                          "type": "ImportNamespaceSpecifier",
-                          "start": 12,
-                          "end": 20,
-                          "local": {
-                              "type": "Identifier",
-                              "start": 17,
-                              "end": 20,
-                              "name": "bar"
-                          }
-                      }
-                  ],
-                  "source": {
-                      "type": "Literal",
-                      "start": 26,
-                      "end": 31,
-                      "value": "foo",
-                      "raw": "\"foo\""
+            "type": "Program",
+            "start": 0,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "body": [
+              {
+                "type": "ImportDeclaration",
+                "start": 0,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 32
                   }
-              }],
-              "sourceType": "module"
+                },
+                "specifiers": [
+                  {
+                    "type": "ImportDefaultSpecifier",
+                    "start": 7,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 7,
+                      "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 7
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
+                      "name": "foo"
+                    }
+                  },
+                  {
+                    "type": "ImportNamespaceSpecifier",
+                    "start": 12,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      }
+                    },
+                    "local": {
+                      "type": "Identifier",
+                      "start": 17,
+                      "end": 20,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 20
+                        }
+                      },
+                      "name": "bar"
+                    }
+                  }
+                ],
+                "source": {
+                  "type": "Literal",
+                  "start": 26,
+                  "end": 31,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 31
+                    }
+                  },
+                  "value": "foo",
+                  "raw": "\"foo\""
+                }
+              }
+            ],
+            "sourceType": "module"
           });
       });
   

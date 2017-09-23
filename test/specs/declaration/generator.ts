@@ -192,20 +192,51 @@ describe('Statements - Generator', () => {
     it('should parse generator declaration', () => {
         expect(parseScript('function *foo() { yield 3; }', {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 28,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 28
+              }
+            },
             "body": [
               {
                 "type": "FunctionDeclaration",
                 "start": 0,
                 "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  }
+                },
                 "id": {
                   "type": "Identifier",
                   "start": 10,
                   "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
                   "name": "foo"
                 },
                 "generator": true,
@@ -216,20 +247,60 @@ describe('Statements - Generator', () => {
                   "type": "BlockStatement",
                   "start": 16,
                   "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 28
+                    }
+                  },
                   "body": [
                     {
                       "type": "ExpressionStatement",
                       "start": 18,
                       "end": 26,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 18
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 26
+                        }
+                      },
                       "expression": {
                         "type": "YieldExpression",
                         "start": 18,
                         "end": 25,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 18
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 25
+                          }
+                        },
                         "delegate": false,
                         "argument": {
                           "type": "Literal",
                           "start": 24,
                           "end": 25,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 24
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 25
+                            }
+                          },
                           "value": 3,
                           "raw": "3"
                         }
@@ -250,20 +321,51 @@ describe('Statements - Generator', () => {
               }())
           }`, {
             raw: true,
-            ranges: true
+            ranges: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 101,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 11
+              }
+            },
             "body": [
               {
                 "type": "FunctionDeclaration",
                 "start": 0,
                 "end": 101,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 11
+                  }
+                },
                 "id": {
                   "type": "Identifier",
                   "start": 10,
                   "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
                   "name": "gen"
                 },
                 "generator": true,
@@ -274,19 +376,59 @@ describe('Statements - Generator', () => {
                   "type": "BlockStatement",
                   "start": 16,
                   "end": 101,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 11
+                    }
+                  },
                   "body": [
                     {
                       "type": "ExpressionStatement",
                       "start": 30,
                       "end": 89,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 12
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 18
+                        }
+                      },
                       "expression": {
                         "type": "CallExpression",
                         "start": 31,
                         "end": 88,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 13
+                          },
+                          "end": {
+                            "line": 4,
+                            "column": 17
+                          }
+                        },
                         "callee": {
                           "type": "FunctionExpression",
                           "start": 31,
                           "end": 86,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 15
+                            }
+                          },
                           "id": null,
                           "generator": false,
                           "expression": false,
@@ -296,20 +438,60 @@ describe('Statements - Generator', () => {
                             "type": "BlockStatement",
                             "start": 42,
                             "end": 86,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 24
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 15
+                              }
+                            },
                             "body": [
                               {
                                 "type": "VariableDeclaration",
                                 "start": 60,
                                 "end": 70,
+                                "loc": {
+                                  "start": {
+                                    "line": 3,
+                                    "column": 16
+                                  },
+                                  "end": {
+                                    "line": 3,
+                                    "column": 26
+                                  }
+                                },
                                 "declarations": [
                                   {
                                     "type": "VariableDeclarator",
                                     "start": 64,
                                     "end": 69,
+                                    "loc": {
+                                      "start": {
+                                        "line": 3,
+                                        "column": 20
+                                      },
+                                      "end": {
+                                        "line": 3,
+                                        "column": 25
+                                      }
+                                    },
                                     "id": {
                                       "type": "Identifier",
                                       "start": 64,
                                       "end": 69,
+                                      "loc": {
+                                        "start": {
+                                          "line": 3,
+                                          "column": 20
+                                        },
+                                        "end": {
+                                          "line": 3,
+                                          "column": 25
+                                        }
+                                      },
                                       "name": "yield"
                                     },
                                     "init": null

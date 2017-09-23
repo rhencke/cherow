@@ -177,66 +177,196 @@ describe('Statement - Labelled', () => {
 
     it('should parse valid labeleld var"', () => {
         expect(parseScript('foo: var bar;', {
-            ranges: false,
-            raw: true
+            ranges: true,
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
-            "body": [{
+            "start": 0,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "body": [
+              {
                 "type": "LabeledStatement",
-                "label": {
-                    "type": "Identifier",
-                    "name": "foo"
+                "start": 0,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  }
                 },
                 "body": {
-                    "type": "VariableDeclaration",
-                    "declarations": [{
-                        "type": "VariableDeclarator",
-                        "id": {
-                            "type": "Identifier",
-                            "name": "bar"
+                  "type": "VariableDeclaration",
+                  "start": 5,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    }
+                  },
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 9,
+                      "end": 12,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
                         },
-                        "init": null
-                    }],
-                    "kind": "var"
+                        "end": {
+                          "line": 1,
+                          "column": 12
+                        }
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start": 9,
+                        "end": 12,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 9
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 12
+                          }
+                        },
+                        "name": "bar"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "var"
+                },
+                "label": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 3,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 3
+                    }
+                  },
+                  "name": "foo"
                 }
-            }],
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should parse yield as label in non-strict mode"', () => {
         expect(parseScript('yield: 1;', {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
-            "body": [{
-                "body": {
-                    "end": 9,
-                    "expression": {
-                        "end": 8,
-                        "raw": "1",
-                        "start": 7,
-                        "type": "Literal",
-                        "value": 1,
-                    },
-                    "start": 7,
-                    "type": "ExpressionStatement"
-                },
-                "end": 9,
-                "label": {
-                    "end": 5,
-                    "name": "yield",
-                    "start": 0,
-                    "type": "Identifier"
-                },
-                "start": 0,
-                "type": "LabeledStatement"
-            }],
-            "end": 9,
-            "sourceType": "script",
+            "type": "Program",
             "start": 0,
-            "type": "Program"
-        });
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              }
+            },
+            "body": [
+              {
+                "type": "LabeledStatement",
+                "start": 0,
+                "end": 9,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 9
+                  }
+                },
+                "body": {
+                  "type": "ExpressionStatement",
+                  "start": 7,
+                  "end": 9,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 9
+                    }
+                  },
+                  "expression": {
+                    "type": "Literal",
+                    "start": 7,
+                    "end": 8,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 8
+                      }
+                    },
+                    "value": 1,
+                    "raw": "1"
+                  }
+                },
+                "label": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 5,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 5
+                    }
+                  },
+                  "name": "yield"
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
     });
 
     it('should parse "a: function b() {}"', () => {
@@ -447,60 +577,152 @@ describe('Statement - Labelled', () => {
             loop:
             switch(c) {}`, {
             ranges: true,
-            raw: true
+            raw: true,
+            locations: true
         })).to.eql({
             "type": "Program",
             "start": 0,
             "end": 73,
-            "body": [{
-                    "type": "LabeledStatement",
-                    "start": 0,
-                    "end": 30,
-                    "body": {
-                        "type": "SwitchStatement",
-                        "start": 18,
-                        "end": 30,
-                        "discriminant": {
-                            "type": "Identifier",
-                            "start": 25,
-                            "end": 26,
-                            "name": "c"
-                        },
-                        "cases": []
-                    },
-                    "label": {
-                        "type": "Identifier",
-                        "start": 0,
-                        "end": 4,
-                        "name": "loop"
-                    }
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 4,
+                "column": 24
+              }
+            },
+            "body": [
+              {
+                "type": "LabeledStatement",
+                "start": 0,
+                "end": 30,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 24
+                  }
                 },
-                {
-                    "type": "LabeledStatement",
-                    "start": 43,
-                    "end": 73,
-                    "body": {
-                        "type": "SwitchStatement",
-                        "start": 61,
-                        "end": 73,
-                        "discriminant": {
-                            "type": "Identifier",
-                            "start": 68,
-                            "end": 69,
-                            "name": "c"
-                        },
-                        "cases": []
+                "body": {
+                  "type": "SwitchStatement",
+                  "start": 18,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 12
                     },
-                    "label": {
-                        "type": "Identifier",
-                        "start": 43,
-                        "end": 47,
-                        "name": "loop"
+                    "end": {
+                      "line": 2,
+                      "column": 24
                     }
+                  },
+                  "discriminant": {
+                    "type": "Identifier",
+                    "start": 25,
+                    "end": 26,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 20
+                      }
+                    },
+                    "name": "c"
+                  },
+                  "cases": []
+                },
+                "label": {
+                  "type": "Identifier",
+                  "start": 0,
+                  "end": 4,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 4
+                    }
+                  },
+                  "name": "loop"
                 }
+              },
+              {
+                "type": "LabeledStatement",
+                "start": 43,
+                "end": 73,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 24
+                  }
+                },
+                "body": {
+                  "type": "SwitchStatement",
+                  "start": 61,
+                  "end": 73,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 24
+                    }
+                  },
+                  "discriminant": {
+                    "type": "Identifier",
+                    "start": 68,
+                    "end": 69,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 20
+                      }
+                    },
+                    "name": "c"
+                  },
+                  "cases": []
+                },
+                "label": {
+                  "type": "Identifier",
+                  "start": 43,
+                  "end": 47,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 16
+                    }
+                  },
+                  "name": "loop"
+                }
+              }
             ],
             "sourceType": "script"
-        });
+          });
     });
 
 });

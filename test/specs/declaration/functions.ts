@@ -1576,45 +1576,7 @@ describe('Declarations - Functions', () => {
         });
     });
 
-    it('should parse "function\u0009\u2029w(\u000C)\u00A0{\u000D};"', () => {
-        expect(parseScript(`function\u0009\u2029w(\u000C)\u00A0{\u000D};`, {
-            ranges: true
-        })).to.eql({
-              "body": [
-                {
-                  "async": false,
-                  "body": {
-                    "body": [],
-                    "end": 18,
-                    "start": 15,
-                    "type": "BlockStatement"
-                  },
-                  "end": 18,
-                  "expression": false,
-                  "generator": false,
-                  "id": {
-                    "end": 11,
-                   "name": "w",
-                    "start": 10,
-                    "type": "Identifier"
-                  },
-                  "params": [],
-                  "start": 0,
-                 "type": "FunctionDeclaration"
-                },
-                {
-                  "end": 19,
-                  "start": 18,
-                  "type": "EmptyStatement"
-                }
-             ],
-              "end": 19,
-              "sourceType": "script",
-              "start": 0,
-              "type": "Program"
-            });
-    });
-
+ 
     it('should parse "function __func(){ x = true; }"', () => {
         expect(parseScript(`function __func(arguments){
             return arguments;

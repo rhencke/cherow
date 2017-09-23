@@ -64,7 +64,8 @@ describe('Destructuring - Arrow rest', () => {
 
     it('should parse "let [a, ...ys] = xs;"', () => {
         expect(parseScript('let [a, ...ys] = xs;', {
-            ranges: false
+            ranges: false,
+            raw: true,
         })).to.eql({
             "type": "Program",
             "body": [
