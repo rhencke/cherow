@@ -2105,6 +2105,7 @@ describe('Statements - For', () => {
           });
     });
 
+   
     it('should parse rest element containing a rest element ', () => {
         expect(parseScript(`for (var [...[...x]] = values; iterCount < 1; ) {}`, {
             ranges: true,

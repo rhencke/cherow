@@ -146,7 +146,9 @@ export const enum Token {
     GetKeyword         = 111 | Contextual,
     SetKeyword         = 112 | Contextual,
     FromKeyword        = 113 | Contextual,
-    OfKeyword          = 114 | Contextual
+    OfKeyword          = 114 | Contextual,
+
+    EnumKeyword        = 115 | Reserved,
 }
 
 const KeywordDescTable = [
@@ -185,7 +187,9 @@ const KeywordDescTable = [
     'implements', 'interface', 'package', 'private', 'protected', 'public', 'static', 'yield',
 
     /* Contextual keywords */
-    'as', 'async', 'await', 'constructor', 'get', 'set', 'from', 'of'
+    'as', 'async', 'await', 'constructor', 'get', 'set', 'from', 'of',
+
+    'enum'
 ];
 
 /**
@@ -216,6 +220,7 @@ const DescKeywordTable: {[key: string]: Token} = Object.create(null, {
     default: {value: Token.DefaultKeyword},
     delete: {value: Token.DeleteKeyword},
     do: {value: Token.DoKeyword},
+    enum: {value: Token.EnumKeyword},
     else: {value: Token.ElseKeyword},
     export: {value: Token.ExportKeyword},
     extends: {value: Token.ExtendsKeyword},
@@ -256,8 +261,6 @@ const DescKeywordTable: {[key: string]: Token} = Object.create(null, {
     yield: {value: Token.YieldKeyword},
 });
 
-// Note: it's `Token.EndOfSource === 0` when it doesn't exist, since it's conveniently
-// `(undefined|0) === 0`.
 export function descKeyword(value: string): Token {
     return (DescKeywordTable[value] | 0) as Token;
 }

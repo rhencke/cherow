@@ -47,7 +47,7 @@ describe('Identifiers', () => {
         it('should fail if reserved words used as Identifier - "enum"', () => {
             expect(() => {
                 parseScript('var enum = 123;');
-            }).to.not.throw();
+            }).to.throw();
         });
         it('should fail if reserved words used as Identifier - "export"', () => {
             expect(() => {

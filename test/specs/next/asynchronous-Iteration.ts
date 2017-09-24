@@ -354,7 +354,7 @@ describe('Next - Asynchronous Iteration', () => {
 
     it("should fail on escaped yield", () => {
         expect(() => {
-            parseScript(`async function *gen() { yi\u0065ld: ; }`, {
+            parseScript(`async function *gen() { yi\\u0065ld: ; }`, {
                 next: true
             })
         }).to.throw('');

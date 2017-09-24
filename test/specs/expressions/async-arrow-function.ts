@@ -148,7 +148,7 @@ it("should fail if rest parameter has an initializer", () => {
 
     it('should fail on await is a reserved keyword within generator function bodies and may not be used as a label identifier', () => {
         expect(() => {
-            parseScript(`\await: ;`)
+            parseScript(`\\await: ;`)
         }).to.throw();
     });
 

@@ -277,6 +277,283 @@ describe('V8 - Do expression', () => {
         });
     });
 
+    it('should parse complex', () => {
+        expect(parseScript(`let x = 100;
+        let y = 20;
+        
+        let a = do {
+          if(x > 10) {
+            if(y > 20) {
+              'big x, big y';
+            } else {
+              'big x, small y';
+            }
+          } else {
+            if(y > 10) {
+              'small x, big y';
+            } else {
+              'small x, small y';
+            }
+          }
+        };`, {
+            ranges: true,
+            raw: true,
+            v8: true
+        })).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "type": "VariableDeclarator",
+                            "init": {
+                                "type": "Literal",
+                                "value": 100,
+                                "start": 8,
+                                "end": 11,
+                                "raw": "100"
+                            },
+                            "id": {
+                                "type": "Identifier",
+                                "name": "x",
+                                "start": 4,
+                                "end": 5
+                            },
+                            "start": 4,
+                            "end": 11
+                        }
+                    ],
+                    "kind": "let",
+                    "start": 0,
+                    "end": 12
+                },
+                {
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "type": "VariableDeclarator",
+                            "init": {
+                                "type": "Literal",
+                                "value": 20,
+                                "start": 29,
+                                "end": 31,
+                                "raw": "20"
+                            },
+                            "id": {
+                                "type": "Identifier",
+                                "name": "y",
+                                "start": 25,
+                                "end": 26
+                            },
+                            "start": 25,
+                            "end": 31
+                        }
+                    ],
+                    "kind": "let",
+                    "start": 21,
+                    "end": 32
+                },
+                {
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "type": "VariableDeclarator",
+                            "init": {
+                                "type": "DoExpression",
+                                "body": {
+                                    "type": "BlockStatement",
+                                    "body": [
+                                        {
+                                            "type": "IfStatement",
+                                            "test": {
+                                                "type": "BinaryExpression",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "x",
+                                                    "start": 76,
+                                                    "end": 77
+                                                },
+                                                "right": {
+                                                    "type": "Literal",
+                                                    "value": 10,
+                                                    "start": 80,
+                                                    "end": 82,
+                                                    "raw": "10"
+                                                },
+                                                "operator": ">",
+                                                "start": 76,
+                                                "end": 82
+                                            },
+                                            "alternate": {
+                                                "type": "BlockStatement",
+                                                "body": [
+                                                    {
+                                                        "type": "IfStatement",
+                                                        "test": {
+                                                            "type": "BinaryExpression",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "y",
+                                                                "start": 242,
+                                                                "end": 243
+                                                            },
+                                                            "right": {
+                                                                "type": "Literal",
+                                                                "value": 10,
+                                                                "start": 246,
+                                                                "end": 248,
+                                                                "raw": "10"
+                                                            },
+                                                            "operator": ">",
+                                                            "start": 242,
+                                                            "end": 248
+                                                        },
+                                                        "alternate": {
+                                                            "type": "BlockStatement",
+                                                            "body": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "Literal",
+                                                                        "value": "small x, small y",
+                                                                        "start": 319,
+                                                                        "end": 337,
+                                                                        "raw": "'small x, small y'"
+                                                                    },
+                                                                    "start": 319,
+                                                                    "end": 338
+                                                                }
+                                                            ],
+                                                            "start": 303,
+                                                            "end": 352
+                                                        },
+                                                        "consequent": {
+                                                            "type": "BlockStatement",
+                                                            "body": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "Literal",
+                                                                        "value": "small x, big y",
+                                                                        "start": 266,
+                                                                        "end": 282,
+                                                                        "raw": "'small x, big y'"
+                                                                    },
+                                                                    "start": 266,
+                                                                    "end": 283
+                                                                }
+                                                            ],
+                                                            "start": 250,
+                                                            "end": 297
+                                                        },
+                                                        "start": 239,
+                                                        "end": 352
+                                                    }
+                                                ],
+                                                "start": 225,
+                                                "end": 364
+                                            },
+                                            "consequent": {
+                                                "type": "BlockStatement",
+                                                "body": [
+                                                    {
+                                                        "type": "IfStatement",
+                                                        "test": {
+                                                            "type": "BinaryExpression",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "y",
+                                                                "start": 101,
+                                                                "end": 102
+                                                            },
+                                                            "right": {
+                                                                "type": "Literal",
+                                                                "value": 20,
+                                                                "start": 105,
+                                                                "end": 107,
+                                                                "raw": "20"
+                                                            },
+                                                            "operator": ">",
+                                                            "start": 101,
+                                                            "end": 107
+                                                        },
+                                                        "alternate": {
+                                                            "type": "BlockStatement",
+                                                            "body": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "Literal",
+                                                                        "value": "big x, small y",
+                                                                        "start": 176,
+                                                                        "end": 192,
+                                                                        "raw": "'big x, small y'"
+                                                                    },
+                                                                    "start": 176,
+                                                                    "end": 193
+                                                                }
+                                                            ],
+                                                            "start": 160,
+                                                            "end": 207
+                                                        },
+                                                        "consequent": {
+                                                            "type": "BlockStatement",
+                                                            "body": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "Literal",
+                                                                        "value": "big x, big y",
+                                                                        "start": 125,
+                                                                        "end": 139,
+                                                                        "raw": "'big x, big y'"
+                                                                    },
+                                                                    "start": 125,
+                                                                    "end": 140
+                                                                }
+                                                            ],
+                                                            "start": 109,
+                                                            "end": 154
+                                                        },
+                                                        "start": 98,
+                                                        "end": 207
+                                                    }
+                                                ],
+                                                "start": 84,
+                                                "end": 219
+                                            },
+                                            "start": 73,
+                                            "end": 364
+                                        }
+                                    ],
+                                    "start": 61,
+                                    "end": 374
+                                },
+                                "start": 58,
+                                "end": 374
+                            },
+                            "id": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "start": 54,
+                                "end": 55
+                            },
+                            "start": 54,
+                            "end": 374
+                        }
+                    ],
+                    "kind": "let",
+                    "start": 50,
+                    "end": 375
+                }
+            ],
+            "sourceType": "script",
+            "start": 0,
+            "end": 375
+        });
+    });
+
     it('should parse with JSX', () => {
         expect(parseScript(`function foo() {
             return (
@@ -496,6 +773,316 @@ describe('V8 - Do expression', () => {
             "sourceType": "script",
             "start": 0,
             "end": 373
+        });
+    });
+
+    it('should parse complex JSX', () => {
+        expect(parseScript(`const Component = props =>
+        <div className='myComponent'>
+          {do {
+            if(color === 'blue') { <BlueComponent/>; }
+            else if(color === 'red') { <RedComponent/>; }
+            else if(color === 'green') { <GreenComponent/>; }
+          }}
+        </div>
+      ;`, {
+            ranges: true,
+            raw: true,
+            v8: true,
+            jsx: true
+        })).to.eql({
+            "type": "Program",
+            "body": [
+                {
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "type": "VariableDeclarator",
+                            "init": {
+                                "type": "ArrowFunctionExpression",
+                                "id": null,
+                                "params": [
+                                    {
+                                        "type": "Identifier",
+                                        "name": "props",
+                                        "start": 18,
+                                        "end": 23
+                                    }
+                                ],
+                                "body": {
+                                    "type": "JSXElement",
+                                    "children": [
+                                        {
+                                            "type": "JSXText",
+                                            "value": "\n          ",
+                                            "start": 64,
+                                            "end": 75,
+                                            "raw": "\n          "
+                                        },
+                                        {
+                                            "type": "JSXExpressionContainer",
+                                            "expression": {
+                                                "type": "DoExpression",
+                                                "body": {
+                                                    "type": "BlockStatement",
+                                                    "body": [
+                                                        {
+                                                            "type": "IfStatement",
+                                                            "test": {
+                                                                "type": "BinaryExpression",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "color",
+                                                                    "start": 96,
+                                                                    "end": 101
+                                                                },
+                                                                "right": {
+                                                                    "type": "Literal",
+                                                                    "value": "blue",
+                                                                    "start": 106,
+                                                                    "end": 112,
+                                                                    "raw": "'blue'"
+                                                                },
+                                                                "operator": "===",
+                                                                "start": 96,
+                                                                "end": 112
+                                                            },
+                                                            "alternate": {
+                                                                "type": "IfStatement",
+                                                                "test": {
+                                                                    "type": "BinaryExpression",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "color",
+                                                                        "start": 156,
+                                                                        "end": 161
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "Literal",
+                                                                        "value": "red",
+                                                                        "start": 166,
+                                                                        "end": 171,
+                                                                        "raw": "'red'"
+                                                                    },
+                                                                    "operator": "===",
+                                                                    "start": 156,
+                                                                    "end": 171
+                                                                },
+                                                                "alternate": {
+                                                                    "type": "IfStatement",
+                                                                    "test": {
+                                                                        "type": "BinaryExpression",
+                                                                        "left": {
+                                                                            "type": "Identifier",
+                                                                            "name": "color",
+                                                                            "start": 214,
+                                                                            "end": 219
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "Literal",
+                                                                            "value": "green",
+                                                                            "start": 224,
+                                                                            "end": 231,
+                                                                            "raw": "'green'"
+                                                                        },
+                                                                        "operator": "===",
+                                                                        "start": 214,
+                                                                        "end": 231
+                                                                    },
+                                                                    "alternate": null,
+                                                                    "consequent": {
+                                                                        "type": "BlockStatement",
+                                                                        "body": [
+                                                                            {
+                                                                                "type": "ExpressionStatement",
+                                                                                "expression": {
+                                                                                    "type": "JSXElement",
+                                                                                    "children": [],
+                                                                                    "openingElement": {
+                                                                                        "type": "JSXOpeningElement",
+                                                                                        "name": {
+                                                                                            "type": "JSXIdentifier",
+                                                                                            "name": "GreenComponent",
+                                                                                            "start": 236,
+                                                                                            "end": 250
+                                                                                        },
+                                                                                        "attributes": [],
+                                                                                        "selfClosing": true,
+                                                                                        "start": 235,
+                                                                                        "end": 252
+                                                                                    },
+                                                                                    "closingElement": null,
+                                                                                    "start": 235,
+                                                                                    "end": 252
+                                                                                },
+                                                                                "start": 235,
+                                                                                "end": 253
+                                                                            }
+                                                                        ],
+                                                                        "start": 233,
+                                                                        "end": 255
+                                                                    },
+                                                                    "start": 211,
+                                                                    "end": 255
+                                                                },
+                                                                "consequent": {
+                                                                    "type": "BlockStatement",
+                                                                    "body": [
+                                                                        {
+                                                                            "type": "ExpressionStatement",
+                                                                            "expression": {
+                                                                                "type": "JSXElement",
+                                                                                "children": [],
+                                                                                "openingElement": {
+                                                                                    "type": "JSXOpeningElement",
+                                                                                    "name": {
+                                                                                        "type": "JSXIdentifier",
+                                                                                        "name": "RedComponent",
+                                                                                        "start": 176,
+                                                                                        "end": 188
+                                                                                    },
+                                                                                    "attributes": [],
+                                                                                    "selfClosing": true,
+                                                                                    "start": 175,
+                                                                                    "end": 190
+                                                                                },
+                                                                                "closingElement": null,
+                                                                                "start": 175,
+                                                                                "end": 190
+                                                                            },
+                                                                            "start": 175,
+                                                                            "end": 191
+                                                                        }
+                                                                    ],
+                                                                    "start": 173,
+                                                                    "end": 193
+                                                                },
+                                                                "start": 153,
+                                                                "end": 255
+                                                            },
+                                                            "consequent": {
+                                                                "type": "BlockStatement",
+                                                                "body": [
+                                                                    {
+                                                                        "type": "ExpressionStatement",
+                                                                        "expression": {
+                                                                            "type": "JSXElement",
+                                                                            "children": [],
+                                                                            "openingElement": {
+                                                                                "type": "JSXOpeningElement",
+                                                                                "name": {
+                                                                                    "type": "JSXIdentifier",
+                                                                                    "name": "BlueComponent",
+                                                                                    "start": 117,
+                                                                                    "end": 130
+                                                                                },
+                                                                                "attributes": [],
+                                                                                "selfClosing": true,
+                                                                                "start": 116,
+                                                                                "end": 132
+                                                                            },
+                                                                            "closingElement": null,
+                                                                            "start": 116,
+                                                                            "end": 132
+                                                                        },
+                                                                        "start": 116,
+                                                                        "end": 133
+                                                                    }
+                                                                ],
+                                                                "start": 114,
+                                                                "end": 135
+                                                            },
+                                                            "start": 93,
+                                                            "end": 255
+                                                        }
+                                                    ],
+                                                    "start": 79,
+                                                    "end": 267
+                                                },
+                                                "start": 76,
+                                                "end": 267
+                                            },
+                                            "start": 75,
+                                            "end": 268
+                                        },
+                                        {
+                                            "type": "JSXText",
+                                            "value": "\n        ",
+                                            "start": 268,
+                                            "end": 277,
+                                            "raw": "\n        "
+                                        }
+                                    ],
+                                    "openingElement": {
+                                        "type": "JSXOpeningElement",
+                                        "name": {
+                                            "type": "JSXIdentifier",
+                                            "name": "div",
+                                            "start": 36,
+                                            "end": 39
+                                        },
+                                        "attributes": [
+                                            {
+                                                "type": "JSXAttribute",
+                                                "value": {
+                                                    "type": "Literal",
+                                                    "value": "myComponent",
+                                                    "start": 50,
+                                                    "end": 63,
+                                                    "raw": "'myComponent'"
+                                                },
+                                                "name": {
+                                                    "type": "JSXIdentifier",
+                                                    "name": "className",
+                                                    "start": 40,
+                                                    "end": 49
+                                                },
+                                                "start": 40,
+                                                "end": 63
+                                            }
+                                        ],
+                                        "selfClosing": false,
+                                        "start": 35,
+                                        "end": 64
+                                    },
+                                    "closingElement": {
+                                        "type": "JSXClosingElement",
+                                        "name": {
+                                            "type": "JSXIdentifier",
+                                            "name": "div",
+                                            "start": 279,
+                                            "end": 282
+                                        },
+                                        "start": 277,
+                                        "end": 283
+                                    },
+                                    "start": 35,
+                                    "end": 283
+                                },
+                                "generator": false,
+                                "expression": true,
+                                "async": false,
+                                "start": 18,
+                                "end": 283
+                            },
+                            "id": {
+                                "type": "Identifier",
+                                "name": "Component",
+                                "start": 6,
+                                "end": 15
+                            },
+                            "start": 6,
+                            "end": 283
+                        }
+                    ],
+                    "kind": "const",
+                    "start": 0,
+                    "end": 291
+                }
+            ],
+            "sourceType": "script",
+            "start": 0,
+            "end": 291
         });
     });
 });

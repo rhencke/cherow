@@ -20,7 +20,7 @@ describe('Future reserved words', () => {
         it('should fail on execution of "enum=1"', () => {
             expect(() => {
                 parseScript('var enum = 1;')
-            }).to.not.throw();
+            }).to.throw();
         });
 
         it('should fail on execution of "super=1"', () => {

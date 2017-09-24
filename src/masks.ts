@@ -48,28 +48,27 @@ export const enum Flags {
     HasMemberExpression          = 1 << 5,  // If the program contain a member expression - '([a.a]) => 42'
     HasReservedWord              = 1 << 6,  // If the program contains a reserved word
     HasEvalArgInParam            = 1 << 7,  // If the source contain either 'eval' or 'arguments'
-    HasExtendedUnicodeEscape     = 1 << 8,
-    NonSimpleParameter           = 1 << 9,
-    AllowSuper                   = 1 << 10,
-    ArgumentList                 = 1 << 11,
-    Break                        = 1 << 12,
-    TopLevel                     = 1 << 13,
-    Continue                     = 1 << 14,
-    AllowConstructorWithSupoer   = 1 << 15,
-    Arrow                        = 1 << 16, // If node was parsed in the 'arrow' context
-    AsyncArrow                   = 1 << 17, // If node was parsed in the 'async' context
+    NonSimpleParameter           = 1 << 8,
+    AllowSuper                   = 1 << 9,
+    ArgumentList                 = 1 << 10,
+    Break                        = 1 << 11,
+    TopLevel                     = 1 << 12,
+    Continue                     = 1 << 13,
+    AllowConstructorWithSupoer   = 1 << 14,
+    Arrow                        = 1 << 15, // If node was parsed in the 'arrow' context
+    AsyncArrow                   = 1 << 16, // If node was parsed in the 'async' context
 
     /* Options */
-    OptionsRanges                = 1 << 18,
-    OptionsLoc                   = 1 << 19,
-    OptionsSource                = 1 << 20,
-    OptionsJSX                   = 1 << 21,
-    OptionsTS                    = 1 << 22,
-    OptionsRaw                   = 1 << 23,
-    OptionsNext                  = 1 << 24,
-    OptionsOnComment             = 1 << 25,
-    OptionsOnToken               = 1 << 26,
-    OptionsV8                    = 1 << 27
+    OptionsRanges                = 1 << 17,
+    OptionsLoc                   = 1 << 18,
+    OptionsSource                = 1 << 19,
+    OptionsJSX                   = 1 << 20,
+    OptionsTS                    = 1 << 21,
+    OptionsRaw                   = 1 << 22,
+    OptionsNext                  = 1 << 23,
+    OptionsOnComment             = 1 << 24,
+    OptionsOnToken               = 1 << 25,
+    OptionsV8                    = 1 << 26
 }
 
 export const enum IterationState {

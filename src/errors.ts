@@ -267,11 +267,11 @@ function constructError(msg: string, column: number): Error {
     // istanbul ignore next
     return error;
 }
-export function createError(type: Errors, index: number, line: number, col: number, ...params: string[]): Error {
+export function createError(type: Errors, loc: any, ...params: string[]): Error {
     const description = ErrorMessages[type].replace(/%(\d+)/g, (_: string, i: number) => params[i]);
-    const error: any = constructError('Line ' + line + ': ' + description, col);
-    error.index = index;
-    error.lineNumber = line;
+    const error: any = constructError('Line ' + loc.line + ': ' + description, loc.column);
+    error.index = loc.index;
+    error.lineNumber = loc.line;
     error.description = description;
     return error;
 }

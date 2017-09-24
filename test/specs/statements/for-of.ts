@@ -137,7 +137,7 @@ describe('Statements - For of', () => {
         it('should fail on escaped of', () => {
             expect(() => {
                 parseScript('for (var x o\\u0066 []) ;');
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on invalid rest element (nested array pattern) with initializer', () => {
@@ -376,59 +376,134 @@ describe('Statements - For of', () => {
             });
         });
     
-        it('should parse "for (var a of /b/);"', () => {
+        it('should parse regular expression', () => {
             expect(parseScript(`for (var a of /b/);`, {
                 ranges: true,
                 raw: true,
-                next: true
+                next: true,
+                locations: true
             })).to.eql({
                 "type": "Program",
                 "start": 0,
                 "end": 19,
-                "body": [{
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 19
+                  }
+                },
+                "body": [
+                  {
                     "type": "ForOfStatement",
                     "start": 0,
                     "end": 19,
                     "await": false,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 19
+                      }
+                    },
                     "left": {
-                        "type": "VariableDeclaration",
-                        "start": 5,
-                        "end": 10,
-                        "declarations": [{
-                            "type": "VariableDeclarator",
+                      "type": "VariableDeclaration",
+                      "start": 5,
+                      "end": 10,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 5
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 10
+                        }
+                      },
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start": 9,
+                          "end": 10,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 10
+                            }
+                          },
+                          "id": {
+                            "type": "Identifier",
                             "start": 9,
                             "end": 10,
-                            "id": {
-                                "type": "Identifier",
-                                "start": 9,
-                                "end": 10,
-                                "name": "a"
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 10
+                              }
                             },
-                            "init": null
-                        }],
-                        "kind": "var"
+                            "name": "a"
+                          },
+                          "init": null
+                        }
+                      ],
+                      "kind": "var"
                     },
                     "right": {
-                        "type": "Literal",
-                        "start": 14,
-                        "end": 17,
-                        "value": /b/,
-                        "raw": "/b/",
-                        "regex": {
-                            "pattern": "b",
-                            "flags": ""
+                      "type": "Literal",
+                      "start": 14,
+                      "end": 17,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 17
                         }
+                      },
+                      "value": /b/,
+                      "raw": "/b/",
+                      "regex": {
+                        "pattern": "b",
+                        "flags": ""
+                      }
                     },
                     "body": {
-                        "type": "EmptyStatement",
-                        "start": 18,
-                        "end": 19
+                      "type": "EmptyStatement",
+                      "start": 18,
+                      "end": 19,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 18
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 19
+                        }
+                      }
                     }
-                }],
+                  }
+                ],
                 "sourceType": "script"
-            });
+              });
         });
-    
+
         it('should parse for of array pattern let', () => {
             expect(parseScript(`for (let [p, q] of r);`, {
                 ranges: true,

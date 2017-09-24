@@ -97,6 +97,160 @@ describe('TC39 - Parenthesized', () => {
             "end": 18
         });
     });
+    
+    it('should parse "(foo = [])[0] = 4;"', () => {
+        expect(parseScript(`(foo = [])[0] = 4;`, {
+            raw: true,
+            ranges: true,
+            locations: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 18
+              }
+            },
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 18,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 18
+                  }
+                },
+                "expression": {
+                  "type": "AssignmentExpression",
+                  "start": 0,
+                  "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
+                  "operator": "=",
+                  "left": {
+                    "type": "MemberExpression",
+                    "start": 0,
+                    "end": 13,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 13
+                      }
+                    },
+                    "object": {
+                      "type": "AssignmentExpression",
+                      "start": 1,
+                      "end": 9,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 1
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 9
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "Identifier",
+                        "start": 1,
+                        "end": 4,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 1
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 4
+                          }
+                        },
+                        "name": "foo"
+                      },
+                      "right": {
+                        "type": "ArrayExpression",
+                        "start": 7,
+                        "end": 9,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 7
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 9
+                          }
+                        },
+                        "elements": []
+                      }
+                    },
+                    "property": {
+                      "type": "Literal",
+                      "start": 11,
+                      "end": 12,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 12
+                        }
+                      },
+                      "value": 0,
+                      "raw": "0"
+                    },
+                    "computed": true
+                  },
+                  "right": {
+                    "type": "Literal",
+                    "start": 16,
+                    "end": 17,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 17
+                      }
+                    },
+                    "value": 4,
+                    "raw": "4"
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
 
     it('should parse "[ (G = s), F = G ]"', () => {
         expect(parseScript(`[ (G = s), F = G ]`, {
