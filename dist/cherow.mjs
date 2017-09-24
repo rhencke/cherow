@@ -4703,11 +4703,11 @@ Parser.prototype.parseObjectElement = function parseObjectElement (context) {
         flags |= lastFlag = 1 /* Getter */;
         count++;
     }
-    else if (this.parseOptional(context, 4208 /* SetKeyword */)) {
+    if (this.parseOptional(context, 4208 /* SetKeyword */)) {
         flags |= lastFlag = 2 /* Setter */;
         count++;
     }
-    else if (this.parseOptional(context, 4204 /* AsyncKeyword */)) {
+    if (this.parseOptional(context, 4204 /* AsyncKeyword */)) {
         flags |= lastFlag = 16 /* Async */;
         asyncNewline = !!(this.flags & 1 /* LineTerminator */);
         count++;
@@ -4836,7 +4836,8 @@ Parser.prototype.parseObjectElement = function parseObjectElement (context) {
 Parser.prototype.parseFunctionMethod = function parseFunctionMethod (context, flags) {
     var pos = this.startNode();
     var isGenerator = !!(flags & 64 /* Generator */);
-    if (isGenerator)
+    context &= ~4096 /* Yield */;
+    if (isGenerator && !(flags & 1 /* Getter */))
         { context |= 4096 /* Yield */; }
     { this.flags |= 16384 /* AllowConstructorWithSupoer */; }
     if (!(context & 32 /* HasConstructor */))

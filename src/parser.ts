@@ -4614,10 +4614,14 @@ export class Parser {
         if (this.parseOptional(context, Token.GetKeyword)) {
             flags |= lastFlag = ObjectFlags.Getter;
             count++;
-        } else if (this.parseOptional(context, Token.SetKeyword)) {
+        }
+
+        if (this.parseOptional(context, Token.SetKeyword)) {
             flags |= lastFlag = ObjectFlags.Setter;
             count++;
-        } else if (this.parseOptional(context, Token.AsyncKeyword)) {
+        }
+
+        if (this.parseOptional(context, Token.AsyncKeyword)) {
             flags |= lastFlag = ObjectFlags.Async;
             asyncNewline = !!(this.flags & Flags.LineTerminator);
             count++;
@@ -4752,9 +4756,12 @@ export class Parser {
     private parseFunctionMethod(context: Context, flags: ObjectFlags) {
 
         const pos = this.startNode();
+
         const isGenerator = !!(flags & ObjectFlags.Generator);
 
-        if (isGenerator) context |= Context.Yield;
+        context &= ~Context.Yield;
+
+        if (isGenerator && !(flags & ObjectFlags.Getter)) context |= Context.Yield;
 
         if (Context.Super) this.flags |= Flags.AllowConstructorWithSupoer;
 

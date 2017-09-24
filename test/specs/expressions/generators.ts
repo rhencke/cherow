@@ -1111,121 +1111,193 @@ describe('Generators', () => {
 
 
     it('should parse "function *a(){({b(){yield}})}"', () => {
-        expect(parseScript('function *a(){({b(){yield}})}')).to.eql({
+        expect(parseScript('function *a(){({b(){yield}})}', {
+            ranges: true,
+            raw: true
+        })).to.eql({
             "type": "Program",
-            "body": [{
+            "start": 0,
+            "end": 29,
+            "body": [
+              {
                 "type": "FunctionDeclaration",
+                "start": 0,
+                "end": 29,
                 "id": {
-                    "type": "Identifier",
-                    "name": "a"
-                },
-                "params": [],
-                "body": {
-                    "type": "BlockStatement",
-                    "body": [{
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "ObjectExpression",
-                            "properties": [{
-                                "type": "Property",
-                                "key": {
-                                    "type": "Identifier",
-                                    "name": "b"
-                                },
-                                "computed": false,
-                                "value": {
-                                    "type": "FunctionExpression",
-                                    "id": null,
-                                    "params": [],
-                                    "body": {
-                                        "type": "BlockStatement",
-                                        "body": [{
-                                            "type": "ExpressionStatement",
-                                            "expression": {
-                                                "type": "YieldExpression",
-                                                "argument": null,
-                                                "delegate": false
-                                            }
-                                        }]
-                                    },
-                                    "generator": false,
-                                    "expression": false,
-                                    "async": false
-                                },
-                                "kind": "init",
-                                "method": true,
-                                "shorthand": false
-                            }]
-                        }
-                    }]
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 11,
+                  "name": "a"
                 },
                 "generator": true,
                 "expression": false,
-                "async": false
-            }],
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 13,
+                  "end": 29,
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 14,
+                      "end": 28,
+                      "expression": {
+                        "type": "ObjectExpression",
+                        "start": 15,
+                        "end": 27,
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "start": 16,
+                            "end": 26,
+                            "method": true,
+                            "shorthand": false,
+                            "computed": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start": 16,
+                              "end": 17,
+                              "name": "b"
+                            },
+                            "kind": "init",
+                            "value": {
+                              "type": "FunctionExpression",
+                              "start": 17,
+                              "end": 26,
+                              "id": null,
+                              "generator": false,
+                              "expression": false,
+                              "async": false,
+                              "params": [],
+                              "body": {
+                                "type": "BlockStatement",
+                                "start": 19,
+                                "end": 26,
+                                "body": [
+                                  {
+                                    "type": "ExpressionStatement",
+                                    "start": 20,
+                                    "end": 25,
+                                    "expression": {
+                                      "type": "Identifier",
+                                      "start": 20,
+                                      "end": 25,
+                                      "name": "yield"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
 
     it('should parse "function *a(){({set b(c){yield}})}"', () => {
-        expect(parseScript('function *a(){({set b(c){yield}})}')).to.eql({
+        expect(parseScript('function *a(){({set b(c){yield}})}', {
+            raw: true,
+            ranges: true
+        })).to.eql({
             "type": "Program",
-            "body": [{
+            "start": 0,
+            "end": 34,
+            "body": [
+              {
                 "type": "FunctionDeclaration",
+                "start": 0,
+                "end": 34,
                 "id": {
-                    "type": "Identifier",
-                    "name": "a"
-                },
-                "params": [],
-                "body": {
-                    "type": "BlockStatement",
-                    "body": [{
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "ObjectExpression",
-                            "properties": [{
-                                "type": "Property",
-                                "key": {
-                                    "type": "Identifier",
-                                    "name": "b"
-                                },
-                                "computed": false,
-                                "value": {
-                                    "type": "FunctionExpression",
-                                    "id": null,
-                                    "params": [{
-                                        "type": "Identifier",
-                                        "name": "c"
-                                    }],
-                                    "body": {
-                                        "type": "BlockStatement",
-                                        "body": [{
-                                            "type": "ExpressionStatement",
-                                            "expression": {
-                                                "type": "YieldExpression",
-                                                "argument": null,
-                                                "delegate": false
-                                            }
-                                        }]
-                                    },
-                                    "generator": false,
-                                    "expression": false,
-                                    "async": false
-                                },
-                                "kind": "set",
-                                "method": false,
-                                "shorthand": false
-                            }]
-                        }
-                    }]
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 11,
+                  "name": "a"
                 },
                 "generator": true,
                 "expression": false,
-                "async": false
-            }],
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 13,
+                  "end": 34,
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 14,
+                      "end": 33,
+                      "expression": {
+                        "type": "ObjectExpression",
+                        "start": 15,
+                        "end": 32,
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "start": 16,
+                            "end": 31,
+                            "method": false,
+                            "shorthand": false,
+                            "computed": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start": 20,
+                              "end": 21,
+                              "name": "b"
+                            },
+                            "kind": "set",
+                            "value": {
+                              "type": "FunctionExpression",
+                              "start": 21,
+                              "end": 31,
+                              "id": null,
+                              "generator": false,
+                              "expression": false,
+                              "async": false,
+                              "params": [
+                                {
+                                  "type": "Identifier",
+                                  "start": 22,
+                                  "end": 23,
+                                  "name": "c"
+                                }
+                              ],
+                              "body": {
+                                "type": "BlockStatement",
+                                "start": 24,
+                                "end": 31,
+                                "body": [
+                                  {
+                                    "type": "ExpressionStatement",
+                                    "start": 25,
+                                    "end": 30,
+                                    "expression": {
+                                      "type": "Identifier",
+                                      "start": 25,
+                                      "end": 30,
+                                      "name": "yield"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
             "sourceType": "script"
-        });
+          });
     });
 
     it('should parse "function *a(){yield ++a;}"', () => {
