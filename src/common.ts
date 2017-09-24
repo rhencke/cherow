@@ -165,31 +165,33 @@ export function isBinaryOperator(t: Token): boolean {
 export function isStartOfExpression(t: Token, inJSXContext: boolean): boolean {
     switch (t) {
         case Token.Identifier:
-        case Token.NumericLiteral:
         case Token.LeftBracket:
-        case Token.LeftParen:
         case Token.LeftBrace:
+        case Token.LeftParen:
+        case Token.TrueKeyword:
+        case Token.StringLiteral:
+        case Token.NumericLiteral:
         case Token.Add:
         case Token.Subtract:
+        case Token.LetKeyword:
         case Token.Negate:
         case Token.Complement:
         case Token.Decrement:
         case Token.Increment:
+        case Token.FunctionKeyword:
+        case Token.NewKeyword:
         case Token.Divide:
         case Token.DivideAssign:
         case Token.ClassKeyword:
         case Token.DeleteKeyword:
-        case Token.FunctionKeyword:
-        case Token.LetKeyword:
-        case Token.NewKeyword:
+        case Token.TemplateCont:
+        case Token.TemplateTail:
         case Token.VoidKeyword:
         case Token.YieldKeyword:
         case Token.SuperKeyword:
         case Token.ThisKeyword:
         case Token.TypeofKeyword:
         case Token.FalseKeyword:
-        case Token.TrueKeyword:
-        case Token.StringLiteral:
         case Token.ImportKeyword:
         case Token.NullKeyword:
         case Token.AwaitKeyword:

@@ -11,6 +11,24 @@ describe('Declarations - Functions', () => {
         }).to.throw();
     });
 
+    it('should fail on ""use strict"; function eval() {  }function eval() {  }"', () => {
+        expect(() => {
+            parseScript('"use strict"; function eval() {  }function eval() {  }');
+        }).to.throw();
+    });
+
+    it('should fail on "function static() { "use strict"; }"', () => {
+        expect(() => {
+            parseModule('function static() { "use strict"; }');
+        }).to.throw();
+    });
+
+    it('should fail on "function static() { "use strict"; }"', () => {
+        expect(() => {
+            parseModule('function arguments() { "use strict"; }');
+        }).to.throw();
+    });
+
     it('should fail on anonymous function declaration', () => {
         expect(() => {
             parseScript('"use strict"; function package() {}');
@@ -86,19 +104,19 @@ describe('Declarations - Functions', () => {
     it('should fail if a FunctionDeclaration has two identical parameters', () => {
         expect(() => {
             parseScript('"use strict"; function _13_1_5_fun(param, param) { }');
-        }).to.not.throw('');
+        }).to.throw('');
     });
 
     it('should fail if any Identifier value occurs more than once within a FormalParameterList', () => {
         expect(() => {
             parseScript('"use strict"; var _13_1_9_fun = function (param1, param2, param1) { };');
-        }).to.not.throw('');
+        }).to.throw('');
     });
 
     it('should fail if a FunctionDeclaration has two identical parameters', () => {
         expect(() => {
             parseScript('"use strict"; function _13_1_5_fun(param, param) { }');
-        }).to.not.throw('');
+        }).to.throw('');
     });
 
     it('should fail on "class A extends yield B { }"', () => {
@@ -128,7 +146,7 @@ describe('Declarations - Functions', () => {
     it('should fail on duplicate params', () => {
         expect(() => {
             parseScript(`"use strict"; function foo(bar, bar) {}`);
-        }).to.not.throw('');
+        }).to.throw('');
     });
 
     it('should fail on yield as function name in strict mode', () => {

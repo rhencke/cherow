@@ -5,6 +5,12 @@ const expect = chai.expect;
 
 describe('Espressions - Template', () => {
 
+    it('should fail on invalid template end', () => {
+        expect(() => {
+            parseScript('a++``');
+        }).to.throw();
+    });
+
     it('should fail on unterminated template', () => {
         expect(() => {
             parseScript('`');

@@ -52,8 +52,8 @@ export const enum Flags {
     AllowSuper                   = 1 << 9,
     ArgumentList                 = 1 << 10,
     Break                        = 1 << 11,
-    TopLevel                     = 1 << 12,
-    Continue                     = 1 << 13,
+    Continue                     = 1 << 12,
+    Switch                       = 1 << 13,
     AllowConstructorWithSupoer   = 1 << 14,
     Arrow                        = 1 << 15, // If node was parsed in the 'arrow' context
     AsyncArrow                   = 1 << 16, // If node was parsed in the 'async' context

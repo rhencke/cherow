@@ -1214,6 +1214,229 @@ describe('Espressions - Super', () => {
         });
     });
 
+    it('should parse yield followed by super', () => {
+        expect(parseScript(`({ *f() { yield super.f(); } })`, {
+            ranges: true,
+            raw: true,
+            locations: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 31,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 31
+              }
+            },
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  }
+                },
+                "expression": {
+                  "type": "ObjectExpression",
+                  "start": 1,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 30
+                    }
+                  },
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start": 3,
+                      "end": 28,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 3
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 28
+                        }
+                      },
+                      "method": true,
+                      "shorthand": false,
+                      "computed": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 4,
+                        "end": 5,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 5
+                          }
+                        },
+                        "name": "f"
+                      },
+                      "kind": "init",
+                      "value": {
+                        "type": "FunctionExpression",
+                        "start": 5,
+                        "end": 28,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 5
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 28
+                          }
+                        },
+                        "id": null,
+                        "generator": true,
+                        "expression": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "start": 8,
+                          "end": 28,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 28
+                            }
+                          },
+                          "body": [
+                            {
+                              "type": "ExpressionStatement",
+                              "start": 10,
+                              "end": 26,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 10
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 26
+                                }
+                              },
+                              "expression": {
+                                "type": "YieldExpression",
+                                "start": 10,
+                                "end": 25,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 10
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 25
+                                  }
+                                },
+                                "delegate": false,
+                                "argument": {
+                                  "type": "CallExpression",
+                                  "start": 16,
+                                  "end": 25,
+                                  "loc": {
+                                    "start": {
+                                      "line": 1,
+                                      "column": 16
+                                    },
+                                    "end": {
+                                      "line": 1,
+                                      "column": 25
+                                    }
+                                  },
+                                  "callee": {
+                                    "type": "MemberExpression",
+                                    "start": 16,
+                                    "end": 23,
+                                    "loc": {
+                                      "start": {
+                                        "line": 1,
+                                        "column": 16
+                                      },
+                                      "end": {
+                                        "line": 1,
+                                        "column": 23
+                                      }
+                                    },
+                                    "object": {
+                                      "type": "Super",
+                                      "start": 16,
+                                      "end": 21,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 16
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 21
+                                        }
+                                      }
+                                    },
+                                    "property": {
+                                      "type": "Identifier",
+                                      "start": 22,
+                                      "end": 23,
+                                      "loc": {
+                                        "start": {
+                                          "line": 1,
+                                          "column": 22
+                                        },
+                                        "end": {
+                                          "line": 1,
+                                          "column": 23
+                                        }
+                                      },
+                                      "name": "f"
+                                    },
+                                    "computed": false
+                                  },
+                                  "arguments": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
     it('should parse super member', () => {
         expect(parseScript(`class A extends B {
             X() {

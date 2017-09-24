@@ -35,6 +35,30 @@ describe('Statements - For in', () => {
         }).to.not.throw();
     });
 
+    it('should fail "for (const a = 0 in {});"', () => {
+        expect(() => {
+            parseScript('for (const a = 0 in {});');
+        }).to.throw();
+    });
+
+    it('should fail "for (var a = 0 in {});"', () => {
+        expect(() => {
+            parseScript('for (var a = 0 in {});');
+        }).to.throw();
+    });
+
+    it('should fail "for (var {a} = 0 in {});"', () => {
+        expect(() => {
+            parseScript('for (var {a} = 0 in {});');
+        }).to.throw();
+    });
+
+    it('should fail "for ([...x, ...y] in [[]]) ;"', () => {
+        expect(() => {
+            parseScript('for ([...x, ...y] in [[]]) ;');
+        }).to.not.throw();
+    });
+
     it('should fail on assignment rest element with an initializer', () => {
         expect(() => {
             parseScript('for ([...x = 1] in [[]]) ;');
@@ -46,7 +70,6 @@ describe('Statements - For in', () => {
             parseScript('"use strict"; for ([[x[yield]]] in [[[]]]) ;');
         }).to.throw();
     });
-
 
     it('should fail on array rest before elison', () => {
         expect(() => {
