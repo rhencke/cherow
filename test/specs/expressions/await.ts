@@ -1118,49 +1118,6 @@ describe('Espressions - Await', () => {
         });
     
     
-        it('should parse await in a generator is an identifier', () => {
-            expect(parseScript('async function await() { return 1 }', {
-                raw: true,
-                ranges: true
-            })).to.eql({
-                "type": "Program",
-                "start": 0,
-                "end": 35,
-                "body": [{
-                    "type": "FunctionDeclaration",
-                    "start": 0,
-                    "end": 35,
-                    "id": {
-                        "type": "Identifier",
-                        "start": 15,
-                        "end": 20,
-                        "name": "await"
-                    },
-                    "generator": false,
-                    "expression": false,
-                    "async": true,
-                    "params": [],
-                    "body": {
-                        "type": "BlockStatement",
-                        "start": 23,
-                        "end": 35,
-                        "body": [{
-                            "type": "ReturnStatement",
-                            "start": 25,
-                            "end": 33,
-                            "argument": {
-                                "type": "Literal",
-                                "start": 32,
-                                "end": 33,
-                                "value": 1,
-                                "raw": "1"
-                            }
-                        }]
-                    }
-                }],
-                "sourceType": "script"
-            });
-        });
     
         it('should parse await in global', () => {
             expect(parseScript('var await = 1;', {

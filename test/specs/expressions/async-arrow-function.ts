@@ -143,7 +143,7 @@ it("should fail if rest parameter has an initializer", () => {
             parseScript(`async() => {
           void await;
         };`)
-      }).to.not.throw();
+      }).to.throw();
     });
 
     it('should fail on await is a reserved keyword within generator function bodies and may not be used as a label identifier', () => {

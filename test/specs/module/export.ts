@@ -17,6 +17,83 @@ describe('Module - Export', () => {
       }).to.not.throw();
     });
     
+    it('should fail on duplicate default', () => {
+      expect(() => {
+          parseModule(`export default default function foo () {}`);
+      }).to.throw();
+  });
+
+    it('should fail on export of let as identifier', () => {
+      expect(() => {
+          parseModule(`export let`);
+      }).to.throw();
+    });
+
+    it('should fail on export of const as identifier', () => {
+      expect(() => {
+          parseModule(`export const`);
+      }).to.throw();
+    });
+
+    it('should fail on export of duplicate lexical binding (let)', () => {
+      expect(() => {
+          parseModule(`export let a, a`);
+      }).to.throw();
+    });
+
+    it('should fail on export of duplicate lexical binding (const)', () => {
+      expect(() => {
+          parseModule(`export const a = 2;
+          export const a = 2;`);
+      }).to.throw();
+    });
+
+    it('should fail on export of anonymous class', () => {
+      expect(() => {
+          parseModule(`export class {}`);
+      }).to.throw();
+  });
+
+    it('should fail on export default of duplicate function', () => {
+      expect(() => {
+        parseModule(`export default function a() {}
+        export default function a() {}`);
+    }).to.throw();
+    });
+
+    it('should fail on export default of duplicate class', () => {
+      expect(() => {
+          parseModule(`export default class a{}  export default class a{} `);
+      }).to.throw();
+    });
+
+    it('should fail on export of duplicate function', () => {
+      expect(() => {
+          parseModule(`export function a() {}
+          export function a() {}`);
+      }).to.throw();
+  });
+
+    it('should fail on export of duplicate function', () => {
+      expect(() => {
+          parseModule(`export async function a() {}
+          export async  function a() {}`);
+      }).to.throw();
+  });
+
+    it('should fail on export of duplicate async and non-async function', () => {
+      expect(() => {
+      parseModule(`export async function a() {}
+      export function a() {}`);
+    }).to.throw();
+  });
+
+    it('should fail on export of duplicate class', () => {
+      expect(() => {
+          parseModule(`export class a{}  export class a{} `);
+      }).to.throw();
+    });
+
     it('should fail on export of arguments', () => {
         expect(() => {
             parseModule(' export { x as arguments };');
@@ -41,7 +118,7 @@ describe('Module - Export', () => {
         }).to.not.throw();
     });
 
-      it('should fail on "{export {a};}"', () => {
+    it('should fail on "{export {a};}"', () => {
           expect(() => {
               parseModule(`{export {a};}`);
           }).to.throw();
@@ -147,7 +224,7 @@ describe('Module - Export', () => {
               parseModule(`export default = 42`);
           }).to.throw();
       });
-  
+
       it('should parse in` operator within an exported AssignmentExpression', () => {
         expect(parseModule(`export default 'x' in { x: true }`, {
             ranges: true,

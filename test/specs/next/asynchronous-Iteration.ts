@@ -17,14 +17,14 @@ describe('Next - Asynchronous Iteration', () => {
             parseScript(`var gen = async function *g() { void await; };`, {
                 next: true
             })
-        }).to.not.throw();
+        }).to.throw();
     });
     it("should fail on named await as identifier reference escaped", () => {
         expect(() => {
-            parseScript(`var gen = async function *g() { void \u0061wait; };`, {
+            parseScript(`var gen = async function *g() { void \\u0061wait; };`, {
                 next: true
             })
-        }).to.not.throw();
+        }).to.throw();
     });
 
     it("should fail if bound names of formal parameters contains any duplicate elements", () => {
