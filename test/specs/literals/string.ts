@@ -358,7 +358,6 @@ describe('TC39 - String literals', () => {
     it('should fail  on invalid octal literal with using strict directive "\\000"', () => {
         expect(() => {
             parseScript('\'use strict\'; (\'\\000\')', {
-                directives: true
             })
         }).to.throw();
     });
@@ -366,7 +365,6 @@ describe('TC39 - String literals', () => {
     it('should fail  on invalid octal literal with using strict directive "\\000"', () => {
         expect(() => {
             parseScript('"use strict"; (\'\\000\')', {
-                directives: true
             })
         }).to.throw();
     });

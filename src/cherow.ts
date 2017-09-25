@@ -1,12 +1,15 @@
 import { Context } from './masks';
 import { Parser } from './parser';
+import { ParserOptions } from './interface';
 
-// https://tc39.github.io/ecma262/#sec-modules
-export function parseModule(sourceText: string, options: any = {}) {
+export function parseModule(sourceText: string, options: ParserOptions = {}) {
     return new Parser(sourceText, options).parseModule(Context.Strict | Context.Module);
 }
 
-// https://tc39.github.io/ecma262/#sec-scripts
-export function parseScript(sourceText: string, options: any = {}) {
+export function parseScript(sourceText: string, options: ParserOptions = {}) {
+    return new Parser(sourceText, options).parseScript(Context.None);
+}
+
+export function parseJSX(sourceText: string, options: ParserOptions = { jsx: true }) {
     return new Parser(sourceText, options).parseScript(Context.None);
 }

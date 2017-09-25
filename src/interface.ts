@@ -6,10 +6,12 @@ export interface ParserOptions {
     next?: boolean;
     ranges?: boolean;
     locations?: boolean;
-    onComment?: boolean;
+    comments?: CollectComments;
     loc?: boolean;
     raw?: boolean;
     jsx?: boolean;
+    tokens?: boolean;
+    v8?: boolean;
 }
 
 export interface SavedState {
@@ -19,6 +21,12 @@ export interface SavedState {
     token: Token;
     tokenValue: any;
     flags: Flags;
+    startPos: number;
+    endPos: number;
+    startLine: number;
+    endLine: number;
+    startColumn: number;
+    endColumn: number;
     tokenRegExp: any;
     tokenRaw: any;
 }
@@ -38,6 +46,6 @@ export interface Location {
 /**
  * The type of the `onComment` option.
  */
-export type OnComment = void | Comment[] | (
+export type CollectComments = void | Comment[] | (
     (type: string, value: string, start: number, end: number) => any
 );

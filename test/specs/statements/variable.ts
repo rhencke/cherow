@@ -405,7 +405,6 @@ describe('Statements - Variable', () => {
             expect(parseScript(`"use strict"; var await = 1`, {
                 ranges: true,
                 raw: true,
-                ecmaVersion: 234
             })).to.eql({
                 "body": [{
                         "end": 13,

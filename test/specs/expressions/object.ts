@@ -2490,7 +2490,6 @@ describe('Espressions - Object', () => {
         expect(parseScript('x = {  "foo"() { return bar; } };', {
             raw: true,
             ranges: false,
-            directives: true
         })).to.eql({
             "type": "Program",
             "body": [{
@@ -2545,7 +2544,6 @@ describe('Espressions - Object', () => {
         expect(parseScript('x = { [foo]() { return bar; }};', {
             raw: true,
             ranges: false,
-            directives: true
         })).to.eql({
             "type": "Program",
             "body": [{
@@ -2599,7 +2597,6 @@ describe('Espressions - Object', () => {
         expect(parseScript('let x = { foo() { return bar; } };', {
             raw: true,
             ranges: false,
-            directives: true
         })).to.eql({
             "type": "Program",
             "body": [{
@@ -2653,7 +2650,6 @@ describe('Espressions - Object', () => {
         expect(parseScript('({ x([ a, b ]){} });', {
             raw: true,
             ranges: false,
-            directives: true
         })).to.eql({
             "type": "Program",
             "body": [{

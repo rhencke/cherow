@@ -28,7 +28,6 @@ export const enum Context {
     Const                  = 1 << 26,  // Variable declaration
     Let                    = 1 << 27,  // Variable declaration
     Var                    = 1 << 28,  // Variable declaration
-    HasProto               = 1 << 30,  // Variable declaration
 
     // An Lexical declaration can be either 'const¨' or 'let
     Lexical = Let | Const,
@@ -62,12 +61,11 @@ export const enum Flags {
     OptionsLoc                   = 1 << 18,
     OptionsSource                = 1 << 19,
     OptionsJSX                   = 1 << 20,
-    OptionsTS                    = 1 << 21,
-    OptionsRaw                   = 1 << 22,
-    OptionsNext                  = 1 << 23,
-    OptionsOnComment             = 1 << 24,
-    OptionsOnToken               = 1 << 25,
-    OptionsV8                    = 1 << 26
+    OptionsRaw                   = 1 << 21,
+    OptionsNext                  = 1 << 22,
+    OptionsOnComment             = 1 << 23,
+    OptionsOnToken               = 1 << 24,
+    OptionsV8                    = 1 << 25
 }
 
 export const enum IterationState {

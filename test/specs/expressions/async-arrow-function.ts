@@ -860,7 +860,6 @@ it("should fail if rest parameter has an initializer", () => {
         expect(parseScript('async package => function () { "use strict" }', {
             ranges: true,
             raw: true,
-            directives: true
         })).to.eql({
             "type": "Program",
             "start": 0,

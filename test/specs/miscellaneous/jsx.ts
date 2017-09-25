@@ -1142,9 +1142,6 @@ describe('JSX', () => {
               jsx: true,
               ranges: true,
               raw: true,
-              plugins: {
-                  jsx: true
-              }
           })).to.eql({
               "body": [{
                   "end": 18,
@@ -3894,9 +3891,6 @@ describe('JSX', () => {
           expect(parseScript(`<p a={'b'}/>`, {
               jsx: true,
               ranges: true,
-              plugins: {
-                  jsx: true
-              }
           })).to.eql({
               "body": [{
                   "end": 12,
@@ -3955,9 +3949,6 @@ describe('JSX', () => {
           expect(parseScript(`<o.p.q/>;`, {
               jsx: true,
               ranges: true,
-              plugins: {
-                  jsx: true
-              }
           })).to.eql({
               "body": [{
                   "end": 9,

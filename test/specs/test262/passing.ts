@@ -9199,8 +9199,7 @@ describe('TC262 - passing', () => {
         it('should parse "function a() {"use strict"; 0o0; }"', () => {
             expect(parseScript('function a() {"use strict"; 0o0; }', {
                 ranges: false,
-                raw: true,
-                directives: false
+                raw: true
             })).to.eql({
                 "type": "Program",
                 "body": [{
@@ -15256,7 +15255,6 @@ describe('TC262 - passing', () => {
     
         it('should parse "(class {get a() {}})"', () => {
             expect(parseScript('(class {get a() {}})', {
-                directives: true,
                 raw: true
             })).to.eql({
                 "type": "Program",
@@ -15300,7 +15298,6 @@ describe('TC262 - passing', () => {
     
         it('should parse "(class {set a(b) {"use strict";}})"', () => {
             expect(parseScript('(class {set a(b) {"use strict";}})', {
-                directives: true,
                 raw: true
             })).to.eql({
                 "type": "Program",

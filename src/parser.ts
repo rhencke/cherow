@@ -5,36 +5,36 @@ import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFl
 import { createError, Errors } from './errors';
 import { Token, tokenDesc, descKeyword } from './token';
 import { isValidIdentifierStart, isIdentifierStart, isIdentifierPart } from './unicode';
-import { ParserOptions, SavedState, OnComment, ErrorLocation, Location } from './interface';
+import { ParserOptions, SavedState, CollectComments, ErrorLocation, Location } from './interface';
 
 export class Parser {
-    source: string;
-    index: number;
-    column: number;
-    line: number;
-    flags: Flags;
-    tokenValue: any;
-    token: Token;
-    startPos: number;
-    startColumn: number;
-    startLine: number;
-    endPos: number;
-    endColumn: number;
-    endLine: number;
-    tokens: any;
-    tokenRaw: string;
-    labelSet: any;
-    blockScope: any;
-    parentScope: any;
-    functionScope: any;
-    comments: OnComment | void;
-    tokenRegExp: void | {
+    private readonly source: string;
+    private index: number;
+    private column: number;
+    private line: number;
+    private flags: Flags;
+    private tokenValue: any;
+    private token: Token;
+    private startPos: number;
+    private startColumn: number;
+    private startLine: number;
+    private endPos: number;
+    private endColumn: number;
+    private endLine: number;
+    private tokens: any;
+    private tokenRaw: string;
+    private labelSet: any;
+    private blockScope: any;
+    private parentScope: any;
+    private functionScope: any;
+    private errorLocation: void | ErrorLocation;
+    private comments: CollectComments | void;
+    private tokenRegExp: void | {
         pattern: string;
         flags: string;
     };
-    errorLocation: void | ErrorLocation;
 
-    constructor(source: string, options: any) {
+    constructor(source: string, options: ParserOptions) {
         this.flags = Flags.None;
         this.source = source;
         this.index = 0;
@@ -49,18 +49,17 @@ export class Parser {
         this.tokenValue = undefined;
         this.tokenRaw = '';
         this.token = 0;
+        this.comments = options.comments;
+        this.tokens = options.tokens;
+        this.labelSet = {};
         this.errorLocation = undefined;
         this.tokenRegExp = undefined;
-        this.labelSet = {};
         this.functionScope = undefined;
         this.blockScope = undefined;
         this.parentScope = undefined;
-        this.comments = options.comments;
-        this.tokens = options.tokens;
 
         if (options.next) this.flags |= Flags.OptionsNext;
         if (options.jsx) this.flags |= Flags.OptionsJSX;
-        if (options.ts) this.flags |= Flags.OptionsTS;
         if (options.ranges) this.flags |= Flags.OptionsRanges;
         if (options.locations) this.flags |= Flags.OptionsLoc;
         if (options.comments) this.flags |= Flags.OptionsOnComment;
@@ -103,11 +102,15 @@ export class Parser {
         };
     }
 
-    private saveState(): any {
+    private saveState(): SavedState {
         return {
             index: this.index,
             column: this.column,
             line: this.line,
+            startLine: this.startLine,
+            endLine: this.endLine,
+            startColumn: this.startColumn,
+            endColumn: this.endColumn,
             token: this.token,
             tokenValue: this.tokenValue,
             tokenRaw: this.tokenRaw,
@@ -118,7 +121,7 @@ export class Parser {
         };
     }
 
-    private restoreState(state: any): any {
+    private restoreState(state: SavedState) {
         this.index = state.index;
         this.column = state.column;
         this.line = state.line;
@@ -126,6 +129,10 @@ export class Parser {
         this.tokenValue = state.tokenValue;
         this.startPos = state.startPos;
         this.endPos = state.endPos;
+        this.endLine = state.endLine;
+        this.startLine = state.startLine;
+        this.startColumn = state.startColumn;
+        this.endColumn = state.endColumn;
         this.tokenRegExp = state.tokenRegExp;
         this.tokenRaw = state.tokenRaw;
         this.flags = state.flags;

@@ -132,7 +132,6 @@ describe('Literals - RegExp', () => {
     it('should parse "/a/"', () => {
         expect(parseScript(`/a/`, {
             ranges: true,
-            directive: true
         })).to.eql({
               "body": [
                {
