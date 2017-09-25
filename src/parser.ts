@@ -1,7 +1,7 @@
 import { Chars } from './chars';
 import * as ESTree from './estree';
 import { isKeyword, isAssignmentOperator, isDigit, hasOwn, toHex, tryCreate, fromCodePoint, hasMask, isUpdateExpression, isBinaryOperator, isUunaryExpression, isValidDestructuringAssignmentTarget, isDirective, getQualifiedJSXName, isStartOfExpression, isStartOfStatement, isValidSimpleAssignmentTarget } from './common';
-import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFlag, ParenthesizedState, IterationState } from './masks';
+import { Flags, Context, ScopeMasks, RegExpState, ObjectFlags, RegExpFlag, ParenthesizedState, IterationState } from './masks';
 import { createError, Errors } from './errors';
 import { Token, tokenDesc, descKeyword } from './token';
 import { isValidIdentifierStart, isIdentifierStart, isIdentifierPart } from './unicode';
@@ -1148,7 +1148,7 @@ export class Parser {
     private scanRegularExpression(): Token {
         let index = this.startPos + 1;
         const bodyStart = index;
-        let preparseState = Preparse.Empty;
+        let preparseState = RegExpState.Empty;
 
         loop:
             while (true) {
@@ -1158,21 +1158,21 @@ export class Parser {
                 index++;
                 this.column++;
 
-                if (preparseState & Preparse.Escape) {
-                    preparseState &= ~Preparse.Escape;
+                if (preparseState & RegExpState.Escape) {
+                    preparseState &= ~RegExpState.Escape;
                 } else {
                     switch (ch) {
                         case Chars.Slash:
                             if (!preparseState) break loop;
                             else break;
                         case Chars.Backslash:
-                            preparseState |= Preparse.Escape;
+                            preparseState |= RegExpState.Escape;
                             break;
                         case Chars.LeftBracket:
-                            preparseState |= Preparse.Class;
+                            preparseState |= RegExpState.Class;
                             break;
                         case Chars.RightBracket:
-                            preparseState &= Preparse.Escape;
+                            preparseState &= RegExpState.Escape;
                             break;
                         case Chars.CarriageReturn:
                         case Chars.LineFeed:

@@ -110,15 +110,8 @@ export const enum ScopeMasks {
     NonShadowable = 0x2,
 }
 
-export const enum AsyncState {
-    None,
-    Parenthesized,
-    UnParenthesized,
-    Function
-}
-
 // Regular expression scanning
-export const enum Preparse {
+export const enum RegExpState {
     Empty = 0,
     Escape = 0x1,
     Class = 0x2,

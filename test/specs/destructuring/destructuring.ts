@@ -6952,4 +6952,179 @@ describe('Destructuring - Destructuring', () => {
                   });
             });
     });
+
+    it('should parse yield inside a nested destructuring assignment', () => {
+        expect(parseScript('result = [[x[yield]]] = [[22]];', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 31,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 31,
+                "expression": {
+                  "type": "AssignmentExpression",
+                  "start": 0,
+                  "end": 30,
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start": 0,
+                    "end": 6,
+                    "name": "result"
+                  },
+                  "right": {
+                    "type": "AssignmentExpression",
+                    "start": 9,
+                    "end": 30,
+                    "operator": "=",
+                    "left": {
+                      "type": "ArrayPattern",
+                      "start": 9,
+                      "end": 21,
+                      "elements": [
+                        {
+                          "type": "ArrayPattern",
+                          "start": 10,
+                          "end": 20,
+                          "elements": [
+                            {
+                              "type": "MemberExpression",
+                              "start": 11,
+                              "end": 19,
+                              "object": {
+                                "type": "Identifier",
+                                "start": 11,
+                                "end": 12,
+                                "name": "x"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 13,
+                                "end": 18,
+                                "name": "yield"
+                              },
+                              "computed": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "type": "ArrayExpression",
+                      "start": 24,
+                      "end": 30,
+                      "elements": [
+                        {
+                          "type": "ArrayExpression",
+                          "start": 25,
+                          "end": 29,
+                          "elements": [
+                            {
+                              "type": "Literal",
+                              "start": 26,
+                              "end": 28,
+                              "value": 22,
+                              "raw": "22"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
+    it('should parse yield inside a nested destructuring assignment', () => {
+        expect(parseScript('0, [[x[yield]]] = [[]];', {
+            ranges: true,
+            raw: true
+        })).to.eql({
+            "type": "Program",
+            "start": 0,
+            "end": 23,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 0,
+                "end": 23,
+                "expression": {
+                  "type": "SequenceExpression",
+                  "start": 0,
+                  "end": 22,
+                  "expressions": [
+                    {
+                      "type": "Literal",
+                      "start": 0,
+                      "end": 1,
+                      "value": 0,
+                      "raw": "0"
+                    },
+                    {
+                      "type": "AssignmentExpression",
+                      "start": 3,
+                      "end": 22,
+                      "operator": "=",
+                      "left": {
+                        "type": "ArrayPattern",
+                        "start": 3,
+                        "end": 15,
+                        "elements": [
+                          {
+                            "type": "ArrayPattern",
+                            "start": 4,
+                            "end": 14,
+                            "elements": [
+                              {
+                                "type": "MemberExpression",
+                                "start": 5,
+                                "end": 13,
+                                "object": {
+                                  "type": "Identifier",
+                                  "start": 5,
+                                  "end": 6,
+                                  "name": "x"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "start": 7,
+                                  "end": 12,
+                                  "name": "yield"
+                                },
+                                "computed": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "right": {
+                        "type": "ArrayExpression",
+                        "start": 18,
+                        "end": 22,
+                        "elements": [
+                          {
+                            "type": "ArrayExpression",
+                            "start": 19,
+                            "end": 21,
+                            "elements": []
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "sourceType": "script"
+          });
+    });
+
     });
