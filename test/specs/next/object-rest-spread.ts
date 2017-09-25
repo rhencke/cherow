@@ -15,7 +15,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({ x, ...{ y, z } } = o)', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "function test({...{a}}) {}" to throw', () => {
@@ -31,7 +31,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({...{}} = {})', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "function test({...{}}) {}" to throw', () => {
@@ -47,7 +47,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({ x, ...{ y, z } } = o)', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "({ x, ...{ y, z } } = o)" to throw', () => {
@@ -55,7 +55,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({ x, ...{ y, z } } = o)', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "({ x, ...{ y, z } } = o)" to throw', () => {
@@ -63,7 +63,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({ x, ...{ y, z } } = o)', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "({...x = 1} = {})" to throw', () => {
@@ -95,7 +95,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('({...[]} = {})', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "var {...[]} = {}" to throw', () => {

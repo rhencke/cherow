@@ -299,6 +299,7 @@ export function isKeyword(context: Context, t: Token): boolean {
         case Token.FalseKeyword:
         case Token.FinallyKeyword:
         case Token.ForKeyword:
+        case Token.EnumKeyword:
         case Token.FromKeyword:
         case Token.FunctionKeyword:
         case Token.GetKeyword:

@@ -259,6 +259,7 @@ function isKeyword(context, t) {
         case 8197 /* FalseKeyword */:
         case 8277 /* FinallyKeyword */:
         case 8278 /* ForKeyword */:
+        case 8307 /* EnumKeyword */:
         case 4209 /* FromKeyword */:
         case 8279 /* FunctionKeyword */:
         case 4207 /* GetKeyword */:
@@ -3842,6 +3843,8 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
             // ObjectPattern and ObjectExpression are isomorphic
             for (var i = 0; i < params.properties.length; i++) {
                 var property = params.properties[i];
+                if (property.kind !== 'init')
+                    { this$1.error(1 /* UnexpectedToken */, tokenDesc(this$1.token)); }
                 this$1.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
             }
             return;

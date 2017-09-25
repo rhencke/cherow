@@ -3648,6 +3648,7 @@ export class Parser {
                 // ObjectPattern and ObjectExpression are isomorphic
                 for (let i = 0; i < params.properties.length; i++) {
                     const property = params.properties[i];
+                    if (property.kind !== 'init') this.error(Errors.UnexpectedToken, tokenDesc(this.token));
                     this.reinterpretExpressionAsPattern(context, property.type === 'SpreadElement' ? property : property.value);
                 }
                 return;

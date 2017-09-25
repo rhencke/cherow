@@ -10,11 +10,17 @@ describe('Espressions - Object', () => {
             parseScript(`"use strict"; var obj = { set foo(eval) {}};`);
         }).to.throw('');
     });
-
+    
     it('should fail on invalid cover initialized name', () => {
         expect(() => {
             parseScript(`({ a = 1 });`);
         }).to.not.throw('');
+    });
+
+    it('should fail on use of enum', () => {
+        expect(() => {
+            parseScript(`{ enum: 1} `);
+        }).to.throw('');
     });
 
     it('should fail on invalid setter', () => {
@@ -8903,6 +8909,7 @@ describe('Espressions - Object', () => {
             "sourceType": "script"
           });
     });
+
 
     it('should parse "({set x(a=0){}})"', () => {
         expect(parseScript(`({set x(a=0){}})`, {
