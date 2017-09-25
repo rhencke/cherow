@@ -1947,10 +1947,35 @@ Parser.prototype.scanStringEscape = function scanStringEscape (context) {
             return this.source.charAt(cp);
     }
 };
+Parser.prototype.scanJSXIdentifier = function scanJSXIdentifier (context) {
+        var this$1 = this;
+
+    switch (this.token) {
+        case 65537 /* Identifier */:
+            var firstCharPosition = this.index;
+            scan: while (this.hasNext()) {
+                var ch = this$1.source.charCodeAt(this$1.index);
+                switch (ch) {
+                    case 45 /* Hyphen */:
+                        this$1.advance();
+                        break;
+                    default:
+                        if ((firstCharPosition === this$1.index) ? isIdentifierStart(ch) : isIdentifierPart(ch)) {
+                            this$1.advance();
+                        }
+                        else {
+                            break scan;
+                        }
+                }
+            }
+            this.tokenValue += this.source.slice(firstCharPosition, this.index - firstCharPosition);
+        default:
+            return this.token;
+    }
+};
 Parser.prototype.scanTemplateNext = function scanTemplateNext (context) {
     if (!this.hasNext())
         { this.error(0 /* Unexpected */); }
-    // Rewind it so the template parser can consume the closing `}`
     this.index--;
     this.column--;
     return this.scanTemplate(context);
@@ -1967,7 +1992,6 @@ Parser.prototype.scanTemplate = function scanTemplate (context) {
     var ch = this.nextChar();
     loop: while (ch !== 96 /* Backtick */) {
         switch (ch) {
-            // Break after a literal `${` (thus the dedicated code path).
             case 36 /* Dollar */:
                 {
                     var index = this$1.index + 1;
@@ -1988,13 +2012,11 @@ Parser.prototype.scanTemplate = function scanTemplate (context) {
                     ch = this$1.nextChar();
                     this$1.index++;
                 }
-            // falls through
             case 10 /* LineFeed */:
             case 8232 /* LineSeparator */:
             case 8233 /* ParagraphSeparator */:
                 this$1.column = -1;
                 this$1.line++;
-            // falls through
             default:
                 if (ret != null)
                     { ret += fromCodePoint(ch); }
@@ -2968,20 +2990,8 @@ Parser.prototype.parseFunctionDeclaration = function parseFunctionDeclaration (c
             if (!(context & 2048 /* Await */))
                 { context &= ~256 /* AsyncFunctionBody */; }
         }
-        // Function names should generally be treated as block variables.
-        // They can be shadowed like `var`s, but they work like `let`
-        // when a shadowed `let` is present. (`var` names already check for
-        // duplicate `let` bindings anyways)
-        //
-        // Note: if the function is the only statement of an `if` or `else` body,
-        // like in `if (foo) function x() {}`, this should *not* be called (as it
-        // can never conflict from an early error standpoint).
         if (context & 8 /* Statement */ && !(context & 32768 /* AnnexB */)) {
             if (!this.initBlockScope() && name in this.blockScope) {
-                // Don't allow overwriting block-scoped variables
-                // Valid: `var x = 1; function x() {}`
-                // Invalid: `let x = 1; function x() {}`
-                // Invalid: `{ var x = 1; function x() {} }`
                 if (this.blockScope[name] === 2 /* NonShadowable */ || this.blockScope !== this.functionScope) {
                     this.error(92 /* DuplicateIdentifier */, name);
                 }
@@ -4997,32 +5007,105 @@ Parser.prototype.parseNullExpression = function parseNullExpression (context) {
         { node.raw = 'null'; }
     return node;
 };
-Parser.prototype.scanJSXIdentifier = function scanJSXIdentifier (context) {
-        var this$1 = this;
+/****
+ * Scope
+ */
+// Fast path for catch arguments
+Parser.prototype.addCatchArg = function addCatchArg (name, type /* Shadowable */) {
+        if ( type === void 0 ) type = 1;
 
-    switch (this.token) {
-        case 65537 /* Identifier */:
-            var firstCharPosition = this.index;
-            scan: while (this.hasNext()) {
-                var ch = this$1.source.charCodeAt(this$1.index);
-                switch (ch) {
-                    case 45 /* Hyphen */:
-                        this$1.advance();
-                        break;
-                    default:
-                        if ((firstCharPosition === this$1.index) ? isIdentifierStart(ch) : isIdentifierPart(ch)) {
-                            this$1.advance();
-                        }
-                        else {
-                            break scan;
-                        }
-                }
-            }
-            this.tokenValue += this.source.slice(firstCharPosition, this.index - firstCharPosition);
-        default:
-            return this.token;
+    this.initBlockScope();
+    this.blockScope[name] = type;
+};
+Parser.prototype.initBlockScope = function initBlockScope () {
+    if (this.functionScope == null) {
+        this.functionScope = Object.create(null);
+        this.blockScope = Object.create(this.functionScope);
+        this.parentScope = this.blockScope;
+    }
+    else if (this.blockScope == null) {
+        this.blockScope = Object.create(this.parentScope);
+        this.parentScope = this.blockScope;
+    }
+    else {
+        return false;
+    }
+    return true;
+};
+Parser.prototype.initFunctionScope = function initFunctionScope () {
+    if (this.functionScope !== undefined)
+        { return false; }
+    this.functionScope = Object.create(null);
+    this.blockScope = this.functionScope;
+    this.parentScope = this.functionScope;
+    return true;
+};
+Parser.prototype.addFunctionArg = function addFunctionArg (name) {
+    if (!this.initFunctionScope() && name in this.functionScope)
+        { this.error(92 /* DuplicateIdentifier */, name); }
+    this.functionScope[name] = 1 /* Shadowable */;
+};
+Parser.prototype.addVarOrBlock = function addVarOrBlock (context, name) {
+    if (context & 201326592 /* Lexical */) {
+        this.addBlockName(name);
+    }
+    else {
+        this.addVarName(name);
     }
 };
+Parser.prototype.addVarName = function addVarName (name) {
+    if (!this.initFunctionScope() && this.blockScope !== undefined &&
+        this.blockScope[name] === 2 /* NonShadowable */) {
+        this.error(92 /* DuplicateIdentifier */, name);
+    }
+    this.functionScope[name] = 1 /* Shadowable */;
+};
+Parser.prototype.addBlockName = function addBlockName (name) {
+    switch (name) {
+        case 'Infinity':
+        case 'NaN':
+        case 'undefined':
+            this.error(92 /* DuplicateIdentifier */, name);
+        default: // ignore
+    }
+    if (!this.initBlockScope() && (
+    // Check `var` variables
+    this.blockScope[name] === 1 /* Shadowable */ ||
+        // Check variables in current block only
+        hasOwn.call(this.blockScope, name))) {
+        this.error(92 /* DuplicateIdentifier */, name);
+    }
+    this.blockScope[name] = 2 /* NonShadowable */;
+};
+Parser.prototype.enterFunctionScope = function enterFunctionScope () {
+    var functionScope = this.functionScope;
+    var blockScope = this.blockScope;
+    var parentScope = this.parentScope;
+    this.functionScope = undefined;
+    this.blockScope = undefined;
+    this.parentScope = undefined;
+    return {
+        functionScope: functionScope,
+        blockScope: blockScope,
+        parentScope: parentScope
+    };
+};
+Parser.prototype.exitFunctionScope = function exitFunctionScope (t) {
+    this.functionScope = t.functionScope;
+    this.blockScope = t.blockScope;
+    this.parentScope = t.parentScope;
+};
+/** V8 */
+Parser.prototype.parseDoExpression = function parseDoExpression (context) {
+    var pos = this.startNode();
+    this.expect(context, 8273 /* DoKeyword */);
+    var body = this.parseBlockStatement(context);
+    return this.finishNode(pos, {
+        type: 'DoExpression',
+        body: body
+    });
+};
+/** JSX */
 Parser.prototype.parseJSXIdentifier = function parseJSXIdentifier (context) {
     var name = this.tokenValue;
     var pos = this.startNode();
@@ -5358,121 +5441,6 @@ Parser.prototype.parseJSXChild = function parseJSXChild (context) {
         default:
             this.error(0 /* Unexpected */);
     }
-};
-/****
- * Scope
- */
-// Fast path for catch arguments
-Parser.prototype.addCatchArg = function addCatchArg (name, type /* Shadowable */) {
-        if ( type === void 0 ) type = 1;
-
-    this.initBlockScope();
-    // `catch` bindings are shadowable only if they're not nested
-    // (i.e. like `catch (foo)` as opposed to `catch ([foo])`).
-    this.blockScope[name] = type;
-};
-Parser.prototype.initBlockScope = function initBlockScope () {
-    // Since the function scope might not exist yet, we still need
-    // to handle that case. We create the block scope as a child
-    // scope so we still treat it correctly in case we're declaring
-    // the first binding as an inner variable.
-    if (this.functionScope == null) {
-        // Create the child block scope as well if it's top-level.
-        this.functionScope = Object.create(null);
-        this.blockScope = Object.create(this.functionScope);
-        this.parentScope = this.blockScope;
-    }
-    else if (this.blockScope == null) {
-        this.blockScope = Object.create(this.parentScope);
-        this.parentScope = this.blockScope;
-    }
-    else {
-        return false;
-    }
-    return true;
-};
-Parser.prototype.initFunctionScope = function initFunctionScope () {
-    if (this.functionScope !== undefined)
-        { return false; }
-    this.functionScope = Object.create(null);
-    this.blockScope = this.functionScope;
-    this.parentScope = this.functionScope;
-    return true;
-};
-// Fast path for function arguments
-Parser.prototype.addFunctionArg = function addFunctionArg (name) {
-    // Surprisingly easy to check duplicates...
-    if (!this.initFunctionScope() && name in this.functionScope)
-        { this.error(92 /* DuplicateIdentifier */, name); }
-    // Function args are always shadowable
-    this.functionScope[name] = 1 /* Shadowable */;
-};
-Parser.prototype.addVarOrBlock = function addVarOrBlock (context, name) {
-    if (context & 201326592 /* Lexical */) {
-        this.addBlockName(name);
-    }
-    else {
-        this.addVarName(name);
-    }
-};
-Parser.prototype.addVarName = function addVarName (name) {
-    if (!this.initFunctionScope() && this.blockScope !== undefined &&
-        this.blockScope[name] === 2 /* NonShadowable */) {
-        // Don't allow overwriting block-scoped variables with a
-        // `var` declaration.
-        this.error(92 /* DuplicateIdentifier */, name);
-    }
-    this.functionScope[name] = 1 /* Shadowable */;
-};
-Parser.prototype.addBlockName = function addBlockName (name) {
-    // V8 magic
-    switch (name) {
-        case 'Infinity':
-        case 'NaN':
-        case 'undefined':
-            this.error(92 /* DuplicateIdentifier */, name);
-        default: // ignore
-    }
-    // Since the function scope might not exist yet, we still need
-    // to handle that case. We create the block scope as a child
-    // scope so we still treat it correctly in case we're declaring
-    // the first binding as an inner variable.
-    if (!this.initBlockScope() && (
-    // Check `var` variables
-    this.blockScope[name] === 1 /* Shadowable */ ||
-        // Check variables in current block only
-        hasOwn.call(this.blockScope, name))) {
-        this.error(92 /* DuplicateIdentifier */, name);
-    }
-    this.blockScope[name] = 2 /* NonShadowable */;
-};
-Parser.prototype.enterFunctionScope = function enterFunctionScope () {
-    var functionScope = this.functionScope;
-    var blockScope = this.blockScope;
-    var parentScope = this.parentScope;
-    this.functionScope = undefined;
-    this.blockScope = undefined;
-    this.parentScope = undefined;
-    return {
-        functionScope: functionScope,
-        blockScope: blockScope,
-        parentScope: parentScope
-    };
-};
-Parser.prototype.exitFunctionScope = function exitFunctionScope (t) {
-    this.functionScope = t.functionScope;
-    this.blockScope = t.blockScope;
-    this.parentScope = t.parentScope;
-};
-/** V8 */
-Parser.prototype.parseDoExpression = function parseDoExpression (context) {
-    var pos = this.startNode();
-    this.expect(context, 8273 /* DoKeyword */);
-    var body = this.parseBlockStatement(context);
-    return this.finishNode(pos, {
-        type: 'DoExpression',
-        body: body
-    });
 };
 
 function parseModule(sourceText, options) {
