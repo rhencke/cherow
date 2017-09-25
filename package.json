@@ -28,8 +28,7 @@
     "BENCHMARK.md"
   ],
   "scripts": {
-    "build":  "npm run prebuild && npm run compile && npm run minify",
-    "compile": "rollup -c rollup.config.js",
+    "build": "rollup -c rollup.config.js",
     "minify": "rollup -c rollup.config.min.js",
     "test": "mocha test/specs/**/*.ts -R spec --bail",
     "coverage": "npm run clean:build && npm run pretest && node --harmony ./node_modules/istanbul/lib/cli.js cover --root ./build/src --report lcov --report text ./node_modules/mocha/bin/_mocha ./build/test/**/*.js",
