@@ -39,14 +39,14 @@ This need to be enabled with the `v8` option
 * `comments` - Enables option to collect comments. Optional; Either array or function. Works like [Acorn](https://github.com/ternjs/acorn) onComment.
 * `tokens` - If enabled each found token will be returned as either an function or an array (*work in progres*)
 * `ranges` - Enables the start and characters offsets on the AST node.
-* `locations` - Enables location tracking. (*4 min fix, but on hold for now*)
+* `locations` - Enables location tracking
 * `jsx` - Enables JSX
 
 ## API
 
 Cherow can be used to perform syntactic analysis of Javascript program. 
 
-*Note!* there does not exist an `sourceType: module` option for parsing module code. Acc. the Ecmascript specs you should use either `parseScript` or `parseModule`.
+**Note!** there does not exist an `sourceType: module` option for parsing module code. Acc. the Ecmascript specs you should use either `parseScript` or `parseModule`.
 
 ```js
 
