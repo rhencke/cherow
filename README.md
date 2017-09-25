@@ -43,7 +43,9 @@ This need to be enabled with the `v8` option
 
 ## API
 
-Cherow can be used to perform syntactic analysis of Javascript program.
+Cherow can be used to perform syntactic analysis of Javascript program. 
+
+*Note!* there does not exist an `sourceType: module` option for parsing module code. Acc. the Ecmascript specs you should use either `parseScript` or `parseModule`.
 
 ```js
 
