@@ -3570,7 +3570,7 @@ export class Parser {
         return expression;
     }
 
-    private reinterpretExpressionAsPattern(context: Context, params: any): void {
+    private reinterpretExpressionAsPattern(context: Context, params: any) {
 
         switch (params.type) {
             case 'Identifier':
@@ -4757,11 +4757,9 @@ export class Parser {
 
         const pos = this.startNode();
 
-        const isGenerator = !!(flags & ObjectFlags.Generator);
+        if (context & Context.Yield) context &= ~Context.Yield;
 
-        context &= ~Context.Yield;
-
-        if (isGenerator && !(flags & ObjectFlags.Getter)) context |= Context.Yield;
+        if (!(flags & ObjectFlags.Getter) && flags & ObjectFlags.Generator) context |= Context.Yield;
 
         if (Context.Super) this.flags |= Flags.AllowConstructorWithSupoer;
 
@@ -4770,13 +4768,9 @@ export class Parser {
         if (flags & ObjectFlags.Async) context |= Context.Await;
 
         const savedScope = this.enterFunctionScope();
-
         const savedFlag = this.flags;
-
         const params = this.parseFormalParameterList(context | Context.Method, flags);
-
         const body = this.parseFunctionBody(context);
-
         this.flags = savedFlag;
 
         this.exitFunctionScope(savedScope);
@@ -4785,7 +4779,7 @@ export class Parser {
             id: null,
             params,
             body,
-            generator: isGenerator,
+            generator: !!(flags & ObjectFlags.Generator),
             async: (flags & ObjectFlags.Async) !== 0,
             expression: false
         });

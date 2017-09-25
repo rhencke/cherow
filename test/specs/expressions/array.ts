@@ -627,4 +627,390 @@ describe('Espressions - Array', () => {
         });
   });    
 
+
+  it('should parse "[,,1,,,2,3,,]"', () => {
+    expect(parseScript(`[,,1,,,2,3,,]`, {
+        raw: true,
+        ranges: true,
+        locations: true
+    })).to.eql({
+      "type": "Program",
+      "start": 0,
+      "end": 13,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 13
+        }
+      },
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "start": 0,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "expression": {
+            "type": "ArrayExpression",
+            "start": 0,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "elements": [
+              null,
+              null,
+              {
+                "type": "Literal",
+                "start": 3,
+                "end": 4,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 4
+                  }
+                },
+                "value": 1,
+                "raw": "1"
+              },
+              null,
+              null,
+              {
+                "type": "Literal",
+                "start": 7,
+                "end": 8,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 8
+                  }
+                },
+                "value": 2,
+                "raw": "2"
+              },
+              {
+                "type": "Literal",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  }
+                },
+                "value": 3,
+                "raw": "3"
+              },
+              null
+            ]
+          }
+        }
+      ],
+      "sourceType": "script"
+    });
+  });
+
+  it('should parse "[a, ...b=c]"', () => {
+    expect(parseScript(`[a, ...b=c]`, {
+        raw: true,
+        ranges: true,
+        locations: true
+    })).to.eql({
+      "type": "Program",
+      "start": 0,
+      "end": 11,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 11
+        }
+      },
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "start": 0,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "expression": {
+            "type": "ArrayExpression",
+            "start": 0,
+            "end": 11,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            "elements": [
+              {
+                "type": "Identifier",
+                "start": 1,
+                "end": 2,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 2
+                  }
+                },
+                "name": "a"
+              },
+              {
+                "type": "SpreadElement",
+                "start": 4,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  }
+                },
+                "argument": {
+                  "type": "AssignmentExpression",
+                  "start": 7,
+                  "end": 10,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 10
+                    }
+                  },
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start": 7,
+                    "end": 8,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 8
+                      }
+                    },
+                    "name": "b"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start": 9,
+                    "end": 10,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 10
+                      }
+                    },
+                    "name": "c"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "sourceType": "script"
+    });
+  });
+
+  it('should parse "([a, ...b=c])"', () => {
+    expect(parseScript(`([a, ...b=c])`, {
+        raw: true,
+        ranges: true,
+        locations: true
+    })).to.eql({
+      "type": "Program",
+      "start": 0,
+      "end": 13,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 13
+        }
+      },
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "start": 0,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "expression": {
+            "type": "ArrayExpression",
+            "start": 1,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 1
+              },
+              "end": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            "elements": [
+              {
+                "type": "Identifier",
+                "start": 2,
+                "end": 3,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 3
+                  }
+                },
+                "name": "a"
+              },
+              {
+                "type": "SpreadElement",
+                "start": 5,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  }
+                },
+                "argument": {
+                  "type": "AssignmentExpression",
+                  "start": 8,
+                  "end": 11,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 11
+                    }
+                  },
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start": 8,
+                    "end": 9,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 9
+                      }
+                    },
+                    "name": "b"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start": 10,
+                    "end": 11,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 11
+                      }
+                    },
+                    "name": "c"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "sourceType": "script"
+    });
+  });
+
     });

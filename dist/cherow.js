@@ -4841,9 +4841,9 @@ Parser.prototype.parseObjectElement = function parseObjectElement (context) {
 };
 Parser.prototype.parseFunctionMethod = function parseFunctionMethod (context, flags) {
     var pos = this.startNode();
-    var isGenerator = !!(flags & 64 /* Generator */);
-    context &= ~4096 /* Yield */;
-    if (isGenerator && !(flags & 1 /* Getter */))
+    if (context & 4096 /* Yield */)
+        { context &= ~4096 /* Yield */; }
+    if (!(flags & 1 /* Getter */) && flags & 64 /* Generator */)
         { context |= 4096 /* Yield */; }
     { this.flags |= 16384 /* AllowConstructorWithSupoer */; }
     if (!(context & 32 /* HasConstructor */))
@@ -4861,7 +4861,7 @@ Parser.prototype.parseFunctionMethod = function parseFunctionMethod (context, fl
         id: null,
         params: params,
         body: body,
-        generator: isGenerator,
+        generator: !!(flags & 64 /* Generator */),
         async: (flags & 16 /* Async */) !== 0,
         expression: false
     });

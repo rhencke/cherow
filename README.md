@@ -6,8 +6,6 @@ It strictly follows the ECMAScript® 2018 Language Specification and should pars
 
 It's safe to use in production.
 
-Please note that I'm not done with this parser. The development are done in the the *dev branch*.
-
 ## Features 
 
 - Full support for ECMAScript® 2018 [(ECMA-262 8th Edition)](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
