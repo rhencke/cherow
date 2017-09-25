@@ -17,6 +17,15 @@ describe('Espressions - Await', () => {
             }).to.throw();
         });
 
+        it('should fail on await binding identifier nested', () => {
+            expect(() => {
+                parseScript(`async function foo() {
+                    function await() {
+                    }
+                  }`)
+            }).to.throw();
+        });
+
         it('should fail on invalid await in async function body', () => {
             expect(() => {
                 parseScript(`async function foo() { return {await} }`)

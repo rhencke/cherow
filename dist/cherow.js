@@ -843,20 +843,23 @@ Parser.prototype.scanToken = function scanToken (context) {
             case 47 /* Slash */:
                 {
                     this$1.advance();
-                    if (this$1.hasNext()) {
-                        if (this$1.consume(47 /* Slash */)) {
+                    if (!this$1.hasNext())
+                        { return 2613 /* Divide */; }
+                    switch (this$1.nextChar()) {
+                        case 47 /* Slash */:
+                            this$1.advance();
                             this$1.skipSingleLineComment(2);
                             continue;
-                        }
-                        else if (this$1.consume(42 /* Asterisk */)) {
+                        case 42 /* Asterisk */:
+                            this$1.advance();
                             this$1.skipMultiLineComment();
                             continue;
-                        }
-                        else if (this$1.consume(61 /* EqualSign */)) {
+                        case 61 /* EqualSign */:
+                            this$1.advance();
                             return 37 /* DivideAssign */;
-                        }
+                        default:
+                            return 2613 /* Divide */;
                     }
-                    return 2613 /* Divide */;
                 }
             // `<`, `<=`, `<<`, `<<=`, `</`
             case 60 /* LessThan */:
@@ -864,7 +867,10 @@ Parser.prototype.scanToken = function scanToken (context) {
                     this$1.advance();
                     if (!this$1.hasNext())
                         { return 1855 /* LessThan */; }
-                    if (!(context & 1 /* Module */) && this$1.consume(33 /* Exclamation */) && this$1.consume(45 /* Hyphen */) && this$1.consume(45 /* Hyphen */)) {
+                    if (!(context & 1 /* Module */) &&
+                        this$1.consume(33 /* Exclamation */) &&
+                        this$1.consume(45 /* Hyphen */) &&
+                        this$1.consume(45 /* Hyphen */)) {
                         this$1.skipSingleLineComment(4);
                         continue;
                     }

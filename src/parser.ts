@@ -294,18 +294,23 @@ export class Parser {
                     {
                         this.advance();
 
-                        if (this.hasNext()) {
-                            if (this.consume(Chars.Slash)) {
+                        if (!this.hasNext()) return Token.Divide;
+
+                        switch (this.nextChar()) {
+                            case Chars.Slash:
+                                this.advance();
                                 this.skipSingleLineComment(2);
                                 continue;
-                            } else if (this.consume(Chars.Asterisk)) {
+                            case Chars.Asterisk:
+                                this.advance();
                                 this.skipMultiLineComment();
                                 continue;
-                            } else if (this.consume(Chars.EqualSign)) {
+                            case Chars.EqualSign:
+                                this.advance();
                                 return Token.DivideAssign;
-                            }
+                            default:
+                                return Token.Divide;
                         }
-                        return Token.Divide;
                     }
 
                     // `<`, `<=`, `<<`, `<<=`, `</`
@@ -315,7 +320,10 @@ export class Parser {
 
                         if (!this.hasNext()) return Token.LessThan;
 
-                        if (!(context & Context.Module) && this.consume(Chars.Exclamation) && this.consume(Chars.Hyphen) && this.consume(Chars.Hyphen)) {
+                        if (!(context & Context.Module) &&
+                            this.consume(Chars.Exclamation) &&
+                            this.consume(Chars.Hyphen) &&
+                            this.consume(Chars.Hyphen)) {
                             this.skipSingleLineComment(4);
                             continue;
                         } else {

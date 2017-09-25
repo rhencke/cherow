@@ -5,7 +5,41 @@ const expect = chai.expect;
 
 describe('Espressions - Async', () => {
 
-    it('async a"', () => {
+    it('should fail if formal parameter contains super call"', () => {
+        expect(() => {
+            parseScript(`(async function foo (foo = super()) { var bar; });`)
+        }).to.throw();
+    });
+
+    it('should fail if contain eval (strict)"', () => {
+        expect(() => {
+            parseScript(`"use strict"; (async function eval () { })`)
+        }).to.throw();
+    });
+
+    it('should fail on duplicates"', () => {
+        expect(() => {
+            parseScript(`(async function foo (bar) { let bar; });`)
+        }).to.throw();
+    });
+
+    it('should fail on await as identifier reference', () => {
+        expect(() => {
+            parseScript(`var fn = async function () {
+                void await;
+              };`)
+        }).to.throw();
+    });
+
+    it('should fail on await as label identifier', () => {
+        expect(() => {
+            parseScript(`var fn = async function () {
+                await: ;
+              };`)
+        }).to.throw();
+    });
+
+    it('should fail on async a"', () => {
         expect(() => {
             parseScript(`async a`)
         }).to.throw();
