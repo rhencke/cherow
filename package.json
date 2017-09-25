@@ -1,6 +1,6 @@
 {
   "name": "cherow",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Fast, standard-compliant ECMAScript parser written in ECMAScript",
   "main": "dist/cherow.js",
   "author": "KFlash",
@@ -13,7 +13,13 @@
   "bugs": {
     "url": "https://github.com/cherow/cherow/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "typescript",
+    "ecmascript",
+    "parser",
+    "javascript",
+    "performance"
+  ],
   "files": [
     "dist",
     "CODE_OF_CONDUCT.md",
@@ -22,7 +28,8 @@
     "BENCHMARK.md"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build":  "npm run prebuild && npm run compile && npm run minify",
+    "compile": "rollup -c rollup.config.js",
     "minify": "rollup -c rollup.config.min.js",
     "test": "mocha test/specs/**/*.ts -R spec --bail",
     "coverage": "npm run clean:build && npm run pretest && node --harmony ./node_modules/istanbul/lib/cli.js cover --root ./build/src --report lcov --report text ./node_modules/mocha/bin/_mocha ./build/test/**/*.js",
@@ -36,12 +43,14 @@
     "lint:src": "tslint src/**/*.ts src/**/*.tsx",
     "lint:tests": "tslint test/specs/**/*.ts test/specs/**/*.tsx",
     "watch:tests": "mocha test/specs/**/*.ts -R spec --bail --watch",
-    "watch:build": "tsc --skipLibCheck -t es2015 --m es2015 -w"
+    "watch:build": "tsc --skipLibCheck -t es2015 --m es2015 -w",
+    "codecov" : "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
+    "circleci": "npm run prebuild && npm run compile && npm run coverage && npm run codecov",
+    "appveyor": "npm run prebuild && npm run compile && npm run coverage && npm run codecov"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
-    "@types/node": "^8.0.28",
     "chai": "^4.1.2",
     "codecov": "^2.3.0",
     "coveralls": "^2.13.1",
