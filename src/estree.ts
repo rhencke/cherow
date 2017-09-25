@@ -1,11 +1,3 @@
-// Note:
-//
-// Union types have an identially named, non-exported interface whose name is preceded with an
-// underscore.
-//
-// Reverse mappings are in `T_Node` and friends, and are for testing.
-/* tslint:disable class-name no-empty-interface */
-
 interface _Node<T extends string> {
     type: T;
     loc?: SourceLocation | null;
