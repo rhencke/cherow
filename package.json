@@ -13,13 +13,7 @@
   "bugs": {
     "url": "https://github.com/cherow/cherow/issues"
   },
-  "keywords": [
-    "typescript",
-    "ecmascript",
-    "parser",
-    "javascript",
-    "performance"
-  ],
+  "keywords": [],
   "files": [
     "dist",
     "CODE_OF_CONDUCT.md",
@@ -27,7 +21,7 @@
     "README.md",
     "BENCHMARK.md"
   ],
- "scripts": {
+  "scripts": {
     "build": "rollup -c rollup.config.js",
     "minify": "rollup -c rollup.config.min.js",
     "test": "mocha test/specs/**/*.ts -R spec --bail",
@@ -42,14 +36,14 @@
     "lint:src": "tslint src/**/*.ts src/**/*.tsx",
     "lint:tests": "tslint test/specs/**/*.ts test/specs/**/*.tsx",
     "watch:tests": "mocha test/specs/**/*.ts -R spec --bail --watch",
-    "watch:build": "tsc --skipLibCheck -t es2015 --m es2015 -w"
-    "codecov" : "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
-    "circleci": "npm run coverage && npm run codecov",
+    "watch:build": "tsc --skipLibCheck -t es2015 --m es2015 -w",
+    "circleci": "npm run coverage && npm run test",
     "appveyor": "npm run build && npm run coverage && npm run test"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.28",
     "chai": "^4.1.2",
     "codecov": "^2.3.0",
     "coveralls": "^2.13.1",
