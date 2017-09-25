@@ -1575,10 +1575,14 @@ export class Parser {
                 }
 
                 this.advance();
+
+                if (!this.hasNext()) this.error(Errors.UnterminatedTemplate);
+
                 ch = this.nextChar();
             }
 
         this.advance();
+        
         this.tokenValue = ret;
 
         if (tail) {
@@ -3969,12 +3973,14 @@ export class Parser {
             }
 
             if (this.token === Token.TemplateCont) {
-                expr = this.parseTaggedTemplateExpression(context, expr, this.parseTemplate(context), pos);
+                const quasi = this.parseTemplate(context, this.startNode());
+                expr = this.parseTaggedTemplateExpression(context, expr, quasi, pos);
                 continue;
             }
 
             if (this.token === Token.TemplateTail) {
-                expr = this.parseTaggedTemplateExpression(context, expr, this.parseTemplateTail(context, pos), pos);
+                const quasi = this.parseTemplateTail(context, this.startNode())
+                expr = this.parseTaggedTemplateExpression(context, expr, quasi, pos);
 
                 continue;
             }
@@ -4302,7 +4308,7 @@ export class Parser {
             case Token.TemplateTail:
                 return this.parseTemplateTail(context, pos);
             case Token.TemplateCont:
-                return this.parseTemplate(context);
+                return this.parseTemplate(context, pos);
             case Token.SuperKeyword:
                 return this.parseSuper(context);
             case Token.DoKeyword:
@@ -4366,16 +4372,18 @@ export class Parser {
     // than Acorn in micro-benchmarks. And we hit the 3 mill ops/sec milestone in
     // a few cases. Average 1.9 mill ops/sec. This is DAMN fast!!
     private parseTemplateTail(context: Context, pos: Location): ESTree.TemplateLiteral {
-        return this.finishNode(this.startNode(), {
+        const quasis = this.parseTemplateElement(context, pos);
+        return this.finishNode(pos, {
             type: 'TemplateLiteral',
             expressions: [],
-            quasis: [this.parseTemplateElement(context, pos)]
+            quasis: [quasis]
         });
     }
 
     private parseTemplateHead(context: Context, cooked: string, raw: string): ESTree.TemplateElement {
+        const pos = this.startNode();
         this.token = this.scanTemplateNext(context);
-        return this.finishNode(this.startNode(), {
+        return this.finishNode(pos, {
             type: 'TemplateElement',
             value: {
                 cooked,
@@ -4407,11 +4415,10 @@ export class Parser {
         });
     }
 
-    private parseTemplate(context: Context): ESTree.TemplateLiteral {
+    private parseTemplate(context: Context, pos: Location): ESTree.TemplateLiteral {
 
         const expressions: ESTree.Expression[] = [];
         const quasis: ESTree.TemplateElement[] = [];
-        const pos = this.startNode();
 
         while (this.token === Token.TemplateCont) {
             if (this.token === Token.RightBrace) this.error(Errors.UnexpectedToken, tokenDesc(this.token));

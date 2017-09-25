@@ -634,6 +634,9 @@ var Parser = function Parser(source, options) {
         }
     }
 };
+// 'strict' are a pre-set bitmask in 'module code',
+// so no need to check for strict directives, and the
+// 'body' are different. (thus the duplicate code path).
 Parser.prototype.parseModule = function parseModule (context) {
     var node = {
         type: 'Program',
@@ -1995,6 +1998,8 @@ Parser.prototype.scanTemplate = function scanTemplate (context) {
                     { ret += fromCodePoint(ch); }
         }
         this$1.advance();
+        if (!this$1.hasNext())
+            { this$1.error(106 /* UnterminatedTemplate */); }
         ch = this$1.nextChar();
     }
     this.advance();
@@ -4107,11 +4112,13 @@ Parser.prototype.parseMemberExpression = function parseMemberExpression (context
             continue;
         }
         if (this$1.token === 8 /* TemplateCont */) {
-            expr = this$1.parseTaggedTemplateExpression(context, expr, this$1.parseTemplate(context), pos);
+            var quasi = this$1.parseTemplate(context, this$1.startNode());
+            expr = this$1.parseTaggedTemplateExpression(context, expr, quasi, pos);
             continue;
         }
         if (this$1.token === 9 /* TemplateTail */) {
-            expr = this$1.parseTaggedTemplateExpression(context, expr, this$1.parseTemplateTail(context, pos), pos);
+            var quasi$1 = this$1.parseTemplateTail(context, this$1.startNode());
+            expr = this$1.parseTaggedTemplateExpression(context, expr, quasi$1, pos);
             continue;
         }
         return expr;
@@ -4402,7 +4409,7 @@ Parser.prototype.parsePrimaryExpression = function parsePrimaryExpression (conte
         case 9 /* TemplateTail */:
             return this.parseTemplateTail(context, pos);
         case 8 /* TemplateCont */:
-            return this.parseTemplate(context);
+            return this.parseTemplate(context, pos);
         case 8284 /* SuperKeyword */:
             return this.parseSuper(context);
         case 8273 /* DoKeyword */:
@@ -4470,15 +4477,17 @@ Parser.prototype.parsePrimaryExpression = function parsePrimaryExpression (conte
 // than Acorn in micro-benchmarks. And we hit the 3 mill ops/sec milestone in
 // a few cases. Average 1.9 mill ops/sec. This is DAMN fast!!
 Parser.prototype.parseTemplateTail = function parseTemplateTail (context, pos) {
-    return this.finishNode(this.startNode(), {
+    var quasis = this.parseTemplateElement(context, pos);
+    return this.finishNode(pos, {
         type: 'TemplateLiteral',
         expressions: [],
-        quasis: [this.parseTemplateElement(context, pos)]
+        quasis: [quasis]
     });
 };
 Parser.prototype.parseTemplateHead = function parseTemplateHead (context, cooked, raw) {
+    var pos = this.startNode();
     this.token = this.scanTemplateNext(context);
-    return this.finishNode(this.startNode(), {
+    return this.finishNode(pos, {
         type: 'TemplateElement',
         value: {
             cooked: cooked,
@@ -4507,12 +4516,11 @@ Parser.prototype.parseTaggedTemplateExpression = function parseTaggedTemplateExp
         quasi: quasi
     });
 };
-Parser.prototype.parseTemplate = function parseTemplate (context) {
+Parser.prototype.parseTemplate = function parseTemplate (context, pos) {
         var this$1 = this;
 
     var expressions = [];
     var quasis = [];
-    var pos = this.startNode();
     while (this.token === 8 /* TemplateCont */) {
         if (this$1.token === 15 /* RightBrace */)
             { this$1.error(1 /* UnexpectedToken */, tokenDesc(this$1.token)); }
