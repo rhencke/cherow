@@ -10,6 +10,31 @@ describe('Next - Object rest spread', () => {
             }).to.throw('');
         });
     
+        it('should fail on duplicates', () => {
+            expect(() => {
+                parseModule(`export const foo = 1;
+                export const [bar, [{ baz, ...foo }]] = qux;`, {
+                    next: true
+                })
+            }).to.throw();
+        });
+
+        it('should parse "function test({...x = 1}) {}"', () => {
+            expect(() => {
+                parseScript('function test({...x = 1}) {}', {
+                    next: true
+                })
+            }).to.throw('');
+        });
+
+        it('should parse "function test({...x = 1}) {}"', () => {
+            expect(() => {
+                parseScript('function test({...x = 1}) {}', {
+                    next: true
+                })
+            }).to.throw('');
+        });
+
         it('should fail on "({ x, ...{ y, z } } = o)" to throw', () => {
             expect(() => {
                 parseScript('({ x, ...{ y, z } } = o)', {
@@ -23,7 +48,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('function test({...{a}}) {}', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "({...{}} = {})" to throw', () => {
@@ -39,7 +64,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('function test({...{}}) {}', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "({ x, ...{ y, z } } = o)" to throw', () => {
@@ -103,7 +128,7 @@ describe('Next - Object rest spread', () => {
                 parseScript('var {...[]} = {}', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
         });
     
         it('should fail on "function test({...[]}) {}" to throw', () => {
@@ -111,7 +136,67 @@ describe('Next - Object rest spread', () => {
                 parseScript('function test({...[]}) {}', {
                     next: true
                 });
-            }).to.not.throw();
+            }).to.throw();
+        });
+
+
+        it('should parse "let { x, y, } = obj;"', () => {
+            expect(parseScript('let { x, y, } = obj;', {
+                next: true
+            })).to.eql({
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "VariableDeclaration",
+                        "declarations": [
+                            {
+                                "type": "VariableDeclarator",
+                                "init": {
+                                    "type": "Identifier",
+                                    "name": "obj"
+                                },
+                                "id": {
+                                    "type": "ObjectPattern",
+                                    "properties": [
+                                        {
+                                            "type": "Property",
+                                            "kind": "init",
+                                            "key": {
+                                                "type": "Identifier",
+                                                "name": "x"
+                                            },
+                                            "computed": false,
+                                            "value": {
+                                                "type": "Identifier",
+                                                "name": "x"
+                                            },
+                                            "method": false,
+                                            "shorthand": true
+                                        },
+                                        {
+                                            "type": "Property",
+                                            "kind": "init",
+                                            "key": {
+                                                "type": "Identifier",
+                                                "name": "y"
+                                            },
+                                            "computed": false,
+                                            "value": {
+                                                "type": "Identifier",
+                                                "name": "y"
+                                            },
+                                            "method": false,
+                                            "shorthand": true
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "kind": "let"
+                    }
+                ],
+                "sourceType": "script"
+            });
         });
     
         it('should parse function extension', () => {
@@ -328,66 +413,7 @@ describe('Next - Object rest spread', () => {
                 "sourceType": "script"
             });
         });
-    
-        it('should parse "var {...{z}} = { z: 1};"', () => {
-            expect(parseModule(`var {...{z}} = { z: 1};`, {
-                next: true
-            })).to.eql({
-                "body": [{
-                    "declarations": [{
-                        "id": {
-                            "properties": [{
-                                "argument": {
-                                    "properties": [{
-                                        "computed": false,
-                                        "key": {
-                                            "name": "z",
-                                            "type": "Identifier"
-                                        },
-                                        "kind": "init",
-                                        "method": false,
-                                        "shorthand": true,
-                                        "type": "Property",
-                                        "value": {
-                                            "name": "z",
-                                            "type": "Identifier"
-                                        }
-                                    }],
-                                    "type": "ObjectPattern"
-                                },
-                                "type": "RestElement"
-                            }],
-                            "type": "ObjectPattern"
-                        },
-                        "init": {
-                            "properties": [{
-                                "computed": false,
-                                "key": {
-                                    "name": "z",
-                                    "type": "Identifier"
-                                },
-                                "kind": "init",
-                                "method": false,
-                                "shorthand": false,
-                                "type": "Property",
-                                "value": {
-                                    "type": "Literal",
-                                    "value": 1
-                                }
-                            }],
-                            "type": "ObjectExpression"
-                        },
-                        "type": "VariableDeclarator"
-                    }],
-                    "kind": "var",
-                    "type": "VariableDeclaration"
-                }],
-                "sourceType": "module",
-                "type": "Program"
-            });
-        });
-    
-    
+     
         it('should parse "let { ...x, y, z } = obj;"', () => {
             expect(parseModule(`let { ...x, y, z } = obj;`, {
                 next: true
@@ -532,6 +558,7 @@ describe('Next - Object rest spread', () => {
                 "type": "Program"
             });
         });
+
         it('should parse "z = {x, ...y}"', () => {
             expect(parseScript('z = {x, ...y}', {
                 next: true
@@ -711,72 +738,7 @@ describe('Next - Object rest spread', () => {
                 "type": "Program"
             });
         });
-    
-        it('should parse "var { ...{ x = 5 } } = {x : 1};"', () => {
-            expect(parseScript('var { ...{ x = 5 } } = {x : 1};', {
-                next: true
-            })).to.eql({
-                "body": [{
-                    "declarations": [{
-                        "id": {
-                            "properties": [{
-                                "argument": {
-                                    "properties": [{
-                                        "computed": false,
-                                        "key": {
-                                            "name": "x",
-                                            "type": "Identifier"
-                                        },
-                                        "kind": "init",
-                                        "method": false,
-                                        "shorthand": true,
-                                        "type": "Property",
-                                        "value": {
-                                            "left": {
-                                                "name": "x",
-                                                "type": "Identifier"
-                                            },
-                                            "right": {
-                                                "type": "Literal",
-                                                "value": 5,
-                                            },
-                                            "type": "AssignmentPattern"
-                                        }
-                                    }],
-                                    "type": "ObjectPattern"
-                                },
-                                "type": "RestElement"
-                            }],
-                            "type": "ObjectPattern"
-                        },
-                        "init": {
-                            "properties": [{
-                                "computed": false,
-                                "key": {
-                                    "name": "x",
-                                    "type": "Identifier"
-                                },
-                                "kind": "init",
-                                "method": false,
-                                "shorthand": false,
-                                "type": "Property",
-                                "value": {
-                                    "type": "Literal",
-                                    "value": 1
-                                }
-                            }],
-                            "type": "ObjectExpression"
-                        },
-                        "type": "VariableDeclarator"
-                    }],
-                    "kind": "var",
-                    "type": "VariableDeclaration"
-                }],
-                "sourceType": "script",
-                "type": "Program"
-            });
-        });
-    
+
         it('should parse "({x, ...y, a, ...b, c, })"', () => {
             expect(parseScript('({x, ...y, a, ...b, c, })', {
                 next: true

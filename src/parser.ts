@@ -34,7 +34,7 @@ export class Parser {
         flags: string;
     };
 
-    constructor(source: string, options?: Options) {
+    constructor(source: string, options ? : Options) {
         this.flags = Flags.None;
         this.source = source;
         this.index = 0;
@@ -1582,7 +1582,7 @@ export class Parser {
             }
 
         this.advance();
-        
+
         this.tokenValue = ret;
 
         if (tail) {
@@ -3617,6 +3617,7 @@ export class Parser {
     private parseRestProperty(context: Context): ESTree.RestElement {
         const pos = this.startNode();
         this.expect(context, Token.Ellipsis);
+        if (this.token !== Token.Identifier) this.error(Errors.InvalidRestOperatorArg);
         const arg = this.parseBindingPatternOrIdentifier(context | Context.Binding);
         if (this.token === Token.Assign) this.error(Errors.DefaultRestProperty);
 
@@ -3670,8 +3671,6 @@ export class Parser {
                 return;
 
             case 'SpreadElement':
-                // Invalid '[a, ...(b = c)] = 0'
-                // Invalid 'for ([...x = 1] in [[]]);'
                 if (params.argument.type === 'AssignmentExpression') {
                     this.error(context & Context.ForStatement ? Errors.InvalidLHSInForIn : Errors.InvalidLHSInAssignment);
                 }

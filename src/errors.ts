@@ -121,7 +121,8 @@ export const enum Errors {
     InvalidStrictLexical,
     MissingInitializer,
     InvalidLabeledForOf,
-    InvalidVarDeclInForIn
+    InvalidVarDeclInForIn,
+    InvalidRestOperatorArg
 }
 
 export const ErrorMessages: {
@@ -248,6 +249,8 @@ export const ErrorMessages: {
     [Errors.MissingInitializer]: 'Missing initializer',
     [Errors.InvalidLabeledForOf]: 'The body of a for-of statement must not be a labeled function declaration',
     [Errors.InvalidVarDeclInForIn]: 'Invalid variable declaration in for-in statement',
+    [Errors.InvalidRestOperatorArg]: 'Invalid rest operator\'s argument',
+    
     
 };
 

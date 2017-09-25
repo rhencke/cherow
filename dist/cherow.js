@@ -427,6 +427,7 @@ ErrorMessages[119 /* InvalidStrictLexical */] = 'Lexical declarations must not h
 ErrorMessages[120 /* MissingInitializer */] = 'Missing initializer';
 ErrorMessages[121 /* InvalidLabeledForOf */] = 'The body of a for-of statement must not be a labeled function declaration';
 ErrorMessages[122 /* InvalidVarDeclInForIn */] = 'Invalid variable declaration in for-in statement';
+ErrorMessages[123 /* InvalidRestOperatorArg */] = 'Invalid rest operator\'s argument';
 function constructError(msg, column) {
     var error = new Error(msg);
     try {
@@ -3818,6 +3819,8 @@ Parser.prototype.parseAssignmentProperty = function parseAssignmentProperty (con
 Parser.prototype.parseRestProperty = function parseRestProperty (context) {
     var pos = this.startNode();
     this.expect(context, 14 /* Ellipsis */);
+    if (this.token !== 65537 /* Identifier */)
+        { this.error(123 /* InvalidRestOperatorArg */); }
     var arg = this.parseBindingPatternOrIdentifier(context | 4194304 /* Binding */);
     if (this.token === 29 /* Assign */)
         { this.error(23 /* DefaultRestProperty */); }
@@ -3870,8 +3873,6 @@ Parser.prototype.reinterpretExpressionAsPattern = function reinterpretExpression
             this.reinterpretExpressionAsPattern(context, params.left);
             return;
         case 'SpreadElement':
-            // Invalid '[a, ...(b = c)] = 0'
-            // Invalid 'for ([...x = 1] in [[]]);'
             if (params.argument.type === 'AssignmentExpression') {
                 this.error(context & 16384 /* ForStatement */ ? 38 /* InvalidLHSInForIn */ : 40 /* InvalidLHSInAssignment */);
             }
