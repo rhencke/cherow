@@ -5,7 +5,7 @@ import { Flags, Context, ScopeMasks, Preparse, AsyncState, ObjectFlags, RegExpFl
 import { createError, Errors } from './errors';
 import { Token, tokenDesc, descKeyword } from './token';
 import { isValidIdentifierStart, isIdentifierStart, isIdentifierPart } from './unicode';
-import { ParserOptions, SavedState, CollectComments, ErrorLocation, Location } from './interface';
+import { Options, SavedState, CollectComments, ErrorLocation, Location } from './interface';
 
 export class Parser {
     private readonly source: string;
@@ -34,7 +34,7 @@ export class Parser {
         flags: string;
     };
 
-    constructor(source: string, options: ParserOptions) {
+    constructor(source: string, options?: Options) {
         this.flags = Flags.None;
         this.source = source;
         this.index = 0;
@@ -49,8 +49,6 @@ export class Parser {
         this.tokenValue = undefined;
         this.tokenRaw = '';
         this.token = 0;
-        this.comments = options.comments;
-        this.tokens = options.tokens;
         this.labelSet = {};
         this.errorLocation = undefined;
         this.tokenRegExp = undefined;
@@ -58,31 +56,82 @@ export class Parser {
         this.blockScope = undefined;
         this.parentScope = undefined;
 
-        if (options.next) this.flags |= Flags.OptionsNext;
-        if (options.jsx) this.flags |= Flags.OptionsJSX;
-        if (options.ranges) this.flags |= Flags.OptionsRanges;
-        if (options.locations) this.flags |= Flags.OptionsLoc;
-        if (options.comments) this.flags |= Flags.OptionsOnComment;
-        if (options.raw) this.flags |= Flags.OptionsRaw;
-        if (options.tokens) this.flags |= Flags.OptionsOnToken;
-        if (options.v8) this.flags |= Flags.OptionsV8;
+        if (options != null) {
+            if (options.next) this.flags |= Flags.OptionsNext;
+            if (options.jsx) this.flags |= Flags.OptionsJSX;
+            if (options.ranges) this.flags |= Flags.OptionsRanges;
+            if (options.locations) this.flags |= Flags.OptionsLoc;
+            if (options.raw) this.flags |= Flags.OptionsRaw;
+            if (options.v8) this.flags |= Flags.OptionsV8;
+
+            if (options.tokens) {
+                this.flags |= Flags.OptionsOnToken;
+                this.tokens = options.tokens;
+            }
+
+            if (options.comments) {
+                this.flags |= Flags.OptionsOnComment;
+                this.comments = options.comments;
+            }
+        }
     }
 
-    public parseModule(context: any): ESTree.Node {
+    // 'strict' are a pre-set bitmask in 'module code',
+    // so no need to check for strict directives, and the
+    // 'body' are different. (thus the duplicate code path).
+    public parseModule(context: Context): ESTree.Program {
 
-        return this.finishNodeAt(this.startPos, this.source.length, {
+        const node: ESTree.Program = {
             type: 'Program',
             body: this.parseModuleItems(context),
             sourceType: 'module'
-        });
+        };
+
+        if (this.flags & Flags.OptionsRanges) {
+            node.start = 0;
+            node.end = this.source.length;
+        }
+
+        if (this.flags & Flags.OptionsLoc) {
+            node.loc = {
+                start: {
+                    line: 1,
+                    column: 0,
+                },
+                end: {
+                    line: this.line,
+                    column: this.column
+                }
+            };
+        }
+        return node;
     }
 
-    public parseScript(context: any): ESTree.Node {
-        return this.finishNodeAt(this.startPos, this.source.length, {
+    public parseScript(context: Context): ESTree.Program {
+
+        const node: ESTree.Program = {
             type: 'Program',
             body: this.parseStatementList(context),
             sourceType: 'script'
-        });
+        };
+
+        if (this.flags & Flags.OptionsRanges) {
+            node.start = 0;
+            node.end = this.source.length;
+        }
+        if (this.flags & Flags.OptionsLoc) {
+            node.loc = {
+                start: {
+                    line: 1,
+                    column: 0,
+                },
+                end: {
+                    line: this.line,
+                    column: this.column
+                }
+            };
+        }
+        return node;
     }
 
     private error(type: Errors, ...params: string[]): void {
@@ -155,7 +204,7 @@ export class Parser {
     /**
      * TODO! Refactor
      */
-    private handleTokens(token: Token): void {
+    private handleTokens(token: Token) {
         const value = this.tokenValue;
         const start = this.startPos;
         const end = this.index;
@@ -179,10 +228,6 @@ export class Parser {
         }
     }
 
-    /**
-     * Returns true if there are more code units in the stream. Otherwise false.
-     *
-     */
     private hasNext() {
         return this.index < this.source.length;
     }

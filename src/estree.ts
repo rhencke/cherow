@@ -239,7 +239,6 @@ export type ModuleSpecifier =
     | ExportSpecifier;
 
 export interface SourceLocation {
-    source: string | null;
     start: Position;
     end: Position;
 }

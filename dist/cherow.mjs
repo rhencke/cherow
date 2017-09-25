@@ -605,44 +605,82 @@ var Parser = function Parser(source, options) {
     this.tokenValue = undefined;
     this.tokenRaw = '';
     this.token = 0;
-    this.comments = options.comments;
-    this.tokens = options.tokens;
     this.labelSet = {};
     this.errorLocation = undefined;
     this.tokenRegExp = undefined;
     this.functionScope = undefined;
     this.blockScope = undefined;
     this.parentScope = undefined;
-    if (options.next)
-        { this.flags |= 4194304 /* OptionsNext */; }
-    if (options.jsx)
-        { this.flags |= 1048576 /* OptionsJSX */; }
-    if (options.ranges)
-        { this.flags |= 131072 /* OptionsRanges */; }
-    if (options.locations)
-        { this.flags |= 262144 /* OptionsLoc */; }
-    if (options.comments)
-        { this.flags |= 8388608 /* OptionsOnComment */; }
-    if (options.raw)
-        { this.flags |= 2097152 /* OptionsRaw */; }
-    if (options.tokens)
-        { this.flags |= 16777216 /* OptionsOnToken */; }
-    if (options.v8)
-        { this.flags |= 33554432 /* OptionsV8 */; }
+    if (options != null) {
+        if (options.next)
+            { this.flags |= 4194304 /* OptionsNext */; }
+        if (options.jsx)
+            { this.flags |= 1048576 /* OptionsJSX */; }
+        if (options.ranges)
+            { this.flags |= 131072 /* OptionsRanges */; }
+        if (options.locations)
+            { this.flags |= 262144 /* OptionsLoc */; }
+        if (options.raw)
+            { this.flags |= 2097152 /* OptionsRaw */; }
+        if (options.v8)
+            { this.flags |= 33554432 /* OptionsV8 */; }
+        if (options.tokens) {
+            this.flags |= 16777216 /* OptionsOnToken */;
+            this.tokens = options.tokens;
+        }
+        if (options.comments) {
+            this.flags |= 8388608 /* OptionsOnComment */;
+            this.comments = options.comments;
+        }
+    }
 };
 Parser.prototype.parseModule = function parseModule (context) {
-    return this.finishNodeAt(this.startPos, this.source.length, {
+    var node = {
         type: 'Program',
         body: this.parseModuleItems(context),
         sourceType: 'module'
-    });
+    };
+    if (this.flags & 131072 /* OptionsRanges */) {
+        node.start = 0;
+        node.end = this.source.length;
+    }
+    if (this.flags & 262144 /* OptionsLoc */) {
+        node.loc = {
+            start: {
+                line: 1,
+                column: 0,
+            },
+            end: {
+                line: this.line,
+                column: this.column
+            }
+        };
+    }
+    return node;
 };
 Parser.prototype.parseScript = function parseScript (context) {
-    return this.finishNodeAt(this.startPos, this.source.length, {
+    var node = {
         type: 'Program',
         body: this.parseStatementList(context),
         sourceType: 'script'
-    });
+    };
+    if (this.flags & 131072 /* OptionsRanges */) {
+        node.start = 0;
+        node.end = this.source.length;
+    }
+    if (this.flags & 262144 /* OptionsLoc */) {
+        node.loc = {
+            start: {
+                line: 1,
+                column: 0,
+            },
+            end: {
+                line: this.line,
+                column: this.column
+            }
+        };
+    }
+    return node;
 };
 Parser.prototype.error = function error (type) {
         var params = [], len = arguments.length - 1;
@@ -731,10 +769,6 @@ Parser.prototype.handleTokens = function handleTokens (token) {
         this.comments.push(node);
     }
 };
-/**
- * Returns true if there are more code units in the stream. Otherwise false.
- *
- */
 Parser.prototype.hasNext = function hasNext () {
     return this.index < this.source.length;
 };
@@ -5430,19 +5464,10 @@ Parser.prototype.parseDoExpression = function parseDoExpression (context) {
 };
 
 function parseModule(sourceText, options) {
-    if ( options === void 0 ) options = {};
-
     return new Parser(sourceText, options).parseModule(2 /* Strict */ | 1 /* Module */);
 }
 function parseScript(sourceText, options) {
-    if ( options === void 0 ) options = {};
-
-    return new Parser(sourceText, options).parseScript(0 /* None */);
-}
-function parseJSX(sourceText, options) {
-    if ( options === void 0 ) options = { jsx: true };
-
     return new Parser(sourceText, options).parseScript(0 /* None */);
 }
 
-export { parseModule, parseScript, parseJSX };
+export { parseModule, parseScript };

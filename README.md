@@ -110,15 +110,15 @@ dependency in other libraries. Poor performance will slow down the main library.
 
 Cherow has been developed from scratch with only one goal - performance.
 
-You can find the the benchmarks [here](BENCHMARK.md)
+You can find the benchmarks [here](BENCHMARK.md)
 
 ## ESTree
 
 Cherow outputs a sensible syntax tree format as standardized by [ESTree project](https://github.com/estree/estree), and does
-not add any "extra" properties to any of it's node like [Esprima](https://github.com/jquery/esprima).
+not add any "extra" properties to any of it's nodes.
 
 However. There is a small difference from other parsers because Cherow outputs a `await` property on the `ForStatement` node.
-This because of the support of `For Await` and `Async Generators`.
+This because of the `Asynchronous Iteration` implementation.
 
 
 ## Contribution

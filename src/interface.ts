@@ -2,7 +2,7 @@ import { Flags } from './masks';
 import { Token } from './token';
 import { Comment } from './estree';
 
-export interface ParserOptions {
+export interface Options {
     next?: boolean;
     ranges?: boolean;
     locations?: boolean;
@@ -11,6 +11,7 @@ export interface ParserOptions {
     raw?: boolean;
     jsx?: boolean;
     tokens?: boolean;
+    source?: string;
     v8?: boolean;
 }
 
